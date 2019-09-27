@@ -1,0 +1,283 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(rgbif)
+library(finch) # for dwca
+library(here)
+```
+
+
+# Data from MIGRAME 
+Acceder al conjunto de datos MIGRAME
+https://www.gbif.org/dataset/6c6a9003-ecea-4f3a-9f2f-414107da65c1 
+
+
+
+```{r}
+# mig <- occ_download_datasets(key = "6c6a9003-ecea-4f3a-9f2f-414107da65c1") 
+ 
+# Download the dwca zip file and process it 
+# Read the dataset 
+mig_dwca <- dwca_read(here::here("raw_data/dwca-migrame-v1.8.zip"), read = TRUE)
+
+# Get occurrences and measurementOrFact files 
+mig_occ <- mig_dwca$data[["occurrence.txt"]]
+mig_mof <- mig_dwca$data[["measurementorfact.txt"]]
+```
+
+# Prepare data 
+```{r}
+aux_occ <- mig_occ %>% 
+  dplyr::select(id, date = eventDate, sp = scientificName, lat = decimalLatitude, long = decimalLongitude)
+
+# Prepare measurement of fact dataframe 
+aux_mof <- mig_mof %>% 
+  dplyr::select(id, measurementType, measurementValue) %>% 
+  spread(measurementType, measurementValue)
+  
+# Join data
+df_occ <- aux_occ %>% 
+  inner_join(aux_mof, by="id") %>% 
+  rename(diam = `diameter size`, height = `tree height`) %>% 
+  mutate(id_transect =
+           str_remove(
+             str_replace(id, pattern = "urn:catalog:OBSNEV:MIGRAME:MIG-", ""),
+             "-.*"), 
+         id = as.numeric(str_sub(id, start=-5)))
+
+# Change name of species 
+df_occ <- df_occ %>% 
+  mutate(sp = recode(sp, 
+         `Acer opalus subsp. granatense (Boiss.) Font Quer & Rothm.` = "Aop", 
+         `Juniperus communis Thunb.` = "Jco",
+         `Quercus pyrenaica Willd.` = "Qpy",
+         `Pinus sylvestris Lour.` = "Psy",
+         `Quercus ilex L. subsp. ballota` = "Qil",
+         `Sorbus aria Wimm. ex Nyman` = "Sar"))
+
+```
+
+```{r}
+# Get transect data and join
+# Transect data comes from Supplementary of https://doi.org/10.3897/phytokeys.56.5482 
+
+# Table S1. Information about transects of the project. Elevation in m a.s.l.. 
+# Type: AM = Altitudinal migration; FO = Forest; MH = Marginal Habitat. 
+# Subtype: 
+#   AC-e = Abandoned Cropland: edge; AC-i = Abandoned Cropland: inside; 
+#   Pp-e = Pine plantations: edge; Pp-i: Pine plantations: inside; 
+#   TE = Treeline Ecotone. 
+# Locality: CA = Robledal de Cáñar; SJ = Robledal de San Juan. 
+
+mig_transect <- read_csv(here::here("raw_data/mig_transect.csv")) %>% 
+  dplyr::select(id_transect = `Transect name`, elev = Elevation, 
+                type = Type, subtype = Subtype, loc = Locality) 
+
+
+df_occ <- df_occ %>% inner_join(mig_transect, by="id_transect") 
+```
+
+
+# Select forest plots 
+
+```{r}
+df <- df_occ %>% filter(type == "FO")
+```
+
+
+```{r}
+x <- df_occ %>% filter(sp == "Qpy") %>% 
+  mutate(h = height/100) %>% 
+  rename(d = diam) %>% 
+  mutate(w = ifelse(d > 7,  
+              0.0261* d^2 * h,
+              ifelse(d < 2,
+                     (0.898*d) - (0.445*h), 
+              (-0.0260 * d^2) + (0.536 * h) + (0.000538 * d^2 * h)      
+                     )),
+  wr = 0.143*d^2) %>% 
+  filter(type == "FO") %>% 
+  dplyr::select(-height, -type, -subtype) %>% 
+  write_csv(path = "/Users/ajpelu/Google Drive/Almacen_Antonio/CURSOS/IMPARTIDOS/2019_CURSO_Estadistica_OAPN/curso_analisis_oapn/biomass_pyrenaica.csv")
+
+
+
+```
+
+
+```{r}
+
+df_occ %>% filter(sp == "Qpy") %>% 
+  filter(diam > 7.5) %>% 
+  ggplot(aes(x=diam, y=height, colour = loc)) + geom_point() +
+  geom_smooth() + 
+  theme_bw()
+
+```
+
+```{r}
+## TODO improve function to compute BIOMASS 
+
+# w (kg); diam (cm); h (m) 
+w_sb7 <- (0.0261* d^2 * h)
+w_b27 <- (-0.0260 * d^2) + (0.536 * h) + (0.000538 * d^2 * h)
+w_b2 <- (0.898*d) - (0.445*h)
+w_r <- 0.143*d^2
+
+
+
+head(df) 
+
+a <- df %>% filter(diam < 2 & height == 85)
+b <- df %>% filter(diam > 2 & diam <= 7) %>% 
+  filter(height  == 190)
+c <- df %>% filter(diam > 7 & height == 1350)
+
+x <- a %>% bind_rows(b,c)
+
+
+biomassQpy <- function(d, h, ...){
+  
+  if (d > 7) {
+    w <- (0.0261* d^2 * h)
+    } else if (d < 2) {
+    w <- (0.898*d) - (0.445*h)
+    } else { 
+    w <- (-0.0260 * d^2) + (0.536 * h) + (0.000538 * d^2 * h)
+    }
+  w
+  }
+
+biomassQpy_vec <- Vectorize(biomassQpy, vectorize.args = c("d","h"))
+
+
+
+xw <- x %>% mutate(h = height/100) %>% 
+  rename(d = diam) %>% 
+  mutate(
+  w = ifelse(d > 7,  
+              0.0261* d^2 * h,
+              ifelse(d < 2,
+                     (0.898*d) - (0.445*h), 
+              (-0.0260 * d^2) + (0.536 * h) + (0.000538 * d^2 * h)      
+                     )),
+  wr = 0.143*d^2) %>% 
+  mutate(
+    wf = biomassQpy_vec(d, h)
+  )
+    
+  
+```
+
+
+```{r}
+df_biomass <- df %>% mutate(h = height/100) %>% 
+  rename(d = diam) %>% 
+  mutate(w = ifelse(d > 7,  
+              0.0261* d^2 * h,
+              ifelse(d < 2,
+                     (0.898*d) - (0.445*h), 
+              (-0.0260 * d^2) + (0.536 * h) + (0.000538 * d^2 * h)      
+                     )),
+  wr = 0.143*d^2)
+```
+
+
+
+
+
+
+# Mas datos
+IFN 
+[X] MIGRAME
+Dendro 
+
+OBSNEV 
+?? SINFONEVADA
+
+[ ] Alvaro Rubio San Jerónimo? 
+[ ] 
+
+[ ] Camarate?? 
+* [X] San Juan
+
+    - [X] MIGRAME
+    - [X] DENDRO 
+    - [ ]
+
+* [ ] San Jerónimo 
+* [ ] Dilar 
+* [ ] Durcal
+* [ ] Cañar
+
+    - [X] MIGRAME
+    - [X] DENDRO 
+    - [ ]
+
+[ ] Pórtugos 
+[ ] Busquistar
+
+
+
+
+
+
+
+
+
+
+```{r}
+# Access data of Wood density
+library(BIOMASS)
+
+wdqp <- wdData %>% 
+  filter(genus == "Quercus" & species == "pyrenaica") %>% 
+
+# Gutierrez Oliva, A. and Plaza Pulgar, F. 1967. Caracteristicas fisico-mecanicas de las maderas espanolas. Ministerio de Agricultura, Direccion general de montes, caza y pesca fluvial, Instituto Forestal de Investigaciones y Experiencias. Madrid. 10 3 pp., A. and Plaza Pulgar, F. 1967. 
+```
+
+
+
+
+
+
+```
+
+
+
+
+
+```{r}
+head(df_occ)
+
+# Filter species (only Q. p)
+df_occ %>% 
+  filter(sp == "Quercus pyrenaica Willd.") %>% 
+  filter(diam > 7.5) %>% 
+  ggplot(aes(x=diam, y=height)) + geom_point(col="black", alpha=.8) +
+  geom_smooth(method = "lm", colour="red") + 
+  theme_bw()
+
+```
+
+
+
+
+
+
+
+
+
+
+
