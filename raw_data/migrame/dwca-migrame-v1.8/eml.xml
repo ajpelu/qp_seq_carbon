@@ -1,0 +1,445 @@
+<eml:eml xmlns:eml="eml://ecoinformatics.org/eml-2.1.1"
+         xmlns:dc="http://purl.org/dc/terms/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml.xsd"
+         packageId="6c6a9003-ecea-4f3a-9f2f-414107da65c1/v1.8" system="http://gbif.org" scope="system"
+         xml:lang="eng">
+
+<dataset>
+  <alternateIdentifier>doi:10.15470/orboj4</alternateIdentifier>
+  <alternateIdentifier>6c6a9003-ecea-4f3a-9f2f-414107da65c1</alternateIdentifier>
+  <alternateIdentifier>https://ipt.gbif.es/resource?r=migrame</alternateIdentifier>
+  <title xml:lang="eng">Dataset of Global Change, altitudinal range shift and colonization of degraded habitats in mediterranean mountains (MIGRAME)</title>
+      <creator>
+    <individualName>
+        <givenName>Antonio Jesús</givenName>
+      <surName>Pérez Luque</surName>
+    </individualName>
+    <organizationName>Laboratorio de Ecología (iEcolab), Instituto Interuniversitario de Investigación del Sistema Tierra en Andalucía (CEAMA), Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>Avenida del Mediterráneo s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18006</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>+34 958 249748</phone>
+    <electronicMailAddress>ajperez@ugr.es</electronicMailAddress>
+    <onlineUrl>http://www.iecolab.es</onlineUrl>
+      </creator>
+      <metadataProvider>
+    <individualName>
+        <givenName>Antonio Jesús</givenName>
+      <surName>Pérez Luque</surName>
+    </individualName>
+    <organizationName>Laboratorio de Ecología (iEcolab), Instituto Interuniversitario de Investigación del Sistema Tierra en Andalucía (CEAMA), Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>Avenida del Mediterráneo s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18006</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>+34 958 249748</phone>
+    <electronicMailAddress>ajperez@ugr.es</electronicMailAddress>
+    <onlineUrl>http://www.iecolab.es</onlineUrl>
+      </metadataProvider>
+      <associatedParty>
+    <individualName>
+        <givenName>Regino Jesús</givenName>
+      <surName>Zamora Rodíguez</surName>
+    </individualName>
+    <organizationName>Grupo de Ecología Terrestre, Departamento de Ecología, Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>Facultad de Ciencias, Campus de Fuentenueva s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18071</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>(+34) 958 241000 ext 20037</phone>
+    <electronicMailAddress>rzamora@ugr.es</electronicMailAddress>
+    <onlineUrl>http://ecologia.ugr.es/pages/personal/profesorado/regino</onlineUrl>
+    <role>principalInvestigator</role>
+      </associatedParty>
+      <associatedParty>
+    <individualName>
+        <givenName>Antonio Jesús</givenName>
+      <surName>Pérez Luque</surName>
+    </individualName>
+    <organizationName>Laboratorio de Ecología (iEcolab), Instituto Interuniversitario de Investigación del Sistema Tierra en Andalucía (CEAMA), Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>Avenida del Mediterráneo s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18006</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>+34 958 249748</phone>
+    <electronicMailAddress>ajperez@ugr.es</electronicMailAddress>
+    <onlineUrl>http://www.iecolab.es</onlineUrl>
+    <role>originator</role>
+      </associatedParty>
+      <associatedParty>
+    <individualName>
+        <givenName>Blas M.</givenName>
+      <surName>Benito de Pando</surName>
+    </individualName>
+    <organizationName>Laboratorio de Ecología (iEcolab), Instituto Interuniversitario de Investigación del Sistema Tierra en Andalucía (CEAMA), Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>Avenida del Mediterráneo s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18006</postalCode>
+        <country>ES</country>
+    </address>
+    <electronicMailAddress>blasbp@ugr.es</electronicMailAddress>
+    <role>originator</role>
+      </associatedParty>
+      <associatedParty>
+    <individualName>
+        <givenName>Pérez-Pérez</givenName>
+      <surName>Ramón</surName>
+    </individualName>
+    <organizationName>Laboratorio de Ecología (iEcolab), Instituto Interuniversitario de Investigación del Sistema Tierra en Andalucía (CEAMA), Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>Avenida del Mediterráneo s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18006</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>+34 958 249748</phone>
+    <electronicMailAddress>ramon@ugr.es</electronicMailAddress>
+    <onlineUrl>http://www.iecolab.es</onlineUrl>
+    <role>originator</role>
+      </associatedParty>
+      <associatedParty>
+    <individualName>
+        <givenName>Francisco Javier</givenName>
+      <surName>Bonet García</surName>
+    </individualName>
+    <organizationName>Laboratorio de Ecología (iEcolab), Instituto Interuniversitario de Investigación del Sistema Tierra en Andalucía (CEAMA), Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>Avenida del Mediterráneo s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18006</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>+34 958 249748</phone>
+    <electronicMailAddress>fjbonet@ugr.es</electronicMailAddress>
+    <onlineUrl>http://www.iecolab.es</onlineUrl>
+    <role>originator</role>
+      </associatedParty>
+  <pubDate>
+      2018-11-30
+  </pubDate>
+  <language>eng</language>
+  <abstract>
+    <para>In this datapaper we describe the dataset of the Global Change, Altitudinal Range Shift and Colonization of Degraded Habitats in Mediterranean Mountains (MIGRAME) project, which aims to asses the capacity of altitudinal migration and colonization of marginal habitats by Quecurs pyreanica Willd. forests in Sierra Nevada (southern Spain) considering two global change drivers: temperature increase and land use changes. The dataset includes information of the forest structure (diameter size, tree height and abundance) of the Quercus pyrenaica ecosystem in Sierra Nevada obtaided from 199 transect sampled at the treeline ecotone, mature forest and marginal habitats (abandoned cropland and pine plantations). A total of 3839 occurence records were collected and 5751 measurement recorded. The dataset is included in the Sierra Nevada Global-Change Observatory (OBSNEV), a long-term research project designed to compile socio-ecological information on the major ecosystem types in order to identify the impacts of global change in this area.</para>
+  </abstract>
+      <keywordSet>
+            <keyword>Quercus pyrenaica forests</keyword>
+            <keyword>altitudinal migration</keyword>
+            <keyword>colonization of abandoned croplands</keyword>
+            <keyword>global change</keyword>
+            <keyword>Sierra Nevada (Spain)</keyword>
+            <keyword>ocurrence data</keyword>
+            <keyword>measurement data</keyword>
+        <keywordThesaurus>GBIF Dataset Type Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_type.xml</keywordThesaurus>
+      </keywordSet>
+  <intellectualRights>
+    <para>This work is licensed under a <ulink url="http://creativecommons.org/licenses/by-nc/4.0/legalcode"><citetitle>Creative Commons Attribution Non Commercial (CC-BY-NC) 4.0 License</citetitle></ulink>.</para>
+  </intellectualRights>
+  <distribution scope="document">
+    <online>
+      <url function="information">http://obsnev.es/noticia.html?id=7841</url>
+    </online>
+  </distribution>
+  <coverage>
+      <geographicCoverage>
+          <geographicDescription>Sierra Nevada is a high-mountain range located in southern Spain (37ºN, 3ºW) with an altitudinal range between 860 m and 3482 m a.s.l.. The climate is Mediterranean, characterized by cold winters and hot summers, with pronounced summer drought (July-August). The Sierra Nevada mountain range hosts a high number of endemic plant species (c. 80) (Lorite et al. (2007)) for a total of 2,100 species of vascular plants (25% and 20% of Spanish and European flora respectively), and thus it is considered one of the most important biodiversity hotspots in the Mediterranean region (Blanca et al. (1998)). This mountain area comprises 27 habitat types from the habitat directive. It contains 31 animal species (20 birds, 5 mammals, 4 invertebrates, 2 amphibians and reptiles) and 20 plant species listed in the Annex I and II of habitat and bird directives. Sierra Nevada has several types of legal protections: Biosphere Reserve MAB Committee UNESCO; Special Protection Area and Site of Community Importance (Natura 2000 network); and National Park. There are 61 municipalities with more than 90,000 inhabitants. The main economic activities are agriculture, tourism, beekeeping, mining, and skiing (Bonet et al. (2010)).</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-3.438</westBoundingCoordinate>
+          <eastBoundingCoordinate>-3.338</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.136</northBoundingCoordinate>
+          <southBoundingCoordinate>36.937</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+          <temporalCoverage>
+              <rangeOfDates>
+                  <beginDate>
+                    <calendarDate>2012-01-01</calendarDate>
+                  </beginDate>
+                <endDate>
+                  <calendarDate>2014-01-01</calendarDate>
+                </endDate>
+              </rangeOfDates>
+          </temporalCoverage>
+          <taxonomicCoverage>
+              <generalTaxonomicCoverage>This dataset includes records of the phylum Magnoliophyta (3823 records, 99.58%) and marginally Pinophyta (16 records, below 1% of total records). Most of the records included in this dataset belong to the class Magnoliopsida (99.58%). There are 5 orders represented in the dataset with Fagales (98.98%) being the most important order. The other 4 orders (Rosales, Cupressales, Sapindales and Pinales) represent only 1.02 % of the records. In this collection, 5 families are represented: Fagaceae, Rosaceae, Cupressaceae, Pinacea and Sapindaceae. The most represented taxa are Quercus pyrenaica Willd. and Quercus ilex L. (81.74 and 17.24 % respectively). Of the six taxa included on the dataset, three are considered threatened.</generalTaxonomicCoverage>
+              <taxonomicClassification>
+                  <taxonRankName>kingdom</taxonRankName>
+                <taxonRankValue>Plantae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>phylum</taxonRankName>
+                <taxonRankValue>Magnoliophyta</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>class</taxonRankName>
+                <taxonRankValue>Magnoliopsida</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Fagales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Fagaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>genus</taxonRankName>
+                <taxonRankValue>Quercus</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>species</taxonRankName>
+                <taxonRankValue>Quercus pyrenaica</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>phylum</taxonRankName>
+                <taxonRankValue>Pinophyta</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>class</taxonRankName>
+                <taxonRankValue>Pinopsida</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Pinales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Pinaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>genus</taxonRankName>
+                <taxonRankValue>Pinus</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>species</taxonRankName>
+                <taxonRankValue>Pinus sylvestris</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Cupressales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Cupressaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>genus</taxonRankName>
+                <taxonRankValue>Juniperus</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>species</taxonRankName>
+                <taxonRankValue>Juniperus communis</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Sapindales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Sapindaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>genus</taxonRankName>
+                <taxonRankValue>Acer</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>subspecies</taxonRankName>
+                <taxonRankValue>Acer opalus supsb. granatense</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Rosales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Rosaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>genus</taxonRankName>
+                <taxonRankValue>Sorbus</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>species</taxonRankName>
+                <taxonRankValue>Sorbus aria</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>species</taxonRankName>
+                <taxonRankValue>Quercus ilex</taxonRankValue>
+              </taxonomicClassification>
+          </taxonomicCoverage>
+  </coverage>
+  <maintenance>
+    <description>
+      <para></para>
+    </description>
+    <maintenanceUpdateFrequency>irregular</maintenanceUpdateFrequency>
+  </maintenance>
+
+      <contact>
+    <individualName>
+        <givenName>Antonio Jesús</givenName>
+      <surName>Pérez Luque</surName>
+    </individualName>
+    <organizationName>Laboratorio de Ecología (iEcolab), Instituto Interuniversitario de Investigación del Sistema Tierra en Andalucía (CEAMA), Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>Avenida del Mediterráneo s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18006</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>+34 958 249748</phone>
+    <electronicMailAddress>ajperez@ugr.es</electronicMailAddress>
+    <onlineUrl>http://www.iecolab.es</onlineUrl>
+      </contact>
+      <contact>
+    <individualName>
+        <givenName>Regino Jesus</givenName>
+      <surName>Zamora Rodríguez</surName>
+    </individualName>
+    <organizationName>Grupo de Ecología Terrestre, Departamento de Ecología, Universidad de Granada</organizationName>
+    <positionName>Professor. Researcher</positionName>
+    <address>
+        <deliveryPoint>Facultad de Ciencias, Campus de Fuentenueva s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18071</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>(+34) 958 241000 ext 20037</phone>
+    <electronicMailAddress>rzamora@ugr.es</electronicMailAddress>
+    <onlineUrl>http://ecologia.ugr.es/pages/personal/profesorado/regino</onlineUrl>
+      </contact>
+  <methods>
+        <methodStep>
+          <description>
+            <para>All data were stored in a normalized database and incorporated into the Information System of Sierra Nevada Global-Change Observatory (http://obsnev.es/linaria.html – Pérez-Pérez et al. 2012; Free access upon registration). Taxonomic and spatial validations were made on this database (see Quality-control description). A custom-made SQL view of the database was performed to gather occurrence data and other variables associated with some occurrence data (diameter size and tree height of each individual).
+The occurrence and measurement data were accommodated to fulfil the Darwin Core Standard (Wieczorek et al. 2009, 2012). We used Darwin Core Archive Validator tool (http://tools.gbif.org/dwca-validator/) to check whether the dataset meets Darwin Core specifications. The Integrated Publishing Toolkit (IPT v2.0.5) (Robertson et al. 2014) of the Spanish node of the Global Biodiversity Information Facility (GBIF) (http://www.gbif.es:8080/ipt) was used both to upload the Darwin Core Archive and to fill out the metadata.</para>
+          </description>
+        </methodStep>
+      <sampling>
+        <studyExtent>
+          <description>
+            <para>The MIGRAME dataset covers the Pyrenean oak forests in Sierra Nevada mountain range. 
+Quercus pyrenaica forests
+The Pyrenean oak (Quercus pyrenaica Willd.) forests extend through southwestern France and the Iberian Peninsula (Franco (1990)) (Figure 2a). In the Iberian Peninsula these forests live under meso-supramediterranean and mesotemperate areas and subhumid, humid and hyperhumid ombroclimate (Rivas-Martínez et al. (2002)) living on siliceous soils, or soils impoverished in basic ions (Vilches de la Serna (2014)). Q. pyrenaica requires between 650 and 1200 mm of annual precipitation and a summer minimal precipitation between 100 and 200 mm (García and Jiménez (2009), Martínez-Parras and Molero-Mesa (1982)), being the summer rainfall a key issue on the distribution of the specie (Río et al. (2007), Gavilán et al. (2007)).
+The forests dominanted by Q. pyrenaica are an ecosystem included in the Annex I of the Habitat Directive (habitat code 9230: Quercus pyrenaica oak woods and Quercus robur and Quercus pyrenaica oak woods from Iberian northwestern). The conservation status of this habitat is not well known (EIONET (2014)), partly due to lack of detailed ecological studies (García et al. (2009)).
+This species reaches its southernmost European limit at Sierra Nevada mountains, where eight oak patches (2400 Has) have been identified (Figure 2b), ranging between 1100 - 2000 m a.s.l. and generally associated to major river valleys. Sierra Nevada is considered a glacial refugia for deciduous Quercus species during glaciation (Brewer et al. 2002, FEM; Olalde et al 2002; Rodríguez-Sánchez et al 2010) and these populations are considered as a rear edge of the habitat distribution, which is important in determining habitat responses to expected climate change (Hampe and Petit (2005)).
+These forests, as other vegetation types, have suffered intense pressure from human use (used for extracting wood, grazing, etc.) which has reduced their distribution area and in some cases their use has led to changes in their floristic pattern (Gavilán et al. (2000), Gavilán et al. (2007)).
+Q. pyrenaica is considered as vulnerable in southern Spain (Vivero et al. (2000)). The populations of Pyrenean oak forests at Sierra Nevada are considered relict forests (Vivero et al. (2000), Melendo and Valle (2000)) and they have suffered an intensive anthropic use in the last decades (Camacho-Olmedo et al. (2002), Valbuena 2010). The relictic presence of this species in Sierra Nevada is related both to its high genetic resilience (Valbuena Carabana and Gil 2013, Tree Genetics &amp; Genomes (2013)) and to its elevated intraspecific genetic diversity (Valbuena CArabana and Gil, Parques Nacioanles). However, they are also expected to suffer the impact of climate change, due to their climate requirements (humid summers). Thus, simulations of the climate change effects on this habitat pointed out a reduction of its suitable habitat for Sierra Nevada (Benito et al. (2011)).</para>
+          </description>
+        </studyExtent>
+        <samplingDescription>
+          <para>We sampled at two localities of the Pyrenean oak forests at Sierra Nevada: Robledal de Cañar and Robledal de San Juan. We selected those two sites based on previous works (Pérez-Luque (2011), Pérez-Luque et al. (2013)) that clustered the populations of Q. pyreanica forests based on their plant species composition and environmental features. The Robledal de Cañar site (1366-1935 m a.s.l., 37°57&apos;28.04&apos;&apos;N, 3°25&apos;57.1&apos;&apos;W; Cáñar, Granada, SE Spain) was located in the Alpujarras Region on the southern slopes of Sierra Nevada. The Robledal de San Juan (1189-1899 m a.s.l., 37°7&apos;29.63&apos;&apos;N, 3°21&apos;54.60&apos;&apos;W; Güejar-Sierra, Granada, SE Spain) site was located in the northern slopes of Sierra Nevada.
+The sampling desing was determined by the hypothesis of the project (see Project Design description section).
+Altitudinal migration desing. 
+To test hypothesis of altitudinal migration, we sampled a total of 104 transects distributed along an altitudinal gradient in the two sites. We sampled two transects (separated at least 10 m from each other) every 25 m of elevation from forest limit to treeline ecotone at both study sites. In each locality we performed three replicates of this desing.
+
+Habitat colonization desing. 
+To test the hypothesis of colonization of marginal habitats, we performed transects in two types of marginal habitats: abandoned agricultural areas and pine plantations. A total of 64 transects were located within the marginal habitat and on the edge between marginal habitat and pyrenean oak forest. The number of transects inside the marginal habitat was determined by the size of the marginal habitat.
+Forests samplings.
+In addition to the above surveys, we conducted a survey inside Q. pyrenaica forests. A total of
+31 transects were distributed in the two sites.
+
+Data collection
+We sampled a total of 199 linear transects of 30 m x 10 m. Within each transect all tree species was mapped and the species identity annotated. Diameter size and tree height was measured for all individuals. duda diametro mayor. Field data were recorded using handheld PDAs. A customized application (app) was built to facilitate both data collection and store (Pérez-Pérez et al. (2013)). Automatic integration of the data into an information system was done thanks to this app.</para>
+        </samplingDescription>
+      </sampling>
+      <qualityControl>
+        <description>
+          <para>The transects coordinates were recorded with a handheld Garmin eTrex Vista Global Positioning System (GPS, +-5 m accuracy, Garmin (2007)) (ED1950 Datum). We also used colour digital orthophotographs provided by the Andalusian Cartography Institute and GIS (ArcGIS 9.2; ESRI, Redlands, California, USA) to verify that the geographical coordinates of each sampling plot were correct (Chapman and Wieczorek 2006).
+The specimens were taxonomically identified using Flora Iberica (Castroviejo et al. 1986-2005, Castroviejo 2001). The scientific names were checked with databases of International Plant Names Index (IPNI 2013) and Catalogue of Life/Species 2000 (Roskov et al. 2013). We also used the R packages taxize (Chamberlian and Szocs 2013, Chamberlain et al. 2014) and Taxostand (Cayuela and Oksanen 2014) to verify the taxonomical classification.
+We also performed validation procedures (Chapman 2005a, 2005b) (geopraphic coordinate format, coordinates within country/provincial boundaries, absence of ASCII anomalous characters in the dataset) with DARWIN_TEST (v3.2) software (Ortega-Maqueda and Pando 2008).</para>
+        </description>
+      </qualityControl>
+  </methods>
+  <project >
+    <title>Global Change, altitudinal range shift and colonization of degraded habitats in mediterranean mountains (MIGRAME)</title>
+      <personnel>
+        <individualName>
+            <givenName>Regino Jesús</givenName>
+          <surName>Zamora Rodríguez</surName>
+        </individualName>
+        <role>principalInvestigator</role>
+      </personnel>
+      <abstract>
+        <para>Nowadays there are strong scientific evidences of the effects of global change on natural systems (Parmesan 2006, Rosenzweig et al. 2008, García et al. 2014, O’Connor et al. 2015). Some ecological process is being altered due to climate change: species distribution (Thuiller et al. 2005, Lenoir et al. 2008); phenology (Parmesan and Yohe 2003, Gordo and Sanz 2010, Wolkovich et al. 2014); ecological interactions (Hughes 2000, Suttle et al. 2007) among others. Land use change and climate change are the most important drivers of biodiversity shifts (Sala et al. 2000).
+One of the most obvious biotic responses from global warming are the latitudinal and altitudinal shifts of species and communities (Allen and Breshears 1998, Jump and Peñuelas 2005, Lenoir et al. 2008). The species tend to expand into new areas they are now favorable, and retracted in the zones they are increasingly hostile. Considering two main drivers of global change (climatic warming and land abandonment), understand the dynamics of altitudinal migration and colonization of marginal habitats is critical to develop effective forest management strategies.
+The Global Change, altitudinal range shift and colonization of degraded habitats in mediterranean mountains (MIGRAME) project (Zamora et al. 2013) aims to asses the capacity of altitudinal migration and colonization of marginal habitats by a mediterrenean forest ecosystem considering two global change drivers: temperature increase and land use changes.
+For this purpose, this project analyzes the pattern of altitudinal migration and colonization of marginal habitats by a vulnerable ecosystem in a mediterranean mountain region, which represents the rear edge of their distribution: forests of Quercus pyrenaica Willd.
+Mediterranean region has shown large climate shifts in the past (Luterbacher et al. 2006) and it is a potentially vulnerable region to climatic changes (Pacifici et al. 2015), being considered as a hot-spot in future climate change projections (Giorgi 2006, Giorgi and Lionello 2008). On the other hand, land use changes are considered a major driver of vegetation change (McGill 2015). This is especially relevant in Mediterranean region, which has undergone intense antrophic activities through centuries (Padilla et al. 2010) shaping the actual landscape configuration (Valbuena-Carabaña et al. 2010).
+In this context mediterranean ecosystems are considered as natural laboratories in which to study global change, due to their high sensitivity to global change drivers (Matesanz and Valladares 2014, Doblas-Miranda et al. 2015).</para>
+      </abstract>
+      <funding>
+        <para>The project MIGRAME (RNM-6734) was funded by the Excellence Research
+Group Programme of the Andalusian Government.</para>
+      </funding>
+      <studyAreaDescription>
+        <descriptor name="generic"
+                    citableClassificationSystem="false">
+          <descriptorValue>The target ecosystem of the project is the Pyrenean oak forests (Quercus pyrenaica Willd.) of Sierra Nevada.
+Sierra Nevada is a high-mountain range located in southern Spain (37ºN, 3ºW) with an altitudinal range between 860 m and 3482 m a.s.l.. The climate is Mediterranean, characterized by cold winters and hot summers, with pronounced summer drought (July-August). The Sierra Nevada mountain range hosts a high number of endemic plant species (c. 80) (Lorite et al. 2007) for a total of 2,100 species of vascular plants (25% and 20% of Spanish and European flora respectively), and thus it is considered one of the most important biodiversity hotspots in the Mediterranean region (Blanca et al. 1998). This mountain area comprises 27 habitat types from the habitat directive. It contains 31 animal species (20 birds, 5 mammals, 4 invertebrates, 2 amphibians and reptiles) and 20 plant species listed in the Annex I and II of habitat and bird directives. Sierra Nevada has several types of legal protections: Biosphere Reserve MAB Committee UNESCO; Special Protection Area and Site of Community Importance (Natura 2000 network); and National Park. There are 61 municipalities with more than 90,000 inhabitants. The main economic activities are agriculture, tourism, beekeeping, mining, and skiing (Bonet et al. 2010).</descriptorValue>
+        </descriptor>
+      </studyAreaDescription>
+      <designDescription>
+        <description>
+          <para>The specific aims of the MIGRAME project are:
+•	To analyze the relevance of altitudinal migration at the leading edge (high elevation) of the range distribution of Pyrenean oak formation. 
+•	To analyze the importance of the recolonization process of marginal habitats (abandoned cropland and pine plantations) close to Pyrenean oak formation.
+Derived from the two global change drivers we have considered two main hypothesis (Figure 1):
+Altitudinal migration hypothesis
+Several studies have pointed out a trend towards higher temperatures and lower precipitation for the Mediterranean area (Giorgi and Lionello 2008, García-Ruiz et al. 2011). Climate projections forecast an increase of +4.8 °C at the end of the 21st century (Benito et al. 2011) for Sierra Nevada. In this context, shifts in the altitudinal (and latitudinal) distribution of species and communities are expected (Thuiller et al. 2008, Gottfried et al. 2012).
+We hypothesized that the range shift of Q. pyrenaica in Sierra Nevada is changing as a consequence of recent changes to temperature, and we would expect an upward expansion (Figure 1a).
+Marginal habitat colonization hypothesis
+In mediterranean area, the abandonment of cropland has been a generalized practice during the second half of the last century (Valbuena-Carabaña et al. 2010, Pías et al. 2014). Land-use change models predict an increase in thes trend in the future (Rounsevell et al. 2006). In fact, land abandonment is considered one of the most powerful global change drivers in developed countries (Escribano-Avila et al. 2012).
+We hypothesized that the land use changes in high mountain (i.e.: abandonment of croplands; management of Pine plantations, etc.) should facilitate the native forests regeneration and a process of colonization of marginal habitat (abandoned cropland, pine plantations) will occur (Figure 1b).
+Overall, focusing on if we will observe changes in altitudinal migration and/or colonization of marginal habitats, we are interested in the following questions: ¿Are altitudinal changes in Pyrenean oak forests associated with recent climate changes? alternatively, ¿are they more consistent with changes in land use? or are they consistent with both global change drivers?</para>
+        </description>
+      </designDescription>
+  </project>
+</dataset>
+  <additionalMetadata>
+    <metadata>
+      <gbif>
+          <dateStamp>2014-03-14T02:47:04.157+01:00</dateStamp>
+          <hierarchyLevel>dataset</hierarchyLevel>
+            <citation identifier="http://doi.org/10.15470/orboj4">iEcolab, University of Granada-Andalusian Environmental Center (Andalusian Institute for Earth System Research) (2015) Dataset of Global Change, altitudinal range shift and colonization of degraded habitats in mediterranean mountains (MIGRAME). Sierra Nevada Global Change Observatory. Andalusian Environmental Center, University of Granada, Regional Government of Andalusia. Dataset/Occurrence. http://www.gbif.es/ipt/resource?r=migrame</citation>
+          <bibliography>
+                <citation identifier="10.7818/AEET.XICongress.2013">Benito BM, Pérez-Pérez R, Zamora R, Pérez-Luque AJ (2013) Colonización de hábitats marginales y migración altitudinal del roble mediada por el arrendajo: simulación dinámica mediante sistemas multi-agente. In: Asociación Española de Ecología Terrestre (Ed) Proceedings of the XI Congreso Nacional de la Asociación Española de Ecología Terrestre, Invitación a la Ecología. Asociación Española de Ecología Terrestre, Pamplona, 31. doi: 10.7818/AEET.XICongress.2013</citation>
+                <citation identifier="10.7818/AEET.XICongress.2013">Pérez-Pérez R, Pérez-Luque AJ, Navarro I, Bonet FJ, Zamora R (2013) Seguimiento y divulgación de procesos ecológicos mediante dispositivos móviles: un caso práctico. In: Asociación Española de Ecología Terrestre (Ed) Proceedings of the XI Congreso Nacional de la Asociación Española de Ecología Terrestre, Invitación a la Ecología. Asociación Española de Ecología Terrestre, Pamplona, 144. doi: 10.7818/AEET.XICongress.2013</citation>
+                <citation identifier="10.7818/AEET.XICongress.2013">Zamora R, Pérez-Luque AJ, Benito BM, Bonet FJ, Navarro I, Pérez-Pérez R, Hódar JA, Matías L (2013) Cambio global, migración altitudinal y colonización de hábitats degradados en montañas mediterráneas (MIGRAME). In: Asociación Española de Ecología Terrestre (Ed) Proceedings of the XI Congreso Nacional de la Asociación Española de Ecología Terrestre, Invitación a la Ecología. Asociación Española de Ecología Terrestre, Pamplona. doi: 10.7818/AEET.XICongress.2013</citation>
+                <citation identifier="10.7818/AEET.XICongress.2013">Pérez-Luque AJ, Bonet FJ, Benito BM, Zamora R (2013) Caracterización ambiental de los robledales de Quercus pyrenaica Willd. de Sierra Nevada. In: Asociación Española de Ecología Terrestre (Ed) Proceedings of the XI Congreso Nacional de la Asociación Española de Ecología Terrestre, Invitación a la Ecología. Asociación Española de Ecología Terrestre, Pamplona, 92. doi: 10.7818/AEET.XICongress.2013</citation>
+          </bibliography>
+              <collection>
+                <collectionName>Dataset of Global Change, altitudinal range shift and colonization of degraded habitats in mediterranean mountains (MIGRAME)</collectionName>
+              </collection>
+          <dc:replaces>6c6a9003-ecea-4f3a-9f2f-414107da65c1/v1.8.xml</dc:replaces>
+      </gbif>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

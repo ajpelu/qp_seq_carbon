@@ -1,0 +1,31 @@
+---
+title: "Estimación del secuestro de C de los robledales de Sierra Nevada"
+output: 
+  word_document
+bibliography: ../references.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Justificación 
+
+El proyecto LIFE-ADAPTAMED (ADAPTAMED) está llevando a cabo diferentes actuaciones de gestión forestal con carácter demostrativo para evaluar cómo éstas pueden ayudar a ecosistemas clave, entre ellos los robledales, a adaptarse a las nuevas condiciones debidas al cambio global. Uno de los focos de este proyecto es analizar cómo se verán afectados los diferentes servicios ecosistémicos que aportan los ecosistemas clave: robledales, enebrales, etc. 
+
+Uno de los servicios ecosistémicos más relevantes realizado por los ecosistemas terrestres es el **secuestro de carbono**, entre otros por su papel en la regulación climática. Para conocer la evolución de este servicio ecosistémico, un primer paso consiste en realizar una estimación de la cantidad de carbono almacenada por los robledales. Una vez conocido el stock de carbono de los robledales podremos analizar su evolución teniendo en cuenta otros datos (*e.g.* dendrocronología; patrones de distribución; patrones de densificación, etc.) 
+
+El objetivo del presente trabajo es realizar una estimación de la cantidad de carbono que están secuestrando los melojares de Sierra Nevada para conocer el estado de este servicio ecosistémico. 
+
+## Objetivos 
+
+El objetivo principal del trabajo es realizar una estimación de la cantidad de carbono y CO2 atmosférico equivalente que hay acumulado en las masas de robledal (*Quercus pyrenaica*) de Sierra Nevada. De esta forma podremos inferir el papel de estas masas forestales en el secuestro de carbono, y cuantificar este servicio ecosistémico. 
+
+## Metodología 
+
+Los robledales, bosques de Quercus pyrenaica, son formaciones forestales consideradas potencialmente vulnerables frente a los impactos del cambio climático []. En Sierra Nevada estas formaciones ocupan cerca de 2400 Has distribuidas en 8 poblaciones que se pueden agrupar en tres grupos de población (Pérez-Luque 2011) (Figura 1). Estas poblaciones representan un rear-edge de la distribución de la especie. 
+
+La distribución de los robledales en Sierra Nevada se ha obtenido a partir del mapa de Ecosistemas de Sierra Nevada. 
+ 
+
+

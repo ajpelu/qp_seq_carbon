@@ -1,0 +1,70 @@
+---
+title: "Prepare Data from Forest Inventories"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, message=FALSE, warning=FALSE}
+source("./load_pkgs.R")
+```
+
+
+# MIGRAME 
+
+First of all, we downloaded the DarwinCore Archive (`.zip` file) of our dataset from GBIF ([doi: 10.15470/orboj4](https://doi.org/10.15470/orboj4)). Then, we use the `finch` package [@finch] to process the Darwin Core Archive and load the datasets. 
+
+```{r}
+# x <- dwca_read("https://ipt.gbif.es/archive.do?r=migrame")
+# 
+# mig_occ <- read_delim(x$data[1], delim = "\t")
+# mig_mof <- read_delim(x$data[2], delim = "\t")
+
+mig_occ <- read_delim(here::here("raw_data/migrame/dwca-migrame-v1.8/occurrence.txt"), delim = "\t")
+mig_mof <- read_delim(here::here("raw_data/migrame/dwca-migrame-v1.8/measurementorfact.txt"), delim = "\t")
+mig_transectos <- read.table(here::here("raw_data/migrame/appendix_transects.csv"))
+```
+
+### Selección de datos
+
+- Transectos realizados dentro del robledal
+
+```{r}
+fo <- mig_transect %>% 
+  filter(type == "FO") %>% as.data.frame()
+
+
+# Prepare measurements
+g <- mig_mof %>% dplyr::select(id, measurementType, measurementValue) %>% 
+  spread(measurementType, measurementValue) %>% 
+  rename(dbh = `diameter size`, h = `tree height`)
+
+mig <- g %>% inner_join(mig_occ, by = "id") %>% 
+  mutate(loc = case_when(
+             locality == "Robledal de San Juan. Barranco de San Juan" ~ "SJ",
+             locality == "Robledal de Cañar. Loma de Cañar" ~ "CA")) %>% 
+  dplyr::select(id, dbh, h, eventDate, catalogNumber, loc, scientificName, 
+                ) %>% 
+  separate(catalogNumber, c(NA, "tr", NA), sep ="-") %>% 
+  filter(tr %in% unique(fo$id_transect)) %>% 
+  mutate(sp = case_when(
+    scientificName == "Quercus pyrenaica Willd." ~ "Qpyr",
+    scientificName == "Quercus ilex L. subsp. ballota" ~ "Qilex"
+  )) %>% 
+  dplyr::select(tr, loc, sp, dbh, h, date = eventDate) %>% 
+  inner_join()
+
+mig 
+
+
+ 
+write_csv(mig, here::here("raw_data/df_mig.csv"))
+  
+```
+
+
+
+
+
+
+
