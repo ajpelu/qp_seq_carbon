@@ -22,8 +22,22 @@ First of all, we downloaded the DarwinCore Archive (`.zip` file) of our dataset 
 
 mig_occ <- read_delim(here::here("raw_data/migrame/dwca-migrame-v1.8/occurrence.txt"), delim = "\t")
 mig_mof <- read_delim(here::here("raw_data/migrame/dwca-migrame-v1.8/measurementorfact.txt"), delim = "\t")
+
+
+# Get transect data 
+# Transect data comes from Supplementary of https://doi.org/10.3897/phytokeys.56.5482 
+
+# Table S1. Information about transects of the project. Elevation in m a.s.l.. 
+# Type: AM = Altitudinal migration; FO = Forest; MH = Marginal Habitat. 
+# Subtype: 
+#   AC-e = Abandoned Cropland: edge; AC-i = Abandoned Cropland: inside; 
+#   Pp-e = Pine plantations: edge; Pp-i: Pine plantations: inside; 
+#   TE = Treeline Ecotone. 
+# Locality: CA = Robledal de Cáñar; SJ = Robledal de San Juan.
+
 mig_transectos <- read.table(here::here("raw_data/migrame/appendix_transects.csv"))
 ```
+
 
 ### Selección de datos
 
@@ -43,23 +57,32 @@ mig <- g %>% inner_join(mig_occ, by = "id") %>%
   mutate(loc = case_when(
              locality == "Robledal de San Juan. Barranco de San Juan" ~ "SJ",
              locality == "Robledal de Cañar. Loma de Cañar" ~ "CA")) %>% 
-  dplyr::select(id, dbh, h, eventDate, catalogNumber, loc, scientificName, 
-                ) %>% 
+  dplyr::select(id, dbh, h, eventDate, catalogNumber, loc, scientificName) %>% 
   separate(catalogNumber, c(NA, "tr", NA), sep ="-") %>% 
   filter(tr %in% unique(fo$id_transect)) %>% 
   mutate(sp = case_when(
     scientificName == "Quercus pyrenaica Willd." ~ "Qpyr",
     scientificName == "Quercus ilex L. subsp. ballota" ~ "Qilex"
-  )) %>% 
-  dplyr::select(tr, loc, sp, dbh, h, date = eventDate) %>% 
-  inner_join()
+  ))
 
-mig 
-
-
- 
 write_csv(mig, here::here("raw_data/df_mig.csv"))
-  
+
+
+
+# Read spatial info 
+
+mig_spa <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"), 
+                   layer = "mig_transectos_polygon", 
+                   verbose = TRUE, encoding = "UTF-8")
+
+# Select transects and variables
+mig_spaFO <- subset(mig_spa, nombre %in% unique(fo$id_transect))
+mig_spaFO <- mig_spaFO[, c("nombre", "fecha")]
+names(mig_spaFO) <- c("code", "fecha")
+
+writeOGR(mig_spaFO, 
+         dsn = here::here("/raw_data/geoinfo"), 
+         "plotQP_lidar", driver="ESRI Shapefile", overwrite_layer = TRUE)
 ```
 
 
