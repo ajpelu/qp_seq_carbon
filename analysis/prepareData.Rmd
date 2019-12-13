@@ -12,7 +12,7 @@ source("./load_pkgs.R")
 
 # MIGRAME 
 
-First of all, we downloaded the DarwinCore Archive (`.zip` file) of our dataset from GBIF ([doi: 10.15470/orboj4](https://doi.org/10.15470/orboj4)). Then, we use the `finch` package [@finch] to process the Darwin Core Archive and load the datasets. 
+We downloaded the DarwinCore Archive (`.zip` file) of our dataset from GBIF ([doi: 10.15470/orboj4](https://doi.org/10.15470/orboj4)). Then, we use the `finch` package [@finch] to process the Darwin Core Archive and load the datasets. 
 
 ```{r}
 # x <- dwca_read("https://ipt.gbif.es/archive.do?r=migrame")
@@ -65,8 +65,7 @@ mig <- g %>% inner_join(mig_occ, by = "id") %>%
     scientificName == "Quercus ilex L. subsp. ballota" ~ "Qilex"
   ))
 
-write_csv(mig, here::here("raw_data/df_mig.csv"))
-
+write_csv(mig, here::here("data/df_mig.csv"))
 
 
 # Read spatial info 
@@ -78,14 +77,40 @@ mig_spa <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"),
 # Select transects and variables
 mig_spaFO <- subset(mig_spa, nombre %in% unique(fo$id_transect))
 mig_spaFO <- mig_spaFO[, c("nombre", "fecha")]
-names(mig_spaFO) <- c("code", "fecha")
+names(mig_spaFO) <- c("code", "date")
 
 writeOGR(mig_spaFO, 
-         dsn = here::here("/raw_data/geoinfo"), 
+         dsn = here::here("/data/geoinfo"), 
          "plotQP_lidar", driver="ESRI Shapefile", overwrite_layer = TRUE)
 ```
 
+# Dendro SN 
 
+* Data from Pérez-Luque et al. (Submitted to *Ecosystems*).
+* 50 target trees were cored for dendrochronological analysis
+* Stand competition of target trees was assessed by recording distance, azimuth, DBH, species and total height of all neighboring living trees with DBH > 7.5 cm within a circular plot of 10 m radius.
+
+
+```{r}
+# Read spatial info 
+
+dendrosn_spa <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"), 
+                   layer = "dendro_sn_polygon", 
+                   verbose = TRUE, encoding = "UTF-8")
+
+dendrosn_spa <- dendrosn_spa[, c("name", "cmt")]
+
+dendrosn_spa@data$date <- parse_date(str_sub(dendrosn_spa@data$cmt, end=-10))
+dendrosn_spa <- dendrosn_spa[, c("name", "date")]
+names(dendrosn_spa)[1] <- "code"
+
+
+
+## Vas por aquí 
+
+
+
+```
 
 
 

@@ -28,4 +28,61 @@ Los robledales, bosques de Quercus pyrenaica, son formaciones forestales conside
 La distribución de los robledales en Sierra Nevada se ha obtenido a partir del mapa de Ecosistemas de Sierra Nevada. 
  
 
+Para cada árbol medido en campo se calculará el valor de la biomasa utilizando las ecuaciones alométricas de la especie [@RuizPeinadoGertrudixetal2012BiomassModels], que considera aditividad ... .Éstas ecuaciones se presentan en la tabla 1 
+
+
+```{r tab_allometric, results='markup', fig.cap= "Ecuaciones alométricas de biomasa para *Q. pyrenaica*. Fuente @RuizPeinadoGertrudixetal2012BiomassModels"}
+
+
+
+```
+
+
+
+## Plan de Trabajo 
+
+- Depurar datos de inventario 
+- Cómputo de datos de biomasa a partir de Datos de Inventario
+- Crear tabla de disponibilidad de datos 
+
+
+
+
+Methods
+
+Montero et al. (2005) developed biomass models for
+thirty two forest species in Spain in order to quantify
+the carbon stocks and the potential of Spanish forests
+as carbon sinks. These are allometric models for the
+different tree components (stem, branches of different
+diameters, needles or leaves and root system), which
+use diameter at the breast height as an independent
+variable.
+
+These models were modified for softwood
+species by Ruiz-Peinado et al. (2011) since they did
+not fulfill the additivity property (which is highly desirable
+in this type of model) between tree components
+(Cunia and Briggs, 1984; Parresol, 1999).
+
+Besides
+diameter, these new equations included total height as
+an independent variable in order to do more applicability
+to the models. In this study, we present new biomass
+models for hardwood species with higher surface distribution
+and ecological importance
+As in the case of the models for softwood species (Ruiz-Peinado et al., 2011), we used methods that guarantee the additivity of the tree biomass fractions and we explored the inclusion of tree height as an additional predictor variable.
+
+Biomass component: 
+stem with bark (commercial volume, up
+to a top diameter of 7 cm), thick branches (diameter
+greater than 7 cm), medium branches (diameter between
+2 and 7 cm), thin branches (diameter smaller
+than 2 cm) and leaves
+
+
+For Q. pyrenaica biomass data were collected in autumn and
+winter when leaves were not present on the trees so this  fraction was excluded from the analysis. 
+
+- 
 
