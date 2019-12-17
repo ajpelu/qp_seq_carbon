@@ -1,0 +1,18 @@
+Al detectar errores en las densidades finales de algunas parcelas le pido a Oliver y a Monica que las vuelvan a tomar. Lo hacen con fecha de 30/10/2013.
+Los datos que obtienen (referidos al total de la parcela de 50x50 m) son los siguientes:
+
+SJ 2 30%: 
+		Pinos; PM: 68
+                          pm: 0
+                          Secos: 0
+                Robles; PM: 97
+                            pm: 37
+                            Secos: 0
+ 
+SJ 6 30%: 
+		Pinos; PM: 159
+                          pm: 0
+                         Secos: 0
+                Robles; PM: 35
+                            pm: 13
+                            Secos: 1

@@ -1,1 +1,0 @@
-Nota: El gps con el que se tomaron las coordenadas tenía el Datum ED50

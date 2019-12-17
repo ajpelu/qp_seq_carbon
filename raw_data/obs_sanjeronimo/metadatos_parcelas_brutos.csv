@@ -1,0 +1,16 @@
+ID_PARCELA,id_parcela_destino,COD_LOCALIDAD,PARCELA,ALTITUD,INCLINACION,EXPOSICION,COBERTURA,AREA,COD_COMUNIDAD,PERTURBACIONES,USOS_SUELO,COD_GPS,COD_DATUM,UTM_X_1,UTM_Y_1,WAYPOINT_1,ERROR_1,UTM_X_2,UTM_Y_2,WAYPOINT_2,ERROR_2,UTM_X_3,UTM_Y_3,WAYPOINT_3,ERROR_3,UTM_X_4,UTM_Y_4,WAYPOINT_4,ERROR_4,OBSERVACIONES
+49,1,16,A-1,"1,800",0,,0,400,"43,380","Ganadería (Vacas y cabras), tratamientos selvicola",Ganadero/Forestal,4,1,"461,156","4,105,545",60,3m,"461,151","4,105,560",61,3m,"461,141","4,105,550",62,4m,"461,145","4,105,529",63,4m,-Comprobar altitud.
+50,2,16,A-2,"1,791",40,Norte-Este,75,400,"43,380",Tratamiento intensidad,,5,1,"461,183","4,105,666",370,3,"461,190","4,105,649",371,,"461,162","4,105,645",372,,"461,165","4,105,669",373,,
+51,3,16,A-3,0,0,,80,400,"43,380",Ganadería,Forestal,4,1,"461,221","4,105,784",64,4m,"461,206","4,105,798",65,4m,"461,195","4,105,762",66,7m,"461,210","4,105,769",67,4m,
+52,9,17,B-1,"1,697",20,Norte,90,400,"43,380",Trratamientos selvicolas antiguos,Forestal/ Ganadero,4,1,"461,197","4,106,116",68,3m,"461,180","4,106,124",69,3m,"461,170","4,106,107",70,,"461,187","4,106,102",71,,
+53,4,17,B-2,"1,615",20,Norte-Norte Oeste,0,400,"43,380",,,4,1,"461,133","4,106,170",73,3m,"461,116","4,106,175",78,3m/1646 msm,"461,107","4,106,159",75,3m/1645 msm,"461,122","4,106,152",76,3m/1655 msm,
+54,5,17,B-3,"1,680",0,Este,80,400,"43,380",,Antiguos cultivos,6,1,"461,206","4,106,183",374,5,"461,190","4,106,171",376,5,"461,179","4,106,181",377,5,"461,194","1,406,194",378,5,"Falta GPS
+
+Fotos parcela: Cámara AV Fujifilm II."
+55,6,18,C-1,"1,800",70,Este,85,400,"43,380",,,7,1,"461,570","4,105,880",390,4m,"461,528","4,105,880",392,4m,"461,558","4,105,876",393,4m,"461,538","4,105,898",394,4m,Cámara:Fujifilm AV
+56,7,18,C-2,"1,815",0,,0,400,"43,380",,,6,1,0,0,386,,0,0,387,,0,0,388,,0,0,385,,"-Falta GPS creo que es FLORA3 por el nº.de wp.
+
+-Fotos perimetro y parcela Cámara Fujifilm II(AV).
+
+-Fotos de SP Cámara Olimpus CS."
+57,8,18,C-3,"1,800",50,Norte-este,85,400,"43,380",Tratamientos selvicolas antiguos,Forestal/Ganadero,4,1,"461,858","4,105,809",77,4m/1800msm,"461,861","4,105,806",78,6m/1792msm,"461,850","4,105,829",79,5m/1792msm,"461,838","4,105,810",80,5m/1801msm,Cámara Olimpus JM

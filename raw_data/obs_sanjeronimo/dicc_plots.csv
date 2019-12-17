@@ -1,0 +1,82 @@
+NAME_OLD,PARCELA,OBSERVACIONES,X,Y,V1_X
+A-1,Sjrob-A1m,Datos 2011: GPS de Oliver Izquierdo para datos de parcela 40x40,461141,4105548,C
+A-2,Sjrob-A2i,Datos 2011: GPS de Oliver Izquierdo para datos de la parcela 40x40. La subparcela está descuadrada y los ángulos de la parcela de 40x40 no son exactos.,461171,4105657,C
+A-3,Sjrob-A3c,"Datos 2011: GPS de Oliver Izquierdo para datos de parcela 40x40.La parcela 20 x 20 se le da nuevo centro, donde se cruzan las cintas y de este se levanta la parcela 40 x 40 y se toman parámetros endrométricos.",461205,4105789,C
+B-1,Sjrob-B1m,Observaciones del 2011: GPS de Oliver Izquierdo; El centro de la parcela de 20x20 no se encuentra. Se ubica un centro nuevo = UTM 461184/4106115.,461187,4106106,C
+B-2,Sjrob-B2i,"Datos incompletos de UTM V2 de parcela 40x40. Datos 2011: GPS Oliver Izquierdo para los datos de 40x40. La estaca V1 de 40x40 se desplaza 2,5 mts hacia arriba de su posición original porque no es posible clavarla. La parcela tiene una zona de canchal ( Foto 21,22).",461117,4106173,C
+B-3,Sjrob-B3c,Datos 2011: GPS de Oliver Izquierdo para datos de la parcela 40x40,461196,4106188,C
+C-1,Sjrob-C1i,Datos 2011: GPS de Oliver Izquierdo para los datos de parcela de 40x40,461545,4105881,C
+C-2,Sjrob-C2m,Datos 2011: GPS de Oliver Izquierdo para dato de parcela 40x40.Ubicación de la parcela 40x40. Subir por la cuerda encontramos las balizas casi haciendo cumbre. La parcela está en los robles más altos y los primeros en el cambio de orientación.,461560,4105800,C
+C-3,Sjrob-C3c,Datos 2011: GPS de Oliver Izquierdo para datos de parcela de 40x40,461854,4105801,C
+A-1,Sjrob-A1m,,461142,4105519,V1
+A-2,Sjrob-A2i,,461200,4105644,V1
+A-3,Sjrob-A3c,,461208,4105750,V1
+B-1,Sjrob-B1m,,461200,4106088,V1
+B-2,Sjrob-B2i,,461125,4106143,V1
+B-3,Sjrob-B3c,,461188,4106154,V1
+C-1,Sjrob-C1i,,461514,4105868,V1
+C-2,Sjrob-C2m,,461510,4105789,V1
+C-3,Sjrob-C3c,,461831,4105809,V1
+A-1,Sjrob-A1m,,461119,4105519,V2
+A-2,Sjrob-A2i,,461177,4105644,V2
+A-3,Sjrob-A3c,,461182,4105750,V2
+B-1,Sjrob-B1m,,461155,4106088,V2
+B-2,Sjrob-B2i,,,4106143,V2
+B-3,Sjrob-B3c,,461166,4106154,V2
+C-1,Sjrob-C1i,,461514,4105868,V2
+C-2,Sjrob-C2m,,461535,4105789,V2
+C-3,Sjrob-C3c,,461840,4105809,V2
+A-1,Sjrob-A1m,,461145,4105572,V3
+A-2,Sjrob-A2i,,461141,4105680,V3
+A-3,Sjrob-A3c,,461202,4105800,V3
+B-1,Sjrob-B1m,,461174,4106137,V3
+B-2,Sjrob-B2i,,461110,4106193,V3
+B-3,Sjrob-B3c,,461197,4106206,V3
+C-1,Sjrob-C1i,,461571,4105872,V3
+C-2,Sjrob-C2m,,461561,4105786,V3
+C-3,Sjrob-C3c,,461885,4105829,V3
+A-1,Sjrob-A1m,,461148,4105551,V4
+A-2,Sjrob-A2i,,461159,4105645,V4
+A-3,Sjrob-A3c,,461235,4105782,V4
+B-1,Sjrob-B1m,,461209,410627,V4
+B-2,Sjrob-B2i,,461144,4106174,V4
+B-3,Sjrob-B3c,,461221,4106174,V4
+C-1,Sjrob-C1i,,461539,4105854,V4
+C-2,Sjrob-C2m,,461532,4105761,V4
+C-3,Sjrob-C3c,,461862,4105792,V4
+A-1,Sjrob-A1m,,461156,4105545,V1_20
+A-2,Sjrob-A2i,,461183,4105666,V1_20
+A-3,Sjrob-A3c,,461221,4105784,V1_20
+B-1,Sjrob-B1m,,461197,4106116,V1_20
+B-2,Sjrob-B2i,,461133,4106170,V1_20
+B-3,Sjrob-B3c,,461206,4106183,V1_20
+C-1,Sjrob-C1i,,461570,4105880,V1_20
+C-2,Sjrob-C2m,,,,V1_20
+C-3,Sjrob-C3c,,461858,4105809,V1_20
+A-1,Sjrob-A1m,,461151,4105560,V2_20
+A-2,Sjrob-A2i,,461190,4105649,V2_20
+A-3,Sjrob-A3c,,461206,4105798,V2_20
+B-1,Sjrob-B1m,,461180,4106124,V2_20
+B-2,Sjrob-B2i,,461116,4106175,V2_20
+B-3,Sjrob-B3c,,461190,4106171,V2_20
+C-1,Sjrob-C1i,,461528,4105880,V2_20
+C-2,Sjrob-C2m,,,,V2_20
+C-3,Sjrob-C3c,,461861,4105806,V2_20
+A-1,Sjrob-A1m,,461141,4105550,V3_20
+A-2,Sjrob-A2i,,461162,4105645,V3_20
+A-3,Sjrob-A3c,,461195,4105762,V3_20
+B-1,Sjrob-B1m,,461170,4106107,V3_20
+B-2,Sjrob-B2i,,461107,4106159,V3_20
+B-3,Sjrob-B3c,,461179,4106181,V3_20
+C-1,Sjrob-C1i,,461558,4105876,V3_20
+C-2,Sjrob-C2m,,,,V3_20
+C-3,Sjrob-C3c,,461850,4105829,V3_20
+A-1,Sjrob-A1m,,461145,4105529,V4_20
+A-2,Sjrob-A2i,,461165,4105669,V4_20
+A-3,Sjrob-A3c,,461210,4105769,V4_20
+B-1,Sjrob-B1m,,461187,4106102,V4_20
+B-2,Sjrob-B2i,,461122,4106152,V4_20
+B-3,Sjrob-B3c,,461194,1406194,V4_20
+C-1,Sjrob-C1i,,461538,4105898,V4_20
+C-2,Sjrob-C2m,,,,V4_20
+C-3,Sjrob-C3c,,461838,4105810,V4_20

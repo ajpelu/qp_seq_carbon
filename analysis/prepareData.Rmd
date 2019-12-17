@@ -84,16 +84,15 @@ writeOGR(mig_spaFO,
          "plotQP_lidar", driver="ESRI Shapefile", overwrite_layer = TRUE)
 ```
 
+
 # Dendro SN 
 
 * Data from Pérez-Luque et al. (Submitted to *Ecosystems*).
 * 50 target trees were cored for dendrochronological analysis
 * Stand competition of target trees was assessed by recording distance, azimuth, DBH, species and total height of all neighboring living trees with DBH > 7.5 cm within a circular plot of 10 m radius.
 
-
 ```{r}
 # Read spatial info 
-
 dendrosn_spa <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"), 
                    layer = "dendro_sn_polygon", 
                    verbose = TRUE, encoding = "UTF-8")
@@ -104,13 +103,53 @@ dendrosn_spa@data$date <- parse_date(str_sub(dendrosn_spa@data$cmt, end=-10))
 dendrosn_spa <- dendrosn_spa[, c("name", "date")]
 names(dendrosn_spa)[1] <- "code"
 
+``` 
 
 
-## Vas por aquí 
+# Dendro LIFE
 
+* Data from monitoring dendro LIFE-ADAPTAMED
+* Several plots in Pyrenean oaks forest with variable size 
+* Distance, azimuth, DBH, species and height of all living trees within a circular plot of variable radius were registered. 
 
-
+```{r}
+# Read spatial info 
+dendrolife_spa <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"), 
+                   layer = "dendro_life_polygon", 
+                   verbose = TRUE, encoding = "UTF-8")
+dendrolife_spa <- dendrolife_spa[, c("code", "date")]
+dendrolife_spa@data$date <- parse_date(dendrolife_spa@data$date)
 ```
+
+# OBSNEV San Jeronimo 
+
+* 9 parcelas en el robledal de San Jerónimo
+* 3 réplicas x 3 tratamientos (Control / Moderado / Intenso)
+  
+  * Control: No actuación. Parcelas de 20 x 20 m. En ellas se toman los datos de 10 individuos (distancia al centro; rumbo; dbh; diametro basal; altura) y también se toman datos del resto de individuos (diámetro basal y dbh)
+  
+  * Moderada: Eliminación de pies secos/enfermos, y los incluidos en una agrupación (conjunto de robles que distan entre sí menos de 3 m.) y que tengan un diámetro basal < 15 cm. 
+  
+  * Intenso: idem moderada + incremento de corta hasta 30 % seleccionándose para ello los pies enfermos, dominados y/o excesivamente densos, eliminándose en este último caso alguno de los pies que estén más próximos. 
+
+### Inconvenientes / DUDAS: 
+* Solamente las parcelas control no fueron tratadas, por lo que tendríamos solamente 3 parcelas. 
+* De las otras, siempre tendríamos en torno al centroide 10 árboles localizados (con todas sus medidas)
+* De las parcelas control, solamente tenemos datos completos de 10 árboles. Del resto de los árboles de la parcela tenemos datos de diámetros. Podemos no utilizarlos o realizar una estimación de la altura a partir de ecuaciónes de regresión. 
+
+```{r}
+# Read spatial info 
+obsnev_sjer <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"), 
+                   layer = "obsnev_sjeronimo_polygon",
+                   verbose = TRUE, encoding = "UTF-8")
+obsnev_sjer <- obsnev_sjer[, c("code", "fecha")]
+names(obsnev_sjer)[2] <- "date"
+obsnev_sjer@data$date <- parse_date(obsnev_sjer@data$date)
+```
+
+
+
+
 
 
 

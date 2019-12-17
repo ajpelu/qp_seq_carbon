@@ -1,0 +1,9 @@
+La versión "20111213_Dasometrico_robledal_SJeron_(Monica).xls", completada por Mónica, está basada en el archivo "Dasometrico_robledal_SJeron(BLANCO).xls" que yo le pasé con los campos a completar.
+
+Al percatarme, en abril de 2012, de que a este archivo le faltan algunos campos importantes que no se han picado en ningún sitio
+(en concreto los datos generales de la parcela), creo una nueva versión para completarla, yo directamente, con estos datos:
+
+201204_Dasometrico_robledal_SJeron_(Monica y Rut).xls
+
+
+Rut, 11 abril 2012
