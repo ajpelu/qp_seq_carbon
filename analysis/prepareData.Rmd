@@ -44,7 +44,7 @@ mig_transectos <- read.table(here::here("raw_data/migrame/appendix_transects.csv
 - Transectos realizados dentro del robledal
 
 ```{r}
-fo <- mig_transect %>% 
+fo <- mig_transectos %>% 
   filter(type == "FO") %>% as.data.frame()
 
 
@@ -75,13 +75,9 @@ mig_spa <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"),
                    verbose = TRUE, encoding = "UTF-8")
 
 # Select transects and variables
-mig_spaFO <- subset(mig_spa, nombre %in% unique(fo$id_transect))
+mig_spaFO <- subset(mig_spa, nombre %in% unique(fo$name))
 mig_spaFO <- mig_spaFO[, c("nombre", "fecha")]
 names(mig_spaFO) <- c("code", "date")
-
-writeOGR(mig_spaFO, 
-         dsn = here::here("/data/geoinfo"), 
-         "plotQP_lidar", driver="ESRI Shapefile", overwrite_layer = TRUE)
 ```
 
 
@@ -147,9 +143,99 @@ names(obsnev_sjer)[2] <- "date"
 obsnev_sjer@data$date <- parse_date(obsnev_sjer@data$date)
 ```
 
+### SINFONEVADA
+
+We downloaded the DarwinCore Archive (`.zip` file) of our dataset from GBIF ([doi: 10.15468/4gpr7e](https://doi.org/10.15468/4gpr7e)). Then, we use the `finch` package [@finch] to process the Darwin Core Archive and load the datasets. 
+
+```{r}
+# sinfodwca  <- dwca_read("https://ipt.gbif.es/archive.do?r=sinfonevada&v=1.5")
+# sinfo_occ <- read_delim(sinfodwca$data[1], delim = "\t")
+
+sinfo_occ <- read_delim(here::here("raw_data/sinfonevada/dwca-sinfonevada-v1.5/occurrence.txt"), delim = "\t")
+
+sinfo_plots <- sinfo_occ %>%
+  separate(catalogNumber, c(NA,"id_parcela", NA, NA), sep = "-") %>% 
+  mutate(id_parcela = as.numeric(id_parcela)) %>% 
+  dplyr::select(id_parcela, decimalLatitude, decimalLongitude) %>% que()
+
+sinfo_aux <- read_csv(here::here("raw_data/sinfonevada/parcelas_sinfo_qp.csv"))
 
 
+sinfo_qp <- sinfo_plots %>% 
+  inner_join(sinfo_aux, by="id_parcela")
+  
+sinfo_qp_spa <- SpatialPointsDataFrame(coords = sinfo_qp[,c("decimalLongitude","decimalLatitude")], 
+                                       data = sinfo_qp, 
+                                       proj4string = CRS("+init=epsg:4326"))
 
+```
+
+
+* Each inventory plot has three sampling ts: i) a forest inventory plot (20 × 20 m); ii) a 5-m radius subplot for the estimation of the regeneration; iii) and a 10-m radius subplot for species composition and abundance. Each live tree with a diameter at breast height (dbh) > 7.5 cm was tallied by species and dbh in the forest inventory plot. 
+
+* Tenemos datos del centroide pero no del polígono. 
+
+
+### CAMARATE
+* Parcelas realizadas en la zona de CAMARATE especificamente para caracterizar la estructura
+
+
+```{r}
+# Read spatial info 
+camarate <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"), 
+                   layer = "camarate_dasometrico_polygon",
+                   verbose = TRUE, encoding = "UTF-8")
+
+camarate@data$date <- parse_date(camarate@data$date)
+```
+
+* Eliminar > 16 m distancia en CAM_H2
+
+# r capas 
+```{r}
+# Check projection and if not 4326 transform 
+
+# CRS("+init=epsg:4326")
+p <-projection(obsnev_sjer)
+  
+camarate <- spTransform(camarate, p)
+mig_spaFO <- spTransform(mig_spaFO, p)
+dendrosn_spa<- spTransform(dendrosn_spa, p)
+dendrolife_spa<- spTransform(dendrolife_spa, p)
+
+
+plotsQP <- rbind(dendrolife_spa, dendrosn_spa,
+           mig_spaFO, camarate, obsnev_sjer,
+           makeUniqueIDs = TRUE)  
+
+
+# Add data 
+dicc_plot <- read_csv(here::here("raw_data/dicc_plots.csv"))
+
+plotsQP <- merge(plotsQP, dicc_plot, duplicateGeoms = T)
+
+
+writeOGR(plotsQP, 
+         dsn = here::here("/data/geoinfo"), 
+         "plotsQP", driver="ESRI Shapefile", overwrite_layer = TRUE)
+
+```
+
+
+# Visualize plots and Q. pyrenaica forests 
+* Read Q. pyrenaica forests 
+
+```{r}
+qp_sn <- rgdal::readOGR(dsn="/Users/ajpelu/Google Drive/_phd/qpyr_distribution/data_raw/geoinfo/",
+                    layer = 'q_pyr_sn_4326', verbose = TRUE, encoding = "UTF-8")
+
+qp_sn25 <- rgdal::readOGR(dsn="/Users/ajpelu/Google Drive/_phd/qpyr_distribution/data_raw/geoinfo/",
+                    layer = 'q_pyr_sn25830', verbose = TRUE, encoding = "UTF-8")
+
+qpR <- spTransform(qp_sn25, CRS("+init=epsg:4326"))
+
+mapview::mapview(qp_sn25)
+```
 
 
 

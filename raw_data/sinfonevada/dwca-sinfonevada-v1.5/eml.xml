@@ -1,0 +1,740 @@
+<eml:eml xmlns:eml="eml://ecoinformatics.org/eml-2.1.1"
+         xmlns:dc="http://purl.org/dc/terms/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml.xsd"
+         packageId="db6cd9d7-7be5-4cd0-8b3c-fb6dd7446472/v1.5" system="http://gbif.org" scope="system"
+         xml:lang="eng">
+
+<dataset>
+  <alternateIdentifier>db6cd9d7-7be5-4cd0-8b3c-fb6dd7446472</alternateIdentifier>
+  <alternateIdentifier>doi:10.15468/4gpr7e</alternateIdentifier>
+  <alternateIdentifier>https://ipt.gbif.es/resource?r=sinfonevada</alternateIdentifier>
+  <title xml:lang="eng">Sinfonevada: Dataset of Floristic diversity in Sierra Nevada forest (SE Spain)</title>
+      <creator>
+    <individualName>
+        <givenName>Antonio Jesús</givenName>
+      <surName>Pérez Luque</surName>
+    </individualName>
+    <organizationName>Laboratorio de Ecología (iEcolab), Centro Andaluz de Medio Ambiente (CEAMA), Universidad de Granada</organizationName>
+    <positionName>Tecnical Contact</positionName>
+    <address>
+        <deliveryPoint>Avenida del Mediterráneo s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18006</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>+34 958 249748</phone>
+    <electronicMailAddress>ajperez@ugr.es</electronicMailAddress>
+    <onlineUrl>http://www.iecolab.es</onlineUrl>
+      </creator>
+      <metadataProvider>
+    <individualName>
+        <givenName>Antonio Jesús</givenName>
+      <surName>Pérez Luque</surName>
+    </individualName>
+    <organizationName>Laboratorio de Ecología (iEcolab), Centro Andaluz de Medio Ambiente (CEAMA), Universidad de Granada</organizationName>
+    <positionName>Metadata Provider</positionName>
+    <address>
+        <deliveryPoint>Avenida del Mediterráneo s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18006</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>+34 958 249748</phone>
+    <electronicMailAddress>ajperez@ugr.es</electronicMailAddress>
+    <onlineUrl>http://www.iecolab.es</onlineUrl>
+      </metadataProvider>
+      <associatedParty>
+    <individualName>
+        <givenName>Regino Jesús</givenName>
+      <surName>Zamora Rodíguez</surName>
+    </individualName>
+    <organizationName>Grupo de Ecología Terrestre, Departamento de Ecología, Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>Facultad de Ciencias, Campus de Fuentenueva s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18071</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>(+34) 958 241000 ext 20037</phone>
+    <role>author</role>
+      </associatedParty>
+      <associatedParty>
+    <individualName>
+        <givenName>Francisco Javier</givenName>
+      <surName>Bonet García</surName>
+    </individualName>
+    <organizationName>Laboratorio de Ecología (iEcolab), Centro Andaluz de Medio Ambiente (CEAMA), Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>Avenida del Mediterráneo s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18006</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>+34 958 249748</phone>
+    <electronicMailAddress>fjbonet@ugr.es</electronicMailAddress>
+    <onlineUrl>http://www.iecolab.es</onlineUrl>
+    <role>author</role>
+      </associatedParty>
+      <associatedParty>
+    <individualName>
+        <givenName>Antonio Jesús</givenName>
+      <surName>Pérez Luque</surName>
+    </individualName>
+    <organizationName>Laboratorio de Ecología (iEcolab), Centro Andaluz de Medio Ambiente (CEAMA), Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>Avenida del Mediterráneo s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18006</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>+34 958 249748</phone>
+    <electronicMailAddress>ajperez@ugr.es</electronicMailAddress>
+    <onlineUrl>http://www.iecolab.es</onlineUrl>
+    <role>author</role>
+      </associatedParty>
+      <associatedParty>
+    <individualName>
+        <givenName>Ramón</givenName>
+      <surName>Pérez Pérez</surName>
+    </individualName>
+    <organizationName>Laboratorio de Ecología (iEcolab), Centro Andaluz de Medio Ambiente (CEAMA), Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>Avenida del Mediterráneo s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18006</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>+34 958 249748</phone>
+    <electronicMailAddress>ramon@ugr.es</electronicMailAddress>
+    <onlineUrl>http://www.iecolab.es</onlineUrl>
+    <role>author</role>
+      </associatedParty>
+      <associatedParty>
+    <individualName>
+        <givenName>Rut</givenName>
+      <surName>Aspizua Cantón</surName>
+    </individualName>
+    <organizationName>Agencia de Medio Ambiente y Agua de Andalucía. Consejería de Agricultura, Pesca y Medio Ambiente. Junta de Andalucía</organizationName>
+    <positionName>Collector</positionName>
+    <address>
+        <deliveryPoint>C/ Joaquina Egüaras, 10</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18003</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>NA</phone>
+    <role>author</role>
+      </associatedParty>
+      <associatedParty>
+    <individualName>
+        <givenName>Juan</givenName>
+      <surName>Lorite</surName>
+    </individualName>
+    <organizationName>Departamento de Botánica, Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>acultad de Ciencias, Campus de Fuentenueva s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18071</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>NA</phone>
+    <role>author</role>
+      </associatedParty>
+  <pubDate>
+      2018-11-30
+  </pubDate>
+  <language>eng</language>
+  <abstract>
+    <para>The Sinfonevada database is a forest inventory that contains information on the forest ecosystem in Sierra Nevada mountains (SE Spain). The Sinfonevada dataset contains more than 7,500 occurrence records belonging to 270 taxa (15 of them are threatened) from floristic inventories of the Sinfonevada Forest inventory. Expert field workers collected the information. The whole dataset suffered a quality control executed by botanists with wide expertise in Sierra Nevada flora. This floristic inventory was created to gather information useful to properly manage Pinus plantations in Sierra Nevada. This is the only dataset that shows a comprehensive view of the forest flora in Sierra Nevada. This is the reason why it is being used to assess biodiversity in the very dense pine plantations existing in Sierra Nevada. Thanks to this dataset, managers have improved their ability to decide where execute forest treatments avoiding biodiversity loss. The dataset is integrated in the Sierra Nevada Global Change Observatory (OBSNEV), a long-term research project designed to compile socio-ecological information on the major ecosystem types in order to identify the impacts of global change in this area.</para>
+  </abstract>
+      <keywordSet>
+            <keyword>Sierra Nevada; Spain; floristic inventories; vascular plant; Liliopsida</keyword>
+            <keyword>Magnoliopsida</keyword>
+            <keyword>global change monitoring</keyword>
+            <keyword>occurrence</keyword>
+            <keyword>observation</keyword>
+        <keywordThesaurus>NA</keywordThesaurus>
+      </keywordSet>
+      <keywordSet>
+            <keyword>Occurrence</keyword>
+        <keywordThesaurus>GBIF Dataset Type Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_type.xml</keywordThesaurus>
+      </keywordSet>
+  <intellectualRights>
+    <para>This work is licensed under a <ulink url="http://creativecommons.org/licenses/by-nc/4.0/legalcode"><citetitle>Creative Commons Attribution Non Commercial (CC-BY-NC) 4.0 License</citetitle></ulink>.</para>
+  </intellectualRights>
+  <distribution scope="document">
+    <online>
+      <url function="information">http://obsnev.es/noticia.html?id=5307</url>
+    </online>
+  </distribution>
+  <coverage>
+      <geographicCoverage>
+          <geographicDescription>Sierra Nevada (Andalusia, SE Spain), is a mountainous region with an altitudinal range between 860 m and 3482 m a.s.l. covering more than 2000 km2 . The climate is Mediterranean, characterized by cold winters and hot summers, with pronounced summer drought (July-August). The annual average temperature decreases in altitude from 12-16ºC below 1500 m to 0ºC above 3000 m a.s.l., and the annual average precipitation is about 600 mm. Additionally, the complex orography of the mountains causes strong climatic contrasts between the sunny, dry south-facing slopes and the shaded, wetter north-facing slopes. Annual precipitation ranges from less than 250 mm in the lowest parts of the mountain range to more than 700 mm in the summit areas. Winter precipitation is mainly in the form of snow above 2000 m of altitude. The Sierra Nevada mountain range hosts a high number of endemic plant species (c. 80; Lorite et al. 2007) for a total of 2,100 species of vascular plants (25% and 20% of Spanish and European flora, respectively), being considered one of the most important biodiversity hotspots in the Mediterranean region (Blanca et al. 1998).  
+This mountain range has several legal protections:  Biosphere Reserve MAB Committee UNESCO; Special Protection Area and Site of Community Importance (Natura 2000 network); and National Park. The area includes 61 municipalities with more than 90,000 inhabitants. The main economic activities are agriculture, tourism, cattle raising, beekeeping, mining, and skiing (Bonet el al. 2010).
+
+The SINFONEVADA forest inventory was conducted in the main forests of Sierra Nevada mountainous region (Figure 1) (for a description of Sierra Nevada see study area of the Project section).  The main forest units of Sierra Nevada (Figure 5) are pine plantations (Pinus halepensis Mill., Pinus pinaster Ait., Pinus nigra Arnold subsp. salzmannii (Dunal) Franco, and Pinus sylvestris L.), evergreen holm oak Quercus ilex subsp. ballota (Desf.) Samp forests, deciduous broadleaf forests (Quercus pyrenaica Willd, Acer opalus subsp. granatense (Boiss.) Font Quer &amp; Rothm., Sorbus aria (L.) Crantz), and autochthonous pine Pinus sylvestris L. var. nevadensis Christ forests.</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-180</westBoundingCoordinate>
+          <eastBoundingCoordinate>180</eastBoundingCoordinate>
+          <northBoundingCoordinate>90</northBoundingCoordinate>
+          <southBoundingCoordinate>-90</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+          <temporalCoverage>
+              <rangeOfDates>
+                  <beginDate>
+                    <calendarDate>2004-01-01</calendarDate>
+                  </beginDate>
+                <endDate>
+                  <calendarDate>2005-12-01</calendarDate>
+                </endDate>
+              </rangeOfDates>
+          </temporalCoverage>
+          <taxonomicCoverage>
+              <generalTaxonomicCoverage>Most of the species recorded in the inventories belong to class Magnoliopsida (6042 records; 76.28 %) and Liliopsida (1171 records; 14.78 %). Among the top ten of the orders includes Poales (1153 records; 14.56 %) for Liliopsida class, Lamiales (1062 records; 13.41 %) for Magnoliopsida and Pinales (569 records; 7.18 %). 57 families are represented in these collection with Poaceae, Fabaceae and Lamiaceae as the families with major number of records. The collection includes 270 taxa belonging to 159 genera being Pinus and Thymus the most represented in the database.</generalTaxonomicCoverage>
+              <taxonomicClassification>
+                  <taxonRankName>class</taxonRankName>
+                <taxonRankValue>Gnetopsida</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>class</taxonRankName>
+                <taxonRankValue>Liliopsida (Monocotyledones)</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>class</taxonRankName>
+                <taxonRankValue>Magnoliopsida (Dicotyledones)</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>class</taxonRankName>
+                <taxonRankValue>Pinopsida</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>class</taxonRankName>
+                <taxonRankValue>Polypodiopsida</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Apiales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Asparagales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Asterales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Brassicales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Caryophyllales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Cucurbitales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Cupressales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Dipsacales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Ephedrales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Ericales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Fabales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Fagales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Gentianales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Geraniales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Lamiales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Liliales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Malpighiales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Malvales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Pinales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Poales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Polypodiales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Ranunculales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Rosales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Santalales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Sapindales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Saxifragales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Solanales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>order</taxonRankName>
+                <taxonRankValue>Umbellales</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Amaryllidaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Anacardiaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Apiaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Apocynaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Araliaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Asparagaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Asteraceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Berberidaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Brassicaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Capparaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Caprifoliaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Caryophyllaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Cistaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Clusiaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Colchicaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Convolvulaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Coriariaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Crassulaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Cupressaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Cyperaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Dennstaedtiaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Dipsacaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Ephedraceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Ericaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Euphorbiaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Fabaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Fagaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Geraniaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Iridaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Juglandaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Juncaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Lamiaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Leguminosae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Oleaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Orchidaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Paeoniaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Pinaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Plantaginaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Plumbaginaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Poaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Polygonaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Ranunculaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Resedaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Rhamnaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Rosaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Rubiaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Rutaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Salicaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Santalaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Sapindaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Scrophulariaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Smilacaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Thymelaeaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Ulmaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Umbelliferae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Urticaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>family</taxonRankName>
+                <taxonRankValue>Violaceae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>kingdom</taxonRankName>
+                <taxonRankValue>Plantae</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>phylum</taxonRankName>
+                <taxonRankValue>Pteridophyta</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>phylum</taxonRankName>
+                <taxonRankValue>Spermatophyta</taxonRankValue>
+              </taxonomicClassification>
+          </taxonomicCoverage>
+  </coverage>
+  <maintenance>
+    <description>
+      <para></para>
+    </description>
+    <maintenanceUpdateFrequency>daily</maintenanceUpdateFrequency>
+  </maintenance>
+
+      <contact>
+    <individualName>
+        <givenName>Francisco Javier</givenName>
+      <surName>Bonet García</surName>
+    </individualName>
+    <organizationName>Laboratorio de Ecología (iEcolab), Centro Andaluz de Medio Ambiente (CEAMA), Universidad de Granada</organizationName>
+    <positionName>Researcher</positionName>
+    <address>
+        <deliveryPoint>Avenida del Mediterráneo s/n</deliveryPoint>
+        <city>Granada</city>
+        <administrativeArea>Granada</administrativeArea>
+        <postalCode>18006</postalCode>
+        <country>ES</country>
+    </address>
+    <phone>+34 958 249748</phone>
+    <electronicMailAddress>fjbonet@ugr.es</electronicMailAddress>
+    <onlineUrl>http://www.iecolab.es</onlineUrl>
+      </contact>
+  <methods>
+        <methodStep>
+          <description>
+            <para>The SINFONEVADA Darwin Core Archive is a custom made SQL view of the original SINFONEVADA database obtained from a Forest Inventory. This information is stored within Information System of Sierra Nevada Global Change Observatory. The view shows occurrence data collected in the floristic inventories associate with the forest inventory. We only included records that are accepted for publication.</para>
+          </description>
+        </methodStep>
+      <sampling>
+        <studyExtent>
+          <description>
+            <para>The floristic inventories was conducted at the Sierra Nevada (Andalusia, southeast Spain). Forest cover in Sierra Nevada is dominated by pine plantations (Pinus halepensis Mill., Pinus pinaster Ait., Pinus nigra Arnold. subsp. salzmannii (Dunal) Franco, and Pinus sylvestris L.) that covering approximately 40,000 ha. Most of them are plantations from the period 1960–1980. The main native forests of Sierra Nevada are dominated by the evergreen holm oak Quercus ilex subsp. ballota (Desf,) Samp. occuping low and medium mountain areas (8,800 ha.) and Pyrenean oak Quercus pyeranaica Willd ranging between 1,100–2,000 m a.s.l. with an occupation area of about 2,000 ha.</para>
+          </description>
+        </studyExtent>
+        <samplingDescription>
+          <para>SINFONEVADA Forest Inventory was done over an extensive network of 600 long-term permanent plots distributed within the main forest units of the Sierra Nevada: pine plantations, evergreen Q. ilex forests, and deciduous broadleaf forests. The network of plots is a random sample stratiﬁed by land cover and altitude, covering a gradient of 974–2439 m a.s.l. 
+Each inventory plot has three sample units i) a forest inventory plot (20 x 20 m); ii) a 5-m radius subplot for the estimation of the regeneration; iii) and a 10-m radius subplot for species composition and abundance. 
+Each live tree with a diameter at breast height (dbh) &gt; 7.5 cm was tallied by species and dbh in the forest inventory plot. This information was used to calculate forest attributes (tree basal area, tree volume, canopy cover). The regeneration was measured in the 5-m radius subplot (78.5 m2 in area) as seedling abundance of the main tree species. 
+The species composition and diversity was recorder within 10-m radius subplot (314 m2 in area) using the Braun-Blanquet cover-abundance scale (Braun-Blanquet, 1964).</para>
+        </samplingDescription>
+      </sampling>
+      <qualityControl>
+        <description>
+          <para>Prior to the store this information in the database, all the data were assessed by a quality control process. Each sampling plot was checked to ensure whether the geographical coordinates were correct. We used the databases of International Plant Names Index (IPNI, 2013) and Catalogue of Life/Species 2000 (Roskov et al 2013) to verify the taxonomical classification. The taxonomic identification of the specimens was done using Flora Iberica (Castroviejo et al. 1986-2005) for the published families and, for the rest of taxa, we used Valdés et al. (1987) and Tutin et al. (1964-1980).</para>
+        </description>
+      </qualityControl>
+  </methods>
+  <project >
+    <title>Sierra Nevada Global Change Observatory</title>
+      <personnel>
+        <individualName>
+            <givenName>Regino Jesús</givenName>
+          <surName>Zamora Rodríguez</surName>
+        </individualName>
+        <role>principalInvestigator</role>
+      </personnel>
+      <funding>
+        <para>All the information contained in Sinfonevada was gathered by TRAGSA (Transformación Agraria S.A.), a public company funded by the Spanish Ministry of Environment. The Sierra Nevada Global Change Observatory is funded by the Andalusian Regional Government (via Environmental Protection Agency) and by the Spanish Government (via ‘Fundación Biodiversidad’, what is a Public Foundation).</para>
+      </funding>
+      <studyAreaDescription>
+        <descriptor name="generic"
+                    citableClassificationSystem="true">
+          <descriptorValue>Sierra Nevada (Andalusia, southeast Spain), is a mountainous region with an altitudinal range between 860 m and 3482 m a.s.l. covering more than 2000 km2. The climate is Mediterranean, characterized by cold winters and hot summers, with pronounced summer drought (July-August). The annual average temperature decreases in altitude from 12-16ºC below 1500 m to 0ºC above 3000 m a.s.l., and the annual average precipitation is about 600 mm.  Additionally, the complex orography of the mountains causes strong climatic contrasts between the sunny and dry south-facing slopes and the shaded and wetter north-facing slopes. Annual precipitation ranges from less than 250 mm in the lowest parts of the mountain range to more than 700 mm in the summit areas. Winter precipitation is mainly in the form of snow above 2000 m of altitude. Sierra Nevada mountain range hosts a high number of endemic plant species (c. 80) (Lorite et al. 2007) in a total of 2.100 species of vascular plants  (25 % and 20 % of Spain and Europe flora respectively), being considered one of the most important biodiversity hotspot in the Mediterranean region (Blanca et al. 1998).  
+It has several legal protections: Biosphere Reserve MAB Committee UNESCO; Special Protection Area and Site of Community Importance (Natura 2000 network); and National Park. There are 61 municipalities with more than 90.000 inhabitants. The main economic activities are agriculture, tourism, cattle raising, beekeeping, mining and skiing (Bonet el al. 2010).</descriptorValue>
+        </descriptor>
+      </studyAreaDescription>
+      <designDescription>
+        <description>
+          <para>Sierra Nevada Global Change Observatory (OBSNEV) (Bonet et al. 2011) is a long-term research project which is being undertaken at Sierra Nevada Biosphere Reserve (SE Spain). It is intended to compile the information necessary for identifying as early as possible the impacts of global change, in order to design management mechanisms to minimize these impacts and adapt the system to new scenarios (Aspizua et al. 2010, Bonet el al. 2010). The general objectives are to:  
+•	Evaluate the functioning of ecosystems in the Sierra Nevada Nature Reserve, their natural processes and dynamics over a medium-term timescale.
+•	Identify population dynamics, phenological changes, and conservation issues regarding key species that could be considered indicators of ecological processes. 
+•	Identify the impact of global change on monitored species, ecosystems, and natural resources, providing an overview of trends of change that could help foster ecosystem resilience. 
+•	Design mechanisms to assess the effectiveness and efficiency of management activities performed in the Sierra Nevada in order to implement an adaptive management framework. 
+•	Help to disseminate information of general interest concerning the values and importance of Sierra Nevada.
+
+The Sierra Nevada Global Change Observatory has four cornerstones (Figure 2):  1) a monitoring program with 40 methodologies that collect information on ecosystem functioning; 2) an information system to store and manage all the information gathered; 3) a plan to promote adaptive management of natural resources using the knowledge amassed through the monitoring programme; and 4) an outreach program to disseminate all the available information to potential users. 
+
+The Sierra Nevada Global Change Observatory is linked to other national (Zamora and Bonet 2011) and international monitoring networks: GLOCHAMORE (Global Change in Mountain Regions) (Björnsen 2005), GLOCHAMOST (Global Change in Mountain Sites) (Schaaf 2009), LTER-Spain (Long-Term Ecological Research).
+
+Sierra Nevada Global Change Observatory is collecting socio-ecological information on the major ecosystem types found in Sierra Nevada. This information is being integrated in an Information System (http://obsnev.es/linaria.html - Pérez-Pérez et al. 2012. (Free access upon registration). The dataset described here is a good example of this idea. We have created a relational database to store the floristic inventories prepared in 2004-2005. Thanks to this work, all this valuable and unique information will be available to scientists and environmental managers worldwide.</para>
+        </description>
+      </designDescription>
+  </project>
+</dataset>
+  <additionalMetadata>
+    <metadata>
+      <gbif>
+          <dateStamp>2013-06-18T02:06:05.000+02:00</dateStamp>
+          <hierarchyLevel>dataset</hierarchyLevel>
+            <citation>iEcolab, University of Granada-Andalusian Environmental Center (2013) Sinfonevada: Dataset of floristic diversity in forest of Sierra Nevada, Spain. 7920 data records. Contributed by TRAGSA, University of Granada, OBSNEV, Pérez-Luque AJ, Pérez-Pérez R, Bonet FJ, Aspizua R, Lorite J, Zamora R. Online at http://www.gbif.es:8080/ipt/resource.do?r=sinfonevada and http://obsnev.es/noticia.html?id=5307, version 1.0 (last updated on 2013-08-01). Resource ID: GBIF Key: http://www.gbif.org/dataset/db6cd9d7-7be5-4cd0-8b3c-fb6dd7446472</citation>
+          <bibliography>
+                <citation identifier="http://www.secforestales.org/buscador/pdf/5CFE01-027.pdf">Gómez-Aparicio L, Zavala MA, Bonet-García FJ, Zamora R (2009) Regeneración y diversidad en pinares de repoblación: un análisis a través de gradientes ambientales. In: Sociedad Española de Ciencias Forestales, (Ed) 5º Congreso Forestal Español. Montes y Sociedad: Saber qué hacer, Ávila.</citation>
+                <citation identifier="http://dx.doi.org/10.1890/08-1656.1">Gómez-Aparicio L, Zavala MA, Bonet-García FJ, Zamora R (2009) Are pine plantations valid tools for restoring Mediterranean forests? An assessment along abiotic and biotic gradients. Ecological Applications 19 (8): 2124–2141.</citation>
+                <citation>González-Moreno P (2009) Natural regeneration and biodiversity in pine plantations of Southern Spain: a landscape approach, Master&apos;s Thesis, Wageningen University, Netherlands</citation>
+                <citation identifier="http://www.secforestales.org/buscador/pdf/5CFE01-065.pdf">González-Moreno P, Quero JL, Bonet FJ, Poorter L, Zamora R (2009) El papel de la estructura espacial de la vegetación en la naturalización de pinares de repoblación en Sierra Nevada (Granada-Almería). In: Sociedad Española de Ciencias Forestales, (Ed) 5º Congreso Forestal Español. Montes y Sociedad: Saber qué hacer, Ávila.</citation>
+                <citation>González-Moreno P, Quero JL, Bonet FJ, Poorter L, Zamora R (2010) The influence of spatial structure on natural regeneration and biodiversity in Mediterranean pine plantations: a nested landscape approach. In: Azevedo J, Feliciano M, Castro J, Pinto MA (Eds) Proceedings of the IUFRO Landscape Ecology Working Group International Conference: Forest landscapes and global change new frontiers in management, conservation and restoration. Instituto Politécnico de Bragança, Portugal, 52–57.</citation>
+                <citation identifier="http://dx.doi.org/10.1016/j.baae.2011.02.012 ">González-Moreno P, Quero JL, Bonet FJ, Poorter L, Zamora R (2011) Is spatial structure the key to promote plant diversity in Mediterranean forest plantations?. Basic and Applied Ecology 12 (3): 251–259.</citation>
+                <citation>Navarro-González  I (2009) Efectos del uso pasado del suelo en la regeneración actual de la vegetación natural bajo las plantaciones de pinares de Sierra Nevada. Implicaciones en la gestión forestal. Master&apos;s Thesis, Universidad Autónoma de Madrid - Universidad Complutense de Madrid - Universidad de Alcalá, Spain.</citation>
+                <citation>Navarro-González I, Bonet-García FJ, Zamora R (2011) Current Mediterranean forest regeneration depends on land use in the recent past. In: European Ecological Federation (Ed) Proceedings of the12th European Ecological Federation Congress: Responding to Rapid Environmental Change, Asociación Española de Ecología Terrestre, Ávila, Spain, 420.</citation>
+                <citation identifier="http://dx.doi.org/10.1890/12-0459.1">Navarro-González I, Pérez-Luque AJ, Bonet FJ, Zamora R (2013) The weight of the past: Land-use legacies and recolonization of pine plantations by oak trees. Ecological Applications 23:1267–1276.</citation>
+                <citation identifier="http://refbase.iecolab.es/files/perez-luque/2011/1661_Perez-Luque2011.pdf">Pérez-Luque AJ (2011) Análisis multivariante ambiental de los melojares de Quercus pyrenaica Willd. de Sierra Nevada. Master&apos;s thesis, Universidad de Granada, Spain.</citation>
+                <citation identifier="http://dx.doi.org/10.7818/AEET.XICongress.2013">Pérez-Luque AJ, Bonet FJ, Benito BM, Zamora R (2013). Caracterización ambiental de los robledales de Quercus pyrenaica Willd. de Sierra Nevada. In: Asociación Española de Ecología Terrestre (Ed) Proceedings of the XI Congreso Nacional de la Asociación Española de Ecología Terrestre, Invitación a la Ecología. Asociación Española de Ecología Terrestre, Pamplona, 92.</citation>
+                <citation>Aspizua-Cantón R, Barea-Azcón JM, Bonet FJ, Pérez-Luque AJ, Zamora R (Eds) (2012) Observatorio de Cambio Global Sierra Nevada: metodologías de seguimiento. Consejería de Medio Ambiente, Junta de Andalucía, 1 – 112.</citation>
+                <citation identifier="http://www.revistaecosistemas.net/index.php/ecosistemas/article/view/46 ">Aspizua-Cantón R, Bonet FJ, Zamora R, Sánchez FJ, Cano-Manuel FJ, Henares I (2010) El observatorio de cambio global de Sierra Nevada: hacia la gestión adaptativa de los espacios naturales. Ecosistemas 19 (2): 56–68.</citation>
+                <citation identifier="http://dx.doi.org/10.1016/S0006-3207(97)00169-9">Blanca G, Cueto M, Martínez-Lirola MJ, Molero-Mesa J (1998) Threatened vascular flora of Sierra Nevada (Southern Spain). Biological Conservation 85 (3): 269–285.</citation>
+                <citation identifier="http://unesdoc.unesco.org/images/0014/001471/147170E.pdf">Björnsen A (Ed) (2005) The GLOCHAMORE (Global Change and Mountain Regions) Research Strategy. Berne (Switzerland) and Vienna (Austria). Mountain Research Initiative Office and University of Vienna, 1-48</citation>
+                <citation>Bonet FJ, Pérez-Luque AJ, Moreno R, Zamora R (2010) Sierra Nevada Global Change Observatory. Structure and Basic Data. Environment Department (Andalusian Regional Government) – University of Granada, 1 – 48.</citation>
+                <citation>Bonet FJ, Aspizua-Cantón R, Zamora R, Sánchez FJ, Cano-Manuel FJ, Henares I (2011) Sierra Nevada Observatory for monitoring global change: Towards the adaptive management of natural resources. In: Austrian MaB Comitee (Ed) Biosphere Reserves in the mountains of the world. Excellence in the clouds?. Austrian Academy of Sciences Press, Vienna, 48–52.</citation>
+                <citation>Braun-Blanquet J (1964) Pflanzensoziologie.  Springer Verlag, Wien, New York, 1 – 865.</citation>
+                <citation>Castroviejo S (Ed) (1986-2005) Flora Iberica. Real Jardín Botánico CSIC, Madrid.</citation>
+                <citation>IPNI (2013) The International Plant Names Index. http://www.ipni.org [accessed 05. 05.2013]</citation>
+                <citation identifier="doi:10.1080/11263500601153560">Lorite J, Navarro FB, Valle F (2007) Estimation of threatened orophytic flora and priority of its conservation in the Baetic range (S. Spain). Plant Biosystems 141(1): 1–14.</citation>
+                <citation>Pérez-Pérez R, Bonet FJ, Pérez-Luque AJ, Zamora R (2012) Linaria: a set of information management tools to aid environmental decision making in Sierra Nevada (Spain) LTER site. In: Long Term Ecological Research (LTER) (Ed) Proceedings of the 2013 LTER All Scientist Meeting: The Unique Role of the LTER Network in the Antropocene: Collaborative Science Across Scales. LTER, Estes Park - Colorado (EE.UU).</citation>
+                <citation>Roskov Y, Kunze T, Paglinawan L, Abucay L, Orrell T, Nicolson D, Culham A, Bailly N, Kirk P, Bourgoin T, Baillargeon G, Hernandez F, De Wever A, Didžiulis V (Eds) (2013) Species 2000 &amp; ITIS Catalogue of Life. Species 2000: Reading, UK. http://www.catalogueoflife.org/col [accessed 05.05.2013]</citation>
+                <citation identifier="http://lib.icimod.org/record/26505/files/c_attachment_601_5624.pdf">Schaaf T (2009) Mountain Biosphere Reserves – A People Centred Approach that also Links Global Knowledge. Sustainable Mountain Development 55: 13–15.</citation>
+                <citation>Tutin TG et al. (Eds) (1964-1980) Flora Europaea, 1-5. Cambridge University Presss, Cambridge.</citation>
+                <citation>Valdés B, Talavera S, Fernández-Galiano E (Eds) (1987) Flora vascular de Andalucía Occidental, 1-3. Ketres, Barcelona.</citation>
+                <citation identifier="http://reddeparquesnacionales.mma.es/parques/rcg/html/rcg_boletin_01.htm ">Zamora R, Bonet FJ (2011) Programa de Seguimiento del Cambio Global en Sierra Nevada: ciencia y tecnología para la gestión adaptativa. Boletín de la RED de seguimiento del cambio global en Parques Nacionales, 1: 18–24.</citation>
+                <citation>Alberdi I, Condés S, Martínez-Millán J, Saura S, Sánchez G, Pérez-Martín F,  Villanueva JA, Vallejo, R (2010) National Forest Inventory Report: Spain. In: Tomppo E, Gschwantner T, Lawrence M, McRoberts RE (Eds.) National Forest Inventories. Pathways for Common Reporting. Springer, 527-540.</citation>
+                <citation>Cabezudo B, Talavera S, Blanca G, Salazar C, Cueto M, Valdés B, Hernández Bermejo JE, Herrera CM, Rodríguez-Hiraldo C, Navas D (2005). Lista roja de la flora vascular de Andalucía, Consejería de Medio Ambiente, Junta de Andalucía. Sevilla.</citation>
+                <citation>CMA (2011) Decreto 238/2011, de 12 de Julio, por el que se establece la ordenación y gestión de Sierra Nevada. BOJA 155 (9 de Agosto de 2011): 114 – 314. Consejería de Medio Ambiente, Junta de Andalucía. http://www.juntadeandalucia.es/boja/2011/155/d3.pdf</citation>
+                <citation>Blanca G, López Onieva MR, Lorite J, Martínez Lirola MJ, Molero Mesa J, Quintas S, Ruíz Girela M, Varo MA, Vidal S (2001) Flora amenazada y endémica de Sierra Nevada. Consejería de Medio Ambiente. Junta de Andalucía.</citation>
+                <citation>CMA(1995) Plan de Ordenación de los Recursos Naturales y Plan Rector de Uso y Gestión del Parque Natural de Sierra Nevada. Junta de Andalucía, Consejería de Medio Ambiente. Sevilla.</citation>
+                <citation>Castroviejo S (Ed) (2001) Claves de Flora Ibérica. Plantas Vasculares de la Península Ibérica e Islas Baleares. Volumen 1. Consejo Superior de Investigaciones Científicas. Real Jardín Botánico, Madrid.</citation>
+                <citation>Philip MS (1994) Measuring Trees and Forests. UK, CAB International</citation>
+                <citation>Ministerio de Medio Ambiente (1998) Segundo inventario forestal nacional 1986-1995. Dirección General Conservación de la Naturaleza, Madrid</citation>
+                <citation>Molero Mesa J, Pérez-Raya F, 1987. La flora de Sierra Nevada. Avance sobre el catálogo florístico nevadense. Universidad de Granada. Granada.</citation>
+                <citation>Molero Mesa J, Pérez Raya F, López Nieto JM, El Aallali A, Hita Fernández JA (2001) Cartografía y evaluación de la vegetación del Parque Natural de Sierra Nevada. Consejería de Medio Ambiente. Junta de Andalucía. Sevilla.</citation>
+          </bibliography>
+            <physical>
+              <objectName>Floristic dataset of Sinfonevada Forest Inventory. Sierra Nevada Global Change Observatory</objectName>
+              <characterEncoding>utf-8</characterEncoding>
+              <dataFormat>
+                <externallyDefinedFormat>
+                  <formatName>Darwin Core Archive</formatName>
+                    <formatVersion>1.0</formatVersion>
+                </externallyDefinedFormat>
+              </dataFormat>
+              <distribution>
+                <online>
+                  <url function="download">http://NA</url>
+                </online>
+              </distribution>
+            </physical>
+          <resourceLogoUrl>http://www.gbif.es/ipt/logo.do?r=sinfonevada</resourceLogoUrl>
+              <collection>
+                  <parentCollectionIdentifier>NA</parentCollectionIdentifier>
+                  <collectionIdentifier>db6cd9d7-7be5-4cd0-8b3c-fb6dd7446472</collectionIdentifier>
+                <collectionName>Sinfonevada: Dataset of floristic diversity in Sierra Nevada forest (SE Spain)</collectionName>
+              </collection>
+          <dc:replaces>db6cd9d7-7be5-4cd0-8b3c-fb6dd7446472/v1.5.xml</dc:replaces>
+      </gbif>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>
