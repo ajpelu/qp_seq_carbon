@@ -273,11 +273,6 @@ mapview::mapview(qp_sn25)
 
 # Generar datos 
 ```{r}
-migData
-dendrolife_Data
-dendrosn_Data
-camarateData
-
 tree <-  bind_rows(list(migData, dendrolife_Data, dendrosn_Data, camarateData))
 
 ggplot(tree, aes(x=dbh, y=h)) + geom_point()
@@ -301,12 +296,33 @@ nlsqp <- nls(h ~ 1.3 + a * exp(b / dbh),
              data = treeqp, 
              start = list(a = 15, b = -10), trace = TRUE)
 
+# Create new data by each 0.5 cm 
+nd <- data.frame(
+  dbh = seq(0, 140, by = 0.5)) 
+
 summary(nlsqp)
 
 plot(treeqp$h ~ treeqp$dbh, pch=19, col="gray40", cex =.5) 
-newdata <- seq(0, 120, length = 1200)
-lines(newdata, predict(nlsqp, list(dbh = newdata)), col = "green", lwd = 2)
+# newdata <- seq(0, 120, length = 1200)
+# lines(nd, predict(nlsqp, list(dbh = newdata)), col = "green", lwd = 2)
 
+# http://sia.webpopix.org/nonlinearRegression.html 
+# propagate pkg 
+prop <- predictNLS(nlsqp, newdata = nd)
+
+ci_nlsqp <- prop$summary
+write_csv(ci_nlsqp, here::here("data/conf_intervals_qp.csv"))
+
+
+# vas por aquí 
+
+p <- data.frame(lc = prop$summary$`Prop.2.5%`, 
+                uc = prop$summary$`Prop.97.5%`)
+
+
+p <- cbind(nd, p)
+lines(p$dbh, p$lc, col = "red")
+lines(p$dbh, p$uc, col = "red")
 qpboot <- nlsBoot(nlsqp, niter = 999)
 plot(qpboot)
 summary(qpboot)
@@ -320,6 +336,13 @@ nd <- nd %>%
     lci = 1.3 + 15.42403 * exp(-13.18342 / dbh),
   uci = 1.3 + 16.23157 * exp(-12.09951/ dbh)
 )
+
+
+confint2(nlsqp)
+
+
+
+coef(nlsqp)
 
 
 ```
