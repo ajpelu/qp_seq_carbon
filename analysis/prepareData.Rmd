@@ -59,7 +59,7 @@ mig <- g %>% inner_join(mig_occ, by = "id") %>%
              locality == "Robledal de Cañar. Loma de Cañar" ~ "CA")) %>% 
   dplyr::select(id, dbh, h, eventDate, catalogNumber, loc, scientificName) %>% 
   separate(catalogNumber, c(NA, "tr", NA), sep ="-") %>% 
-  filter(tr %in% unique(fo$id_transect)) %>% 
+  filter(tr %in% unique(fo$name)) %>% 
   mutate(sp = case_when(
     scientificName == "Quercus pyrenaica Willd." ~ "Qpyr",
     scientificName == "Quercus ilex L. subsp. ballota" ~ "Qilex"
@@ -67,7 +67,12 @@ mig <- g %>% inner_join(mig_occ, by = "id") %>%
 
 write_csv(mig, here::here("data/df_mig.csv"))
 
+migData <- mig %>% 
+  mutate(h = h/100, 
+         project = "migrame") %>% 
+  dplyr::select(code = tr, sp, h, dbh, project)
 
+code sp h dbh 
 # Read spatial info 
 
 mig_spa <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"), 
@@ -99,6 +104,17 @@ dendrosn_spa@data$date <- parse_date(str_sub(dendrosn_spa@data$cmt, end=-10))
 dendrosn_spa <- dendrosn_spa[, c("name", "date")]
 names(dendrosn_spa)[1] <- "code"
 
+dendrosn_Data <- read_csv(here::here("raw_data/dendro_sn/dendro_competence.csv")) %>% 
+  dplyr::select(code = id_focal, sp, h = height_cm, perim_mm) %>% 
+  filter(code != "Fresno") %>% 
+  mutate(sp = case_when(
+    sp == "Focal" ~ "Qpyr",
+    TRUE ~ as.character(sp))) %>% 
+  mutate(h = h / 100, # as meter
+         dbh = round((perim_mm / 10)/pi,2), 
+         project = "dendro_sn") %>% 
+  dplyr::select(-perim_mm)
+
 ``` 
 
 
@@ -115,6 +131,14 @@ dendrolife_spa <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"),
                    verbose = TRUE, encoding = "UTF-8")
 dendrolife_spa <- dendrolife_spa[, c("code", "date")]
 dendrolife_spa@data$date <- parse_date(dendrolife_spa@data$date)
+
+dendrolife_Data <- read_csv(here::here("raw_data/dendro_life/dendro_life.csv")) %>% 
+  mutate(sp = case_when(
+    specie == "Quercus pyrenaica" ~ "Qpyr", 
+    TRUE ~ "Qilex"), 
+    project = "dendro_life") %>% 
+  dplyr::select(code = loc, sp, h = treeHeight_m, dbh = dbh1_cm, project)
+
 ```
 
 # OBSNEV San Jeronimo 
@@ -187,11 +211,21 @@ camarate <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"),
                    verbose = TRUE, encoding = "UTF-8")
 
 camarate@data$date <- parse_date(camarate@data$date)
+
+# Data 
+camarateData <- read_csv(here::here("raw_data/camarate/camarate_tree_data.csv")) %>% 
+   mutate(sp = case_when(
+    sp == "Quercus pyrenaica" ~ "Qpyr",
+    sp == "Acer opalus granatensis" ~ "Aopa", 
+    sp == "Sorbus aria" ~ "Saria", 
+    TRUE ~ "Cmon"), 
+    project = "camarate") %>% 
+  dplyr::select(code = plot, sp, h = height, dbh = dbh, project)
 ```
 
 * Eliminar > 16 m distancia en CAM_H2
 
-# r capas 
+# Unir capas 
 ```{r}
 # Check projection and if not 4326 transform 
 
@@ -237,7 +271,57 @@ qpR <- spTransform(qp_sn25, CRS("+init=epsg:4326"))
 mapview::mapview(qp_sn25)
 ```
 
+# Generar datos 
+```{r}
+migData
+dendrolife_Data
+dendrosn_Data
+camarateData
+
+tree <-  bind_rows(list(migData, dendrolife_Data, dendrosn_Data, camarateData))
+
+ggplot(tree, aes(x=dbh, y=h)) + geom_point()
+
+```
 
 
+```{r}
+# see pag. 391 from @PommereningGrabarnik2019IndividualbasedMethods
+# See @Adameetal2008MixedNonlinear for equations. The best equation is 
+# h ~ 1.3 + a*e^(b/D)
+# start values from @Adameetal2008MixedNonlinear
+
+# Remove data withouth dbh 
+
+treeqp <- tree %>% 
+  filter(!is.na(dbh)) %>% 
+  filter(!is.na(h))
+
+nlsqp <- nls(h ~ 1.3 + a * exp(b / dbh),
+             data = treeqp, 
+             start = list(a = 15, b = -10), trace = TRUE)
+
+summary(nlsqp)
+
+plot(treeqp$h ~ treeqp$dbh, pch=19, col="gray40", cex =.5) 
+newdata <- seq(0, 120, length = 1200)
+lines(newdata, predict(nlsqp, list(dbh = newdata)), col = "green", lwd = 2)
+
+qpboot <- nlsBoot(nlsqp, niter = 999)
+plot(qpboot)
+summary(qpboot)
+
+
+nd <- data.frame(
+  dbh = seq(0, 120, length = 1200)) 
+
+nd <- nd %>% 
+  mutate(
+    lci = 1.3 + 15.42403 * exp(-13.18342 / dbh),
+  uci = 1.3 + 16.23157 * exp(-12.09951/ dbh)
+)
+
+
+```
 
 
