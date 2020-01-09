@@ -1,6 +1,8 @@
 # pkg used
 library("here")
 library("tidyverse")
+library("magrittr")
+library("tidylog")
 library("finch")
 library("stringr")
 library("readODS")
@@ -11,6 +13,7 @@ library("stringr")
 library("parsedate")
 library("nlstools")
 library("propagate")
+library("broom")
 
 
 
