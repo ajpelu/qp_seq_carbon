@@ -6,7 +6,7 @@ editor_options:
 ---
 
 ```{r, message=FALSE, warning=FALSE}
-source("./load_pkgs.R")
+source(here::here("load_pkgs.R"))
 ```
 
 
@@ -36,17 +36,11 @@ mig_mof <- read_delim(here::here("raw_data/migrame/dwca-migrame-v1.8/measurement
 # Locality: CA = Robledal de Cáñar; SJ = Robledal de San Juan.
 
 mig_transectos <- read.table(here::here("raw_data/migrame/appendix_transects.csv"))
-```
 
+# Seleccionar datos de transectos dentro del robledal 
 
-### Selección de datos
-
-- Transectos realizados dentro del robledal
-
-```{r}
 fo <- mig_transectos %>% 
   filter(type == "FO") %>% as.data.frame()
-
 
 # Prepare measurements
 g <- mig_mof %>% dplyr::select(id, measurementType, measurementValue) %>% 
@@ -65,16 +59,106 @@ mig <- g %>% inner_join(mig_occ, by = "id") %>%
     scientificName == "Quercus ilex L. subsp. ballota" ~ "Qilex"
   ))
 
-write_csv(mig, here::here("data/df_mig.csv"))
 
-migData <- mig %>% 
+mig %<>% 
   mutate(h = h/100, 
+         hval = "field",
          project = "migrame") %>% 
-  dplyr::select(code = tr, sp, h, dbh, project)
+  dplyr::select(code = tr, sp, dbh, h, hval, project)
 
-code sp h dbh 
+
+# Filter data 
+# cuantos ind sin diámetro? 
+mig %>% filter(is.na(dbh)) %>% group_by(sp) %>% count()
+
+# Maxima h 
+mig %>% filter(is.na(dbh)) %>% summarise(hmax = max(h))
+
+# Estimar datos de diámetro para valores h < 2.1 
+## ploteo 
+mig %>% 
+  filter(!is.na(dbh)) %>% 
+  filter(sp == "Qpyr") %>% 
+  filter(h < 2.1) %>% 
+  ggplot(aes(x=dbh, y = h)) + 
+  geom_point() +
+  geom_smooth()
+
+##  Elimino outliers: aquellos valores de h < 2.1 con dbh > 10 
+mig %<>% filter(!(dbh %in% c(12,15) & h < 2.1))
+               
+## Elimino datos con dbh = 0                
+mig %<>% filter(!(dbh == 0) | is.na(dbh))
+
+# Creo subset de datos con 
+mig_h2 <- mig %>% 
+  filter(sp == "Qpyr") %>% 
+  filter(!is.na(dbh) & h < 2.1)
+
+mig_h2 %>% 
+ ggplot(aes(x=dbh, y = h)) + 
+  geom_point() +
+  geom_smooth()
+ 
+
+# Computar modelo de dbh para los datos de h < 2.1
+m_dbh <- nls(dbh ~ a + b * exp(h),
+         data = mig_h2, 
+         start = list(a=0.1, b=0.1), trace = TRUE)
+
+mig_h2 %>% 
+ ggplot(aes(y=dbh, x = h)) + 
+  geom_point() +
+  geom_smooth(method="nls", 
+              formula=y~a+b*exp(x), 
+              method.args = list(start=c(a=0.5,b=0.45)),
+              se = FALSE)
+
+# Estimar valores de dbh para datos de h < 2.1 
+mig %<>% 
+  mutate(dval = case_when(
+    is.na(dbh) ~ "est", 
+    TRUE ~ "field")) %>% 
+  mutate(dbh = 
+        ifelse(is.na(dbh) & sp == "Qpyr", 
+             round((coef(m_dbh)[1] + coef(m_dbh)[2] * exp(h)), 2),
+             dbh))
+  
+
+
+
+
+
+
+
+
+
+
+
+
+migData %>% 
+  filter(!is.na(dbh)) %>% 
+  filter(sp == "Qpyr") %>% 
+  filter(h < 2.1) %>% 
+ ggplot(aes(x=h, y = dbh)) + 
+  geom_point() +
+  geom_smooth()
+
+
+
+
+
+
+
+
+
+migData %>% 
+
+
+
+
+
 # Read spatial info 
-
 mig_spa <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"), 
                    layer = "mig_transectos_polygon", 
                    verbose = TRUE, encoding = "UTF-8")
@@ -84,7 +168,6 @@ mig_spaFO <- subset(mig_spa, nombre %in% unique(fo$name))
 mig_spaFO <- mig_spaFO[, c("nombre", "fecha")]
 names(mig_spaFO) <- c("code", "date")
 ```
-
 
 # Dendro SN 
 
@@ -105,13 +188,14 @@ dendrosn_spa <- dendrosn_spa[, c("name", "date")]
 names(dendrosn_spa)[1] <- "code"
 
 dendrosn_Data <- read_csv(here::here("raw_data/dendro_sn/dendro_competence.csv")) %>% 
-  dplyr::select(code = id_focal, sp, h = height_cm, perim_mm) %>% 
+  dplyr::select(code = id_focal, sp, perim_mm, h = height_cm) %>% 
   filter(code != "Fresno") %>% 
   mutate(sp = case_when(
     sp == "Focal" ~ "Qpyr",
     TRUE ~ as.character(sp))) %>% 
-  mutate(h = h / 100, # as meter
-         dbh = round((perim_mm / 10)/pi,2), 
+  mutate(dbh = round((perim_mm / 10)/pi,2),
+         h = h / 100, # as meter
+         hval = "field",
          project = "dendro_sn") %>% 
   dplyr::select(-perim_mm)
 
@@ -136,9 +220,74 @@ dendrolife_Data <- read_csv(here::here("raw_data/dendro_life/dendro_life.csv")) 
   mutate(sp = case_when(
     specie == "Quercus pyrenaica" ~ "Qpyr", 
     TRUE ~ "Qilex"), 
+    hval = "field",
     project = "dendro_life") %>% 
-  dplyr::select(code = loc, sp, h = treeHeight_m, dbh = dbh1_cm, project)
+  dplyr::select(code = loc, sp, dbh = dbh1_cm, h = treeHeight_m, hval, project)
 
+```
+
+
+# Robledal LIFE
+
+* Parcelas de CANAR = robledal puro. PORTUGOS = robledal-encinar
+* Solamente 5 árboles tipo por plot 
+* Estimar h por ecuacion
+
+```{r}
+# list ods files 
+ods_file_names <- here::here("raw_data/robledal_life/") %>%
+  list.files() %>%
+  .[str_detect(., ".ods")] 
+
+# Read tree data 
+df_dbh <- ods_file_names %>% 
+  purrr::map_dfr(function(file_name){ # iterate through each file name
+    daso <- read_ods(paste0(here::here("raw_data/robledal_life/"), file_name),
+                          sheet = "1_DASOMETRICO") %>%
+      as_tibble(.name_repair = "unique") %>% # Name variable col 7
+      mutate(code = str_remove(file_name, "_c1_forestal.ods"))
+    }) %>% 
+  filter(is.na(`...7`)) %>% 
+  dplyr::select(-CUADRANTE, sp = ESPECIE, -`...7`, 
+                dbh1 = "Dnor (cm) 1", dbh2 = "Dnor (cm) 2", 
+                dbase1 ="Dbas (cm) 1", dbase2 = "Dbas (cm) 2")
+      
+
+df_aux <- df_dbh %>% 
+   mutate(sp = case_when(
+    sp == "Quercus pyrenaica" ~ "Qpyr",
+    sp == "Quercus ilex" ~ "Qilex"),
+    h = NA, hval = "est", project = "robledal_life") %>% 
+  rowwise() %>% 
+  mutate(dbh = max(c(dbh1, dbh2))) %>% 
+  dplyr::select(code, sp, dbh, h, hval, project) %>% 
+  filter(str_detect(code, "CAN"))
+  
+
+    
+# Read tipo data 
+df_tipo <- ods_file_names %>% 
+  purrr::map_dfr(function(file_name){ 
+    daso <- read_ods(paste0(here::here("raw_data/robledal_life/"), file_name),
+                          sheet = "2_EJEMPLARES_TIPO") %>%
+      as_tibble(.name_repair = "unique") %>% # Name variable col 7
+      mutate(code = str_remove(file_name, "_c1_forestal.ods"))
+    }) %>% 
+   dplyr::select(sp = Especie, h = "Altura (m)", 
+                dbh1 = "D.nor (cm) 1", dbh2 = "D.nor (cm) 2", 
+                dbase1 ="D.bas (cm) 1", dbase2 = "D.bas (cm) 2", 
+                code) 
+
+df_auxtipo <- df_tipo %>% 
+   mutate(sp = case_when(
+    sp == "Quercus pyrenaica" ~ "Qpyr"),
+    hval = "field", project = "robledal_life") %>% 
+  rowwise() %>% 
+  mutate(dbh = max(c(dbh1, dbh2))) %>% 
+  dplyr::select(code, sp, dbh, h, hval, project) %>% 
+  filter(str_detect(code, "CAN"))
+
+robledal_lifeData <- df_aux %>% rbind(df_auxtipo)
 ```
 
 # OBSNEV San Jeronimo 
@@ -165,6 +314,37 @@ obsnev_sjer <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"),
 obsnev_sjer <- obsnev_sjer[, c("code", "fecha")]
 names(obsnev_sjer)[2] <- "date"
 obsnev_sjer@data$date <- parse_date(obsnev_sjer@data$date)
+
+
+
+# Data
+j <- readxl::read_xlsx(
+  here::here("raw_data/obs_sanjeronimo/san_jeronimo_cleaned.xlsx")) %>% 
+  rowwise() %>% 
+  mutate(dbh = max(c(Dn1, Dn2)),
+         project = "obsnev_sjer", 
+         sp = recode(especie, "Quercus pyrenaica" = "Qpyr")) 
+  
+
+# Get only Data of "tipo" trees from all plots
+j_tipo <- j %>% 
+  filter(!is.na(tipo)) %>%
+  rowwise() %>% 
+  mutate(h = max(c(h1, h2, htot), na.rm = TRUE)) %>%
+  filter(h != -Inf) %>% 
+  mutate(hval = "field") %>% 
+  dplyr::select(code, sp, dbh, h, hval, project) 
+
+
+# Get other data 
+j_all <- j %>% 
+  filter(is.na(tipo)) %>% 
+  mutate(h = NA, hval = "est") %>% 
+  dplyr::select(code, sp, dbh, h, hval, project)
+  
+
+obsnev_sjerData <- j_all %>% rbind(j_tipo)
+  
 ```
 
 ### SINFONEVADA
@@ -214,13 +394,15 @@ camarate@data$date <- parse_date(camarate@data$date)
 
 # Data 
 camarateData <- read_csv(here::here("raw_data/camarate/camarate_tree_data.csv")) %>% 
+  filter(dis < 16) %>% 
    mutate(sp = case_when(
     sp == "Quercus pyrenaica" ~ "Qpyr",
     sp == "Acer opalus granatensis" ~ "Aopa", 
     sp == "Sorbus aria" ~ "Saria", 
     TRUE ~ "Cmon"), 
+    hval = "field",
     project = "camarate") %>% 
-  dplyr::select(code = plot, sp, h = height, dbh = dbh, project)
+  dplyr::select(code = plot, sp, dbh = dbh, h = height, hval, project)
 ```
 
 * Eliminar > 16 m distancia en CAM_H2
@@ -246,7 +428,7 @@ plotsQP <- rbind(dendrolife_spa, dendrosn_spa,
 # Add data 
 dicc_plot <- read_csv(here::here("raw_data/dicc_plots.csv"))
 
-plotsQP <- merge(plotsQP, dicc_plot, duplicateGeoms = T)
+plotsQP <- merge(plotsQP, dicc_plot, by.x ="code", by.y="original_code")
 
 
 writeOGR(plotsQP, 
@@ -273,78 +455,12 @@ mapview::mapview(qp_sn25)
 
 # Generar datos 
 ```{r}
-tree <-  bind_rows(list(migData, dendrolife_Data, dendrosn_Data, camarateData))
+tree <-  bind_rows(
+  list(migData, dendrolife_Data, dendrosn_Data, camarateData, obsnev_sjerData, robledal_lifeData))
 
-ggplot(tree, aes(x=dbh, y=h)) + geom_point()
-
-```
-
-
-```{r}
-# see pag. 391 from @PommereningGrabarnik2019IndividualbasedMethods
-# See @Adameetal2008MixedNonlinear for equations. The best equation is 
-# h ~ 1.3 + a*e^(b/D)
-# start values from @Adameetal2008MixedNonlinear
-
-# Remove data withouth dbh 
-
-treeqp <- tree %>% 
-  filter(!is.na(dbh)) %>% 
-  filter(!is.na(h))
-
-nlsqp <- nls(h ~ 1.3 + a * exp(b / dbh),
-             data = treeqp, 
-             start = list(a = 15, b = -10), trace = TRUE)
-
-# Create new data by each 0.5 cm 
-nd <- data.frame(
-  dbh = seq(0, 140, by = 0.5)) 
-
-summary(nlsqp)
-
-plot(treeqp$h ~ treeqp$dbh, pch=19, col="gray40", cex =.5) 
-# newdata <- seq(0, 120, length = 1200)
-# lines(nd, predict(nlsqp, list(dbh = newdata)), col = "green", lwd = 2)
-
-# http://sia.webpopix.org/nonlinearRegression.html 
-# propagate pkg 
-prop <- predictNLS(nlsqp, newdata = nd)
-
-ci_nlsqp <- prop$summary
-write_csv(ci_nlsqp, here::here("data/conf_intervals_qp.csv"))
-
-
-# vas por aquí 
-
-p <- data.frame(lc = prop$summary$`Prop.2.5%`, 
-                uc = prop$summary$`Prop.97.5%`)
-
-
-p <- cbind(nd, p)
-lines(p$dbh, p$lc, col = "red")
-lines(p$dbh, p$uc, col = "red")
-qpboot <- nlsBoot(nlsqp, niter = 999)
-plot(qpboot)
-summary(qpboot)
-
-
-nd <- data.frame(
-  dbh = seq(0, 120, length = 1200)) 
-
-nd <- nd %>% 
-  mutate(
-    lci = 1.3 + 15.42403 * exp(-13.18342 / dbh),
-  uci = 1.3 + 16.23157 * exp(-12.09951/ dbh)
-)
-
-
-confint2(nlsqp)
-
-
-
-coef(nlsqp)
-
+write_csv(tree, here::here("data/tree_data.csv"))
 
 ```
+
 
 
