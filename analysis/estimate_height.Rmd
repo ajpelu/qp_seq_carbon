@@ -1,0 +1,89 @@
+---
+title: "Estimate height"
+output: pdf_document
+bibliography: ../references.bib
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, message=FALSE, warning=FALSE}
+source(here::here("load_pkgs.R"))
+```
+
+## Explore data 
+```{r}
+tree <- read_csv(here::here("data/tree_data.csv"), col_types = cols())
+
+tree %>% group_by(sp) %>% 
+  count(is.na(h)) %>% 
+  spread(`is.na(h)`, n) %>% 
+  rename(n=`FALSE`, n_na = `TRUE`) %>% 
+  knitr::kable() 
+```
+
+Trees with no values for height belongs to *Q. ilex* and *Q. pyrenaica*. Height data for computation of *Q. ilex* biomass is not needed according to allometric equation proposed by @RuizPeinadoetal2012BiomassModels. For *Q. pyrenaica* and estimation of height values was done using non-linear squares model. We used the best equation according to @Adameetal2008MixedNonlinear
+
+$$h = 1.3 + a*\exp(b/dbh)$$ 
+
+## Model height-diameter 
+```{r}
+# see pag. 391 from @PommereningGrabarnik2019IndividualbasedMethods
+# See @Adameetal2008MixedNonlinear for equations. The best equation is 
+# h ~ 1.3 + a*e^(b/D)
+# start values from @Adameetal2008MixedNonlinear
+
+# Remove data withouth dbh 
+df_model <- tree %>% 
+  filter(sp == "Qpyr") %>% 
+  filter(!is.na(h))
+
+# NonLinear Least Squares
+m <- nls(h ~ 1.3 + a * exp(b / dbh),
+         data = df_model, 
+         start = list(a = 15, b = -10), trace = TRUE)
+```
+
+```{r, echo = FALSE}
+tidy(m) %>% knitr::kable()
+```
+
+```{r, echo = FALSE}
+glance(m) %>% knitr::kable()
+```
+
+```{r, echo = FALSE}
+ggplot(broom::augment(m), aes(dbh, h)) +
+  geom_point() +
+  geom_line(aes(y = .fitted), colour = "red", size=1) +
+  theme_bw()
+```
+
+
+Compute the estimate values 
+
+```{r}
+tree %<>% 
+  mutate(h = ifelse(
+    sp == "Qpyr" & hval == "est",
+    predict(m, list(dbh = dbh)),
+    h)) 
+
+# (1.3 + coef(m)[1]*exp(coef(m)[2]/dbh))
+
+```
+
+
+```{r, echo = FALSE}
+ggplot(tree, aes(dbh, h, colour=hval)) +
+  geom_point() +
+  # geom_line(broom::augment(m), aes(y = .fitted), colour = "red", size=1) +
+  theme_bw()
+```
+
+Export data
+
+```{r}
+write_csv(tree, here::here("data/tree_data_full.csv"))
+```
+
+# References 
