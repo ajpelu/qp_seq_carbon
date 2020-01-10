@@ -1,8 +1,9 @@
 ---
 title: "Prepare Data from Forest Inventories"
-output: pdf_document
+output: html_document 
 editor_options: 
   chunk_output_type: console
+bibliography: ../references.bib
 ---
 
 ```{r, message=FALSE, warning=FALSE}
@@ -20,8 +21,8 @@ We downloaded the DarwinCore Archive (`.zip` file) of our dataset from GBIF ([do
 # mig_occ <- read_delim(x$data[1], delim = "\t")
 # mig_mof <- read_delim(x$data[2], delim = "\t")
 
-mig_occ <- read_delim(here::here("raw_data/migrame/dwca-migrame-v1.8/occurrence.txt"), delim = "\t")
-mig_mof <- read_delim(here::here("raw_data/migrame/dwca-migrame-v1.8/measurementorfact.txt"), delim = "\t")
+mig_occ <- read_delim(here::here("raw_data/migrame/dwca-migrame-v1.8/occurrence.txt"), delim = "\t", col_types = cols())
+mig_mof <- read_delim(here::here("raw_data/migrame/dwca-migrame-v1.8/measurementorfact.txt"), delim = "\t", col_types = cols())
 
 
 # Get transect data 
@@ -115,7 +116,7 @@ mig_h2 %>%
               se = FALSE)
 
 # Estimar valores de dbh para datos de h < 2.1 
-mig %<>% 
+mig_Data <- mig %<>%  
   mutate(dval = case_when(
     is.na(dbh) ~ "est", 
     TRUE ~ "field")) %>% 
@@ -123,41 +124,26 @@ mig %<>%
         ifelse(is.na(dbh) & sp == "Qpyr", 
              round((coef(m_dbh)[1] + coef(m_dbh)[2] * exp(h)), 2),
              dbh))
-  
+```
 
+Notas: 
+- *Q. ilex* records 
+  - n = 37 
+	- 36 records h < 0.8
+	- 1 record h = 1.44 
 
+Remove Q. ilex data from migrame 
 
+```{r}
+mig_Data %<>% filter(sp != "Qilex")  
+```
 
+¿Todos los datos de mig completos? 
+```{r}
+mig_Data %>% filter(is.na(h)) %>% count()
+```
 
-
-
-
-
-
-
-
-migData %>% 
-  filter(!is.na(dbh)) %>% 
-  filter(sp == "Qpyr") %>% 
-  filter(h < 2.1) %>% 
- ggplot(aes(x=h, y = dbh)) + 
-  geom_point() +
-  geom_smooth()
-
-
-
-
-
-
-
-
-
-migData %>% 
-
-
-
-
-
+```{r}
 # Read spatial info 
 mig_spa <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"), 
                    layer = "mig_transectos_polygon", 
@@ -168,6 +154,7 @@ mig_spaFO <- subset(mig_spa, nombre %in% unique(fo$name))
 mig_spaFO <- mig_spaFO[, c("nombre", "fecha")]
 names(mig_spaFO) <- c("code", "date")
 ```
+
 
 # Dendro SN 
 
@@ -199,6 +186,9 @@ dendrosn_Data <- read_csv(here::here("raw_data/dendro_sn/dendro_competence.csv")
          project = "dendro_sn") %>% 
   dplyr::select(-perim_mm)
 
+
+dendrosn_Data %>% group_by(sp) %>% count()
+dendrosn_Data %<>% mutate(dval = "field") 
 ``` 
 
 
@@ -224,6 +214,39 @@ dendrolife_Data <- read_csv(here::here("raw_data/dendro_life/dendro_life.csv")) 
     project = "dendro_life") %>% 
   dplyr::select(code = loc, sp, dbh = dbh1_cm, h = treeHeight_m, hval, project)
 
+# Remove mixed stands 
+dendrolife_Data %<>% filter(code != "PORTUGOS_X") 
+
+# Remove records without measures 
+dendrolife_Data %<>% filter(!(is.na(dbh) & is.na(h)))
+
+# Estimate dbh 
+
+## ¿h max de los datos sin dbh?
+dendrolife_Data %>% 
+  filter(is.na(dbh)) %>% summarise(max(h))
+
+## subset datos con dbh 
+d5 <- dendrolife_Data %>% 
+  filter(!is.na(dbh)) %>% 
+  filter(h < 5)
+
+# Computar modelo de dbh para los datos de h < 2.1
+m_d <- nls(dbh ~ a + b * exp(h),
+         data = d5, 
+         start = list(a=2, b=1), trace = TRUE)
+
+summary(m_d)
+
+# Estimar valores de dbh para datos de h < 5
+dendrolife_Data %<>% 
+  mutate(dval = case_when(
+    is.na(dbh) ~ "est", 
+    TRUE ~ "field")) %>% 
+  mutate(dbh = 
+        ifelse(is.na(dbh), 
+             round((coef(m_d)[1] + coef(m_d)[2] * exp(h)), 2),
+             dbh))
 ```
 
 
@@ -231,7 +254,7 @@ dendrolife_Data <- read_csv(here::here("raw_data/dendro_life/dendro_life.csv")) 
 
 * Parcelas de CANAR = robledal puro. PORTUGOS = robledal-encinar
 * Solamente 5 árboles tipo por plot 
-* Estimar h por ecuacion
+* Estimar h por ecuación
 
 ```{r}
 # list ods files 
@@ -243,7 +266,7 @@ ods_file_names <- here::here("raw_data/robledal_life/") %>%
 df_dbh <- ods_file_names %>% 
   purrr::map_dfr(function(file_name){ # iterate through each file name
     daso <- read_ods(paste0(here::here("raw_data/robledal_life/"), file_name),
-                          sheet = "1_DASOMETRICO") %>%
+                          sheet = "1_DASOMETRICO", col_types = cols()) %>%
       as_tibble(.name_repair = "unique") %>% # Name variable col 7
       mutate(code = str_remove(file_name, "_c1_forestal.ods"))
     }) %>% 
@@ -269,7 +292,7 @@ df_aux <- df_dbh %>%
 df_tipo <- ods_file_names %>% 
   purrr::map_dfr(function(file_name){ 
     daso <- read_ods(paste0(here::here("raw_data/robledal_life/"), file_name),
-                          sheet = "2_EJEMPLARES_TIPO") %>%
+                          sheet = "2_EJEMPLARES_TIPO", col_types = cols()) %>%
       as_tibble(.name_repair = "unique") %>% # Name variable col 7
       mutate(code = str_remove(file_name, "_c1_forestal.ods"))
     }) %>% 
@@ -288,6 +311,21 @@ df_auxtipo <- df_tipo %>%
   filter(str_detect(code, "CAN"))
 
 robledal_lifeData <- df_aux %>% rbind(df_auxtipo)
+
+# Cuantas sps? 
+robledal_lifeData %>% group_by(sp) %>% count()
+
+# Q.ilex
+robledal_lifeData %>% filter(sp == "Qilex")
+
+# How many full records for Q. pyr 
+robledal_lifeData %>% filter(sp == "Qpyr") %>% 
+  group_by(hval) %>% count()
+
+
+robledal_lifeData %<>% mutate(dval = "field") 
+
+
 ```
 
 # OBSNEV San Jeronimo 
@@ -342,9 +380,14 @@ j_all <- j %>%
   mutate(h = NA, hval = "est") %>% 
   dplyr::select(code, sp, dbh, h, hval, project)
   
-
 obsnev_sjerData <- j_all %>% rbind(j_tipo)
-  
+
+obsnev_sjerData %<>% 
+  filter(code %in% c("A-3", "B-3", "C-3")) %>% 
+  mutate(dval = "field")
+
+obsnev_sjerData %>% group_by(hval) %>% count()
+
 ```
 
 ### SINFONEVADA
@@ -355,14 +398,14 @@ We downloaded the DarwinCore Archive (`.zip` file) of our dataset from GBIF ([do
 # sinfodwca  <- dwca_read("https://ipt.gbif.es/archive.do?r=sinfonevada&v=1.5")
 # sinfo_occ <- read_delim(sinfodwca$data[1], delim = "\t")
 
-sinfo_occ <- read_delim(here::here("raw_data/sinfonevada/dwca-sinfonevada-v1.5/occurrence.txt"), delim = "\t")
+sinfo_occ <- read_delim(here::here("raw_data/sinfonevada/dwca-sinfonevada-v1.5/occurrence.txt"), delim = "\t", col_types = cols())
 
 sinfo_plots <- sinfo_occ %>%
   separate(catalogNumber, c(NA,"id_parcela", NA, NA), sep = "-") %>% 
   mutate(id_parcela = as.numeric(id_parcela)) %>% 
-  dplyr::select(id_parcela, decimalLatitude, decimalLongitude) %>% que()
+  dplyr::select(id_parcela, decimalLatitude, decimalLongitude) 
 
-sinfo_aux <- read_csv(here::here("raw_data/sinfonevada/parcelas_sinfo_qp.csv"))
+sinfo_aux <- read_csv(here::here("raw_data/sinfonevada/parcelas_sinfo_qp.csv"), col_types = cols())
 
 
 sinfo_qp <- sinfo_plots %>% 
@@ -393,7 +436,7 @@ camarate <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"),
 camarate@data$date <- parse_date(camarate@data$date)
 
 # Data 
-camarateData <- read_csv(here::here("raw_data/camarate/camarate_tree_data.csv")) %>% 
+camarateData <- read_csv(here::here("raw_data/camarate/camarate_tree_data.csv"), col_types = cols()) %>% 
   filter(dis < 16) %>% 
    mutate(sp = case_when(
     sp == "Quercus pyrenaica" ~ "Qpyr",
@@ -401,8 +444,12 @@ camarateData <- read_csv(here::here("raw_data/camarate/camarate_tree_data.csv"))
     sp == "Sorbus aria" ~ "Saria", 
     TRUE ~ "Cmon"), 
     hval = "field",
+    dval = "field",
     project = "camarate") %>% 
-  dplyr::select(code = plot, sp, dbh = dbh, h = height, hval, project)
+  dplyr::select(code = plot, sp, dbh = dbh, h = height, hval, project) 
+
+camarateData %>% group_by(sp) %>% count()
+
 ```
 
 * Eliminar > 16 m distancia en CAM_H2
@@ -426,7 +473,7 @@ plotsQP <- rbind(dendrolife_spa, dendrosn_spa,
 
 
 # Add data 
-dicc_plot <- read_csv(here::here("raw_data/dicc_plots.csv"))
+dicc_plot <- read_csv(here::here("raw_data/dicc_plots.csv"), col_types = cols())
 
 plotsQP <- merge(plotsQP, dicc_plot, by.x ="code", by.y="original_code")
 
@@ -450,17 +497,23 @@ qp_sn25 <- rgdal::readOGR(dsn="/Users/ajpelu/Google Drive/_phd/qpyr_distribution
 
 qpR <- spTransform(qp_sn25, CRS("+init=epsg:4326"))
 
-mapview::mapview(qp_sn25)
+mapview::mapview(qpR, color = "red", col.regions = "red", lwd = 1) + mapview::mapview(plotsQP, color = "blue", clo.regions = "blue")
 ```
 
 # Generar datos 
 ```{r}
 tree <-  bind_rows(
-  list(migData, dendrolife_Data, dendrosn_Data, camarateData, obsnev_sjerData, robledal_lifeData))
+  list(mig_Data, dendrolife_Data, dendrosn_Data, camarateData, obsnev_sjerData, robledal_lifeData))
 
 write_csv(tree, here::here("data/tree_data.csv"))
 
 ```
 
+A total of `r tree %>% tally` trees in our dataset. Trees by project: 
+```{r, message = FALSE}
+tree %>% group_by(project) %>% count() %>% knitr::kable()
+```
 
+
+# References 
 
