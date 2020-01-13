@@ -4598,7 +4598,7 @@ urn:catalog:OBSNEV:MIGRAME:MIG-P023-24930	urn:catalog:OBSNEV:MIGRAME:MIG-P023-24
 urn:catalog:OBSNEV:MIGRAME:MIG-P023-24930	urn:catalog:OBSNEV:MIGRAME:MIG-P023-24930-1	diameter size	20.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	tape-measure and caliper
 urn:catalog:OBSNEV:MIGRAME:MIG-P023-24931	urn:catalog:OBSNEV:MIGRAME:MIG-P023-24931-2	tree height	55.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	hypsometer and tape-measure
 urn:catalog:OBSNEV:MIGRAME:MIG-P024-24121	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24121-1	diameter size	3.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	tape-measure and caliper
-urn:catalog:OBSNEV:MIGRAME:MIG-P024-24121	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24121-2	tree height	33.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	hypsometer and tape-measure
+urn:catalog:OBSNEV:MIGRAME:MIG-P024-24121	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24121-2	tree height	53.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	hypsometer and tape-measure
 urn:catalog:OBSNEV:MIGRAME:MIG-P024-24122	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24122-2	tree height	20.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	hypsometer and tape-measure
 urn:catalog:OBSNEV:MIGRAME:MIG-P024-24123	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24123-2	tree height	30.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	hypsometer and tape-measure
 urn:catalog:OBSNEV:MIGRAME:MIG-P024-24124	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24124-1	diameter size	42.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	tape-measure and caliper
@@ -4638,7 +4638,7 @@ urn:catalog:OBSNEV:MIGRAME:MIG-P024-24149	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24
 urn:catalog:OBSNEV:MIGRAME:MIG-P024-24150	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24150-2	tree height	1100.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	hypsometer and tape-measure
 urn:catalog:OBSNEV:MIGRAME:MIG-P024-24150	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24150-1	diameter size	38.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	tape-measure and caliper
 urn:catalog:OBSNEV:MIGRAME:MIG-P024-24151	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24151-1	diameter size	6.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	tape-measure and caliper
-urn:catalog:OBSNEV:MIGRAME:MIG-P024-24151	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24151-2	tree height	150.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	hypsometer and tape-measure
+urn:catalog:OBSNEV:MIGRAME:MIG-P024-24151	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24151-2	tree height	170.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	hypsometer and tape-measure
 urn:catalog:OBSNEV:MIGRAME:MIG-P024-24152	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24152-2	tree height	250.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	hypsometer and tape-measure
 urn:catalog:OBSNEV:MIGRAME:MIG-P024-24152	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24152-1	diameter size	10.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	tape-measure and caliper
 urn:catalog:OBSNEV:MIGRAME:MIG-P024-24153	urn:catalog:OBSNEV:MIGRAME:MIG-P024-24153-2	tree height	34.00	1	cm	2012-09-10	Navarro-González I, Pérez-Luque AJ	hypsometer and tape-measure
@@ -4942,7 +4942,7 @@ urn:catalog:OBSNEV:MIGRAME:MIG-P028-22846	urn:catalog:OBSNEV:MIGRAME:MIG-P028-22
 urn:catalog:OBSNEV:MIGRAME:MIG-P028-22846	urn:catalog:OBSNEV:MIGRAME:MIG-P028-22846-1	diameter size	3.00	1	cm	2012-11-12	Navarro-González I, Benito de Pando BM, Zamora-Rodríguez R, Matías L	tape-measure and caliper
 urn:catalog:OBSNEV:MIGRAME:MIG-P028-22847	urn:catalog:OBSNEV:MIGRAME:MIG-P028-22847-2	tree height	168.00	1	cm	2012-11-12	Navarro-González I, Benito de Pando BM, Zamora-Rodríguez R, Matías L	hypsometer and tape-measure
 urn:catalog:OBSNEV:MIGRAME:MIG-P028-22847	urn:catalog:OBSNEV:MIGRAME:MIG-P028-22847-1	diameter size	3.00	1	cm	2012-11-12	Navarro-González I, Benito de Pando BM, Zamora-Rodríguez R, Matías L	tape-measure and caliper
-urn:catalog:OBSNEV:MIGRAME:MIG-P028-22848	urn:catalog:OBSNEV:MIGRAME:MIG-P028-22848-2	tree height	137.00	1	cm	2012-11-12	Navarro-González I, Benito de Pando BM, Zamora-Rodríguez R, Matías L	hypsometer and tape-measure
+urn:catalog:OBSNEV:MIGRAME:MIG-P028-22848	urn:catalog:OBSNEV:MIGRAME:MIG-P028-22848-2	tree height	170.00	1	cm	2012-11-12	Navarro-González I, Benito de Pando BM, Zamora-Rodríguez R, Matías L	hypsometer and tape-measure
 urn:catalog:OBSNEV:MIGRAME:MIG-P028-22848	urn:catalog:OBSNEV:MIGRAME:MIG-P028-22848-1	diameter size	6.00	1	cm	2012-11-12	Navarro-González I, Benito de Pando BM, Zamora-Rodríguez R, Matías L	tape-measure and caliper
 urn:catalog:OBSNEV:MIGRAME:MIG-P028-22849	urn:catalog:OBSNEV:MIGRAME:MIG-P028-22849-2	tree height	1050.00	1	cm	2012-11-12	Navarro-González I, Benito de Pando BM, Zamora-Rodríguez R, Matías L	hypsometer and tape-measure
 urn:catalog:OBSNEV:MIGRAME:MIG-P028-22849	urn:catalog:OBSNEV:MIGRAME:MIG-P028-22849-1	diameter size	36.00	1	cm	2012-11-12	Navarro-González I, Benito de Pando BM, Zamora-Rodríguez R, Matías L	tape-measure and caliper

@@ -1,99 +1,108 @@
-id_plot,project,original_code,loc,type,size_m,size,gps,precision GPS
-1,migrame,P028,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-2,migrame,P031,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-3,migrame,A029,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-4,migrame,A026,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-5,migrame,P037,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-6,migrame,P007,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-7,migrame,P027,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-8,migrame,P024,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-9,migrame,P034,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-10,migrame,P038,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-11,migrame,P033,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-12,migrame,P030,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-13,migrame,P035,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-14,migrame,P023,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-15,migrame,P026,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-16,migrame,P021,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-17,migrame,P022,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-18,migrame,A024,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-19,migrame,A028,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-20,migrame,A027,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-21,migrame,A040,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-22,migrame,A041,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-23,migrame,A036,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-24,migrame,A037,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-25,migrame,A038,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-26,migrame,A039,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-27,migrame,A035,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-28,migrame,A034,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-29,migrame,A033,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-30,migrame,A032,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-31,migrame,A031,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5
-32,dendro_sn,B01,CA,circular,r=10,314.1593,LeicaGS20,
-33,dendro_sn,B02,CA,circular,r=10,314.1593,LeicaGS20,
-34,dendro_sn,B03,CA,circular,r=10,314.1593,LeicaGS20,
-35,dendro_sn,B04,CA,circular,r=10,314.1593,LeicaGS20,
-36,dendro_sn,B05,CA,circular,r=10,314.1593,LeicaGS20,
-37,dendro_sn,B06,CA,circular,r=10,314.1593,LeicaGS20,
-38,dendro_sn,B07,CA,circular,r=10,314.1593,LeicaGS20,
-39,dendro_sn,B08,CA,circular,r=10,314.1593,LeicaGS20,
-40,dendro_sn,B09,CA,circular,r=10,314.1593,LeicaGS20,
-41,dendro_sn,B10,CA,circular,r=10,314.1593,LeicaGS20,
-42,dendro_sn,B11,CA,circular,r=10,314.1593,LeicaGS20,
-43,dendro_sn,B12,CA,circular,r=10,314.1593,LeicaGS20,
-44,dendro_sn,B13,CA,circular,r=10,314.1593,LeicaGS20,
-45,dendro_sn,B14,CA,circular,r=10,314.1593,LeicaGS20,
-46,dendro_sn,B15,CA,circular,r=10,314.1593,LeicaGS20,
-47,dendro_sn,B16,CA,circular,r=10,314.1593,LeicaGS20,
-48,dendro_sn,B17,CA,circular,r=10,314.1593,LeicaGS20,
-49,dendro_sn,B18,CA,circular,r=10,314.1593,LeicaGS20,
-50,dendro_sn,B19,CA,circular,r=10,314.1593,LeicaGS20,
-51,dendro_sn,B20,CA,circular,r=10,314.1593,LeicaGS20,
-52,dendro_sn,B21,CA,circular,r=10,314.1593,LeicaGS20,
-53,dendro_sn,B22,CA,circular,r=10,314.1593,LeicaGS20,
-54,dendro_sn,B23,CA,circular,r=10,314.1593,LeicaGS20,
-55,dendro_sn,B24,CA,circular,r=10,314.1593,LeicaGS20,
-56,dendro_sn,B25,CA,circular,r=10,314.1593,LeicaGS20,
-57,dendro_sn,B26,CA,circular,r=10,314.1593,LeicaGS20,
-58,dendro_sn,B27,CA,circular,r=10,314.1593,LeicaGS20,
-59,dendro_sn,B28,CA,circular,r=10,314.1593,LeicaGS20,
-60,dendro_sn,B29,CA,circular,r=10,314.1593,LeicaGS20,
-61,dendro_sn,B30,CA,circular,r=10,314.1593,LeicaGS20,
-62,dendro_sn,A01,SJ,circular,r=10,314.1593,LeicaGS20,
-63,dendro_sn,A02,SJ,circular,r=10,314.1593,LeicaGS20,
-64,dendro_sn,A03,SJ,circular,r=10,314.1593,LeicaGS20,
-65,dendro_sn,A04,SJ,circular,r=10,314.1593,LeicaGS20,
-66,dendro_sn,A05,SJ,circular,r=10,314.1593,LeicaGS20,
-67,dendro_sn,A06,SJ,circular,r=10,314.1593,LeicaGS20,
-68,dendro_sn,A07,SJ,circular,r=10,314.1593,LeicaGS20,
-69,dendro_sn,A08,SJ,circular,r=10,314.1593,LeicaGS20,
-70,dendro_sn,A09,SJ,circular,r=10,314.1593,LeicaGS20,
-71,dendro_sn,A10,SJ,circular,r=10,314.1593,LeicaGS20,
-72,dendro_sn,A11,SJ,circular,r=10,314.1593,LeicaGS20,
-73,dendro_sn,A12,SJ,circular,r=10,314.1593,LeicaGS20,
-74,dendro_sn,A13,SJ,circular,r=10,314.1593,LeicaGS20,
-75,dendro_sn,A14,SJ,circular,r=10,314.1593,LeicaGS20,
-76,dendro_sn,A15,SJ,circular,r=10,314.1593,LeicaGS20,
-77,dendro_sn,A16,SJ,circular,r=10,314.1593,LeicaGS20,
-78,dendro_sn,A17,SJ,circular,r=10,314.1593,LeicaGS20,
-79,dendro_sn,A18,SJ,circular,r=10,314.1593,LeicaGS20,
-80,dendro_sn,A19,SJ,circular,r=10,314.1593,LeicaGS20,
-81,dendro_sn,A20,SJ,circular,r=10,314.1593,LeicaGS20,
-82,dendro_life,CANARLOW,CA,circular,r=10,314.1593,LeicaZeno20,
-83,dendro_life,CANARHIGH,CA,circular,r=9,254.469,LeicaZeno20,
-84,dendro_life,PORTUGOS_X,PORTUGOS,circular,r=9,254.469,LeicaZeno20,
-85,obsnev,Sjrob-A1m,MONACHIL,cuadrado,20x20,400,Garmin eTreX Vista HCX,5
-86,obsnev,Sjrob-A2i,MONACHIL,cuadrado,20x20,400,Garmin eTreX Vista HCX,5
-87,obsnev,Sjrob-A3c,MONACHIL,cuadrado,20x20,400,Garmin eTreX Vista HCX,5
-88,obsnev,Sjrob-B1m,MONACHIL,cuadrado,20x20,400,Garmin eTreX Vista HCX,5
-89,obsnev,Sjrob-B2i,MONACHIL,cuadrado,20x20,400,Garmin eTreX Vista HCX,5
-90,obsnev,Sjrob-B3c,MONACHIL,cuadrado,20x20,400,Garmin eTreX Vista HCX,5
-91,obsnev,Sjrob-C1i,MONACHIL,cuadrado,20x20,400,Garmin eTreX Vista HCX,5
-92,obsnev,Sjrob-C2m,MONACHIL,cuadrado,20x20,400,Garmin eTreX Vista HCX,5
-93,obsnev,Sjrob-C3c,MONACHIL,cuadrado,20x20,400,Garmin eTreX Vista HCX,5
-94,camarate,CAM_H1,CAMARATE,circular,r=15,706.8583,LeicaZeno20,
-95,camarate,CAM_H2,CAMARATE,circular,r=16,804.2477,LeicaZeno20,
-96,camarate,CAM_H3,CAMARATE,circular,r=10,314.1593,LeicaZeno20,
-97,camarate,CAM_H4,CAMARATE,circular,r=11,314.1593,LeicaZeno20,
-98,camarate,CAM_H5,CAMARATE,circular,r=12,314.1593,LeicaZeno20,
+id_plot,project,original_code,loc,type,size_m,size,gps,precision GPS,selected,cause
+1,migrame,P028,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+2,migrame,P031,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+3,migrame,A029,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+4,migrame,A026,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+5,migrame,P037,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+6,migrame,P007,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+7,migrame,P027,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+8,migrame,P024,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+9,migrame,P034,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+10,migrame,P038,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+11,migrame,P033,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+12,migrame,P030,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+13,migrame,P035,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+14,migrame,P023,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+15,migrame,P026,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+16,migrame,P021,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,FALSE,overlap
+17,migrame,P022,CA,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+18,migrame,A024,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+19,migrame,A028,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+20,migrame,A027,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+21,migrame,A040,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+22,migrame,A041,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+23,migrame,A036,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+24,migrame,A037,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+25,migrame,A038,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+26,migrame,A039,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+27,migrame,A035,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+28,migrame,A034,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+29,migrame,A033,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+30,migrame,A032,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+31,migrame,A031,SJ,rectangular,30x10,300,Garmin eTreX Vista HCX,5,TRUE,
+32,dendro_sn,B01,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+33,dendro_sn,B02,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+34,dendro_sn,B03,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+35,dendro_sn,B04,CA,circular,r=10,314.1593,LeicaGS20,,FALSE,overlap
+36,dendro_sn,B05,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+37,dendro_sn,B06,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+38,dendro_sn,B07,CA,circular,r=10,314.1593,LeicaGS20,,FALSE,overlap
+39,dendro_sn,B08,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+40,dendro_sn,B09,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+41,dendro_sn,B10,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+42,dendro_sn,B11,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+43,dendro_sn,B12,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+44,dendro_sn,B13,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+45,dendro_sn,B14,CA,circular,r=10,314.1593,LeicaGS20,,FALSE,overlap
+46,dendro_sn,B15,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+47,dendro_sn,B16,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+48,dendro_sn,B17,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+49,dendro_sn,B18,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+50,dendro_sn,B19,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+51,dendro_sn,B20,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+52,dendro_sn,B21,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+53,dendro_sn,B22,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+54,dendro_sn,B23,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+55,dendro_sn,B24,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+56,dendro_sn,B25,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+57,dendro_sn,B26,CA,circular,r=10,314.1593,LeicaGS20,,FALSE,overlap
+58,dendro_sn,B27,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+59,dendro_sn,B28,CA,circular,r=10,314.1593,LeicaGS20,,FALSE,overlap
+60,dendro_sn,B29,CA,circular,r=10,314.1593,LeicaGS20,,FALSE,overlap
+61,dendro_sn,B30,CA,circular,r=10,314.1593,LeicaGS20,,TRUE,
+62,dendro_sn,A01,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+63,dendro_sn,A02,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+64,dendro_sn,A03,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+65,dendro_sn,A04,SJ,circular,r=10,314.1593,LeicaGS20,,FALSE,overlap
+66,dendro_sn,A05,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+67,dendro_sn,A06,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+68,dendro_sn,A07,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+69,dendro_sn,A08,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+70,dendro_sn,A09,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+71,dendro_sn,A10,SJ,circular,r=10,314.1593,LeicaGS20,,FALSE,overlap
+72,dendro_sn,A11,SJ,circular,r=10,314.1593,LeicaGS20,,FALSE,overlap
+73,dendro_sn,A12,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+74,dendro_sn,A13,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+75,dendro_sn,A14,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+76,dendro_sn,A15,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+77,dendro_sn,A16,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+78,dendro_sn,A17,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+79,dendro_sn,A18,SJ,circular,r=10,314.1593,LeicaGS20,,FALSE,overlap
+80,dendro_sn,A19,SJ,circular,r=10,314.1593,LeicaGS20,,FALSE,overlap
+81,dendro_sn,A20,SJ,circular,r=10,314.1593,LeicaGS20,,TRUE,
+82,dendro_life,CANARLOW,CA,circular,r=10,314.1593,LeicaZeno20,,TRUE,
+83,dendro_life,CANARHIGH,CA,circular,r=9,254.469,LeicaZeno20,,TRUE,
+84,obsnev,Sjrob-A3c,MONACHIL,cuadrado,20x20,400,Garmin eTreX Vista HCX,5,TRUE,
+85,obsnev,Sjrob-B3c,MONACHIL,cuadrado,20x20,400,Garmin eTreX Vista HCX,5,TRUE,
+86,obsnev,Sjrob-C3c,MONACHIL,cuadrado,20x20,400,Garmin eTreX Vista HCX,5,TRUE,
+87,camarate,CAM_H1,CAMARATE,circular,r=15,706.8583,LeicaZeno20,,TRUE,
+88,camarate,CAM_H2,CAMARATE,circular,r=16,804.2477,LeicaZeno20,,TRUE,
+89,camarate,CAM_H3,CAMARATE,circular,r=10,314.1593,LeicaZeno20,,TRUE,
+90,camarate,CAM_H4,CAMARATE,circular,r=11,314.1593,LeicaZeno20,,TRUE,
+91,camarate,CAM_H5,CAMARATE,circular,r=12,314.1593,LeicaZeno20,,TRUE,
+92,robledal_life,CAN-RES-24,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+93,robledal_life,CAN-RES 23,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+94,robledal_life,CAN-CON-22,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+95,robledal_life,CAN-RES-37,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+96,robledal_life,CAN-RES-35,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+97,robledal_life,CAN-CON-34,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+98,robledal_life,CAN-CON-33,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+99,robledal_life,CAN-RES-38,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+100,robledal_life,CAN-RES-21,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+101,robledal_life,CAN-RES-31,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+102,robledal_life,CAN-RES-25,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+103,robledal_life,CAN-RES-27,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+104,robledal_life,CAN-RES-28,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+105,robledal_life,CAN-RES-30,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+106,robledal_life,CAN-RES-29,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,
+107,robledal_life,CAN-CON-26,CANAR,circular,r=15,706.8583,Garmin eTreX Vista HCX,,TRUE,

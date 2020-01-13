@@ -10,7 +10,6 @@ bibliography: ../references.bib
 source(here::here("load_pkgs.R"))
 ```
 
-
 # MIGRAME 
 
 We downloaded the DarwinCore Archive (`.zip` file) of our dataset from GBIF ([doi: 10.15470/orboj4](https://doi.org/10.15470/orboj4)). Then, we use the `finch` package [@finch] to process the Darwin Core Archive and load the datasets. 
@@ -204,7 +203,8 @@ dendrolife_spa <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"),
                    layer = "dendro_life_polygon", 
                    verbose = TRUE, encoding = "UTF-8")
 dendrolife_spa <- dendrolife_spa[, c("code", "date")]
-dendrolife_spa@data$date <- parse_date(dendrolife_spa@data$date)
+dendrolife_spa@data$date <- parse_date(dendrolife_spa@data$date) 
+dendrolife_spa <- subset(dendrolife_spa, code != "PORTUGOS_X")
 
 dendrolife_Data <- read_csv(here::here("raw_data/dendro_life/dendro_life.csv")) %>% 
   mutate(sp = case_when(
@@ -326,6 +326,15 @@ robledal_lifeData %>% filter(sp == "Qpyr") %>%
 robledal_lifeData %<>% mutate(dval = "field") 
 
 
+
+# Read spatial info 
+robledal_lifespa <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"), 
+                   layer = "robledal_life_polygon",
+                   verbose = TRUE, encoding = "UTF-8")
+
+robledal_lifespa <- robledal_lifespa[, c("code", "date")]
+robledal_lifespa@data$date <- parse_date(robledal_lifespa@data$date)
+
 ```
 
 # OBSNEV San Jeronimo 
@@ -422,7 +431,6 @@ sinfo_qp_spa <- SpatialPointsDataFrame(coords = sinfo_qp[,c("decimalLongitude","
 
 * Tenemos datos del centroide pero no del polígono. 
 
-
 ### CAMARATE
 * Parcelas realizadas en la zona de CAMARATE especificamente para caracterizar la estructura
 
@@ -465,18 +473,26 @@ camarate <- spTransform(camarate, p)
 mig_spaFO <- spTransform(mig_spaFO, p)
 dendrosn_spa<- spTransform(dendrosn_spa, p)
 dendrolife_spa<- spTransform(dendrolife_spa, p)
+robledal_lifespa <- spTransform(robledal_lifespa, p)
 
 
 plotsQP <- rbind(dendrolife_spa, dendrosn_spa,
-           mig_spaFO, camarate, obsnev_sjer,
+           mig_spaFO, camarate, obsnev_sjer, robledal_lifespa,
            makeUniqueIDs = TRUE)  
+```
 
 
+## Filtrado datos espaciales 
+
+* Visualización para ver solapes
+* Creamos variable selected
+* Indicamos motivo no selected 
+
+```{r}
 # Add data 
 dicc_plot <- read_csv(here::here("raw_data/dicc_plots.csv"), col_types = cols())
 
 plotsQP <- merge(plotsQP, dicc_plot, by.x ="code", by.y="original_code")
-
 
 writeOGR(plotsQP, 
          dsn = here::here("/data/geoinfo"), 
@@ -484,6 +500,20 @@ writeOGR(plotsQP,
 
 ```
 
+### ¿Cuantos plots selecionados? 
+
+```{r}
+plotsQP@data %>% dplyr::group_by(selected) %>% count()
+```
+
+```{r}
+
+plotsQP_selected <- subset(plotsQP, selected == "TRUE")
+
+writeOGR(plotsQP_selected, 
+         dsn = here::here("/data/geoinfo"), 
+         "plotsQP_selected", driver="ESRI Shapefile", overwrite_layer = TRUE)
+```
 
 # Visualize plots and Q. pyrenaica forests 
 * Read Q. pyrenaica forests 
