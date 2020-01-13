@@ -1,0 +1,198 @@
+---
+title: "Compute Biomass"
+output: pdf_document
+bibliography: ../references.bib
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, message=FALSE, warning=FALSE}
+source(here::here("load_pkgs.R"))
+```
+
+```{r, message=FALSE}
+df_tree <- read_csv(here::here("data/tree_data_full.csv"), col_types = cols())
+
+# OJO Corección datos P028 // P024 // P024 
+
+```
+
+¿Qué especies tenemos en nuestros plots? 
+
+```{r}
+df_tree %>% group_by(sp) %>% count() %>% knitr::kable()
+```
+
+¿Cómo de puro o mixed es cada plot? 
+
+```{r}
+aux <- df_tree %>% group_by(code, sp) %>% 
+  count() %>% 
+  spread(key = sp, value = n) %>% 
+  as.data.frame()
+
+df <- aux %>% 
+   # replace(is.na(.), 0) %>% 
+   mutate(n_total = rowSums(dplyr::select(., -code), na.rm = TRUE),
+          per_pure = round((Qpyr / n_total)*100, 2))
+```
+
+Añadir datos de la parcela y filtrar por selected 
+```{r}
+dicc_plots <- read_csv(here::here("raw_data/dicc_plots.csv"), col_types = cols())
+
+plot_s <- dicc_plots %>% 
+  inner_join(df, by = c("original_code" = "code")) %>% 
+  filter(selected == "TRUE")
+```
+
+Filtrar datos de los plots seleccionados, y ver que species tenemos 
+
+```{r}
+df_tree_sel <- df_tree %>% 
+  filter(code %in% plot_s$original_code)
+
+df_tree_sel %>% group_by(sp) %>% count()
+
+```
+
+ 
+## Componentes de la biomasa 
+
+- Stem with bark (commercial volume, up to a top diameter of 7 cm) 
+- Thick branches (diameter greater than 7 cm)
+- Medium branches (diameter between 2 and 7 cm)
+- Thin branches (diameter smaller than 2 cm) 
+- Leaves
+
+Seguimos la misma nomenclatura que @RuizPeinadoetal2012BiomassModels 
+
+- $W_{s}$: Biomass weight of the stem fraction (kg)
+- $W_{b7}$: Biomass weight of the thick branches fraction (diameter larger than 7 cm) (kg)
+- $W_{b2-7}$: Biomass weight of medium branches fraction (diameter between 2 and 7 cm) (kg)
+- $W_{b2+l}$: Biomass weight of thin branches fraction (diameter smaller than 2 cm) with leaves (kg)
+- $W_{r}$: Biomass weight of the belowground fraction (kg)
+
+
+## *Quercus pyrenaica* 
+Fuente: @RuizPeinadoetal2012BiomassModels
+
+- Stem + Thick branches $W_{s} + W_{b7} = 0.0261 \cdot d^2 \cdot h$ 
+- Medium branches $W_{b2-7} = -0.0260 \cdot d^2  + 0.536 \cdot h + 0.00538 \cdot d^2 \cdot h$
+- Thin branches $W_{b2} = 0.898 \cdot d  - 0.445 \cdot h$
+- Roots $W_{r} = 0.143 \cdot d^2$
+
+```{r}
+# Proposal function
+biomassQpyr <- function(d, h, ...){
+  
+  ws <- 0.0261* d^2 * h
+  wb7 <- NA 
+  wb27 <- (-0.0260 * d^2) + (0.536 * h) + (0.00538 * d^2 * h)
+  wb2 <- (0.898*d) - (0.445*h)
+  wr <- 0.143 * d^2
+  
+  out <- data.frame(ws, wb7, wb27, wb2, wr)
+  return(out)
+}
+```
+
+
+## Computo de Biomasa para Qp 
+```{r}
+df_qpyr <- df_tree_sel %>% 
+  filter(sp == "Qpyr") %>% 
+  filter(dbh > 7) %>% 
+  bind_cols(map2_dfr(.$dbh, .$h, biomassQpyr)) 
+
+
+# tengo varios valores negativos en wb27 
+df_qpyr %<>% mutate(wb27 = ifelse(wb27 < 0, 0, wb27)) 
+
+
+# Biomasa por plot 
+w_qpyr <- df_qpyr %>% 
+  group_by(code) %>% 
+  summarise_at(vars(starts_with("w")), sum) 
+```
+
+??? Que hacemos con los mas pezqueñines?? 
+```{r}
+df_qpyr7 <- df_tree_sel %>% 
+  filter(sp == "Qpyr") %>% 
+  filter(dbh < 7) %>% 
+  group_by(code) %>% 
+  count()
+
+```
+
+## *Quercus ilex* 
+Fuente: @RuizPeinadoetal2012BiomassModels
+
+- Stem $W_{s} = 0.143 \cdot d^2$ 
+- Thick branches: 
+    - If $d \leq 12.5$ then $Z = 0$; If $d > 12.5$ then $Z = 1$ 
+    - $W_{b7} = [0.0684 \cdot (d - 12.5)^2 \cdot h ]\cdot Z$ 
+
+- Medium branches $W_{b2-7} = 0.0898 \cdot d^2$
+- Thin branches $W_{b2+l} = 0.0824 \cdot d^2$
+- Roots $W_{r} = 0.254 \cdot d^2$
+
+Ojo aquellos ind que no tengan d > 12.5, no se considera la fracción thick branches. 
+```{r}
+biomassQilex <- function(d, h, ...){
+  # aboveground biomass 
+  # nota: no he incluido la parte de thick branches 
+
+  ws <- 0.143 * d^2
+  wb7 <- ifelse(d > 12.5, 0.0684 * ((d - 12.5)^2) * h, NA)
+  wb27 <- 0.0898 * d^2
+  wb2 <-  0.0824 * d^2
+  wr <- 0.254 * d^2
+  
+  out <- data.frame(ws, wb7, wb27, wb2, wr)
+  return(out)
+} 
+```
+
+
+```{r}
+df_qilex <- df_tree_sel %>% 
+  filter(sp == "Qilex") %>% 
+  bind_cols(map2_dfr(.$dbh, .$h, biomassQilex))
+
+w_qilex <- df_qilex %>% 
+  group_by(code) %>% 
+  summarise_at(vars(starts_with("w")), sum) 
+```
+
+
+
+
+
+# Modelos ecuaciones 
+Pistacia terebinthus: from Blanco Oyonarte et al. 2003
+Crataegus monogyna: from Blanco Oyonarte et al. 2003
+
+
+
+# Pistacia therebinthus 
+
+* Volumen 
+* morfotipo 
+
+$y = 323.49 * x^{1.130}$ 
+# References 
+
+
+
+mixed <- tree %>% 
++   group_by(code, sp) %>% 
++   count() %>% 
++   rowid_to_column(.) %>% 
++   group_by(code) %>% 
++   count() %>% 
++   filter(n > 1) %>% 
++   dplyr::select(code)
+
+

@@ -333,6 +333,8 @@ robledal_lifespa <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"),
                    verbose = TRUE, encoding = "UTF-8")
 
 robledal_lifespa <- robledal_lifespa[, c("code", "date")]
+# Solve problems with naming 
+robledal_lifespa@data$code <- gsub("-", "_", robledal_lifespa@data$code) 
 robledal_lifespa@data$date <- parse_date(robledal_lifespa@data$date)
 
 ```
