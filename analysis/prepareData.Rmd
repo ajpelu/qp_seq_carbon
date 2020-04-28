@@ -155,6 +155,10 @@ names(mig_spaFO) <- c("code", "date")
 ```
 
 
+```{r}
+rm(list = setdiff(ls(), c("mig_Data", "mig_spaFO")))
+```
+
 # Dendro SN 
 
 * Data from Pérez-Luque et al. (Submitted to *Ecosystems*).
@@ -249,6 +253,9 @@ dendrolife_Data %<>%
              dbh))
 ```
 
+```{r}
+rm("d5", "m_d")
+```
 
 # Robledal LIFE
 
@@ -337,6 +344,8 @@ robledal_lifespa <- robledal_lifespa[, c("code", "date")]
 robledal_lifespa@data$code <- gsub("-", "_", robledal_lifespa@data$code) 
 robledal_lifespa@data$date <- parse_date(robledal_lifespa@data$date)
 
+
+rm("df_aux", "df_auxtipo", "df_dbh", "df_tipo")
 ```
 
 # OBSNEV San Jeronimo 
@@ -399,13 +408,15 @@ obsnev_sjerData %<>%
 
 obsnev_sjerData %>% group_by(hval) %>% count()
 
+rm("j", "j_all", "j_tipo")
+
 ```
 
 ### SINFONEVADA
 
 We downloaded the DarwinCore Archive (`.zip` file) of our dataset from GBIF ([doi: 10.15468/4gpr7e](https://doi.org/10.15468/4gpr7e)). Then, we use the `finch` package [@finch] to process the Darwin Core Archive and load the datasets. 
 
-```{r}
+```{r, eval=FALSE}
 # sinfodwca  <- dwca_read("https://ipt.gbif.es/archive.do?r=sinfonevada&v=1.5")
 # sinfo_occ <- read_delim(sinfodwca$data[1], delim = "\t")
 
@@ -433,36 +444,37 @@ sinfo_qp_spa <- SpatialPointsDataFrame(coords = sinfo_qp[,c("decimalLongitude","
 
 * Tenemos datos del centroide pero no del polígono. 
 
-### CAMARATE
-* Parcelas realizadas en la zona de CAMARATE especificamente para caracterizar la estructura
+### QP_DASOMETRICO
+* Parcelas realizadas en varias de las poblaciones de robledal especificamente para caracterizar la estructura
 
 
 ```{r}
 # Read spatial info 
-camarate <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"), 
-                   layer = "camarate_dasometrico_polygon",
+qp_dasometrico <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"), 
+                   layer = "qp_dasometrico_polygon",
                    verbose = TRUE, encoding = "UTF-8")
 
-camarate@data$date <- parse_date(camarate@data$date)
+qp_dasometrico@data$date <- parse_date(qp_dasometrico@data$date)
 
 # Data 
-camarateData <- read_csv(here::here("raw_data/camarate/camarate_tree_data.csv"), col_types = cols()) %>% 
+qp_dasometricoData <- read_csv(here::here("raw_data/camarate/qp_dasometrico_tree_data.csv"), col_types = cols()) %>% 
   filter(dis < 16) %>% 
    mutate(sp = case_when(
     sp == "Quercus pyrenaica" ~ "Qpyr",
     sp == "Acer opalus granatensis" ~ "Aopa", 
     sp == "Sorbus aria" ~ "Saria", 
+    sp == "Adenocarpus decorticans" ~ "Adec",
     TRUE ~ "Cmon"), 
     hval = "field",
     dval = "field",
-    project = "camarate") %>% 
+    project = "qp_dasometrico") %>% 
   dplyr::select(code = plot, sp, dbh = dbh, h = height, hval, project) 
 
-camarateData %>% group_by(sp) %>% count()
+qp_dasometricoData %>% group_by(sp) %>% count()
 
 ```
 
-* Eliminar > 16 m distancia en CAM_H2
+* Eliminar > 16 m distancia en CAM2
 
 # Unir capas 
 ```{r}
@@ -471,7 +483,7 @@ camarateData %>% group_by(sp) %>% count()
 # CRS("+init=epsg:4326")
 p <-projection(obsnev_sjer)
   
-camarate <- spTransform(camarate, p)
+qp_dasometrico <- spTransform(qp_dasometrico, p)
 mig_spaFO <- spTransform(mig_spaFO, p)
 dendrosn_spa<- spTransform(dendrosn_spa, p)
 dendrolife_spa<- spTransform(dendrolife_spa, p)
@@ -479,7 +491,7 @@ robledal_lifespa <- spTransform(robledal_lifespa, p)
 
 
 plotsQP <- rbind(dendrolife_spa, dendrosn_spa,
-           mig_spaFO, camarate, obsnev_sjer, robledal_lifespa,
+           mig_spaFO, qp_dasometrico, obsnev_sjer, robledal_lifespa,
            makeUniqueIDs = TRUE)  
 ```
 
@@ -495,6 +507,8 @@ plotsQP <- rbind(dendrolife_spa, dendrosn_spa,
 dicc_plot <- read_csv(here::here("raw_data/dicc_plots.csv"), col_types = cols())
 
 plotsQP <- merge(plotsQP, dicc_plot, by.x ="code", by.y="original_code")
+
+tt <- plotsQP@data
 
 writeOGR(plotsQP, 
          dsn = here::here("/data/geoinfo"), 
@@ -535,7 +549,7 @@ mapview::mapview(qpR, color = "red", col.regions = "red", lwd = 1) + mapview::ma
 # Generar datos 
 ```{r}
 tree <-  bind_rows(
-  list(mig_Data, dendrolife_Data, dendrosn_Data, camarateData, obsnev_sjerData, robledal_lifeData))
+  list(mig_Data, dendrolife_Data, dendrosn_Data, qp_dasometricoData, obsnev_sjerData, robledal_lifeData))
 
 write_csv(tree, here::here("data/tree_data.csv"))
 
