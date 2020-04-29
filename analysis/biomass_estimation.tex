@@ -1,0 +1,625 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Compute Biomass},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
+\usepackage{graphicx}
+% grffile has become a legacy package: https://ctan.org/pkg/grffile
+\IfFileExists{grffile.sty}{%
+\usepackage{grffile}
+}{}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Compute Biomass}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{}
+    \preauthor{}\postauthor{}
+    \date{}
+    \predate{}\postdate{}
+  
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{source}\NormalTok{(here}\OperatorTok{::}\KeywordTok{here}\NormalTok{(}\StringTok{"load_pkgs.R"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_tree <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(here}\OperatorTok{::}\KeywordTok{here}\NormalTok{(}\StringTok{"data/tree_data_full.csv"}\NormalTok{), }\DataTypeTok{col_types =} \KeywordTok{cols}\NormalTok{())}
+
+\CommentTok{# OJO Corección datos P028 // P024 // P024 }
+\end{Highlighting}
+\end{Shaded}
+
+¿Qué especies tenemos en nuestros plots?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_tree }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(sp) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\NormalTok{knitr}\OperatorTok{::}\KeywordTok{kable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## group_by: one grouping variable (sp)
+\end{verbatim}
+
+\begin{verbatim}
+## count: now 8 rows and 2 columns, one group variable remaining (sp)
+\end{verbatim}
+
+\begin{longtable}[]{@{}lr@{}}
+\toprule
+sp & n\tabularnewline
+\midrule
+\endhead
+Adec & 1\tabularnewline
+Aopa & 6\tabularnewline
+Cmon & 36\tabularnewline
+Pdul & 9\tabularnewline
+Pter & 9\tabularnewline
+Qilex & 3\tabularnewline
+Qpyr & 3260\tabularnewline
+Saria & 18\tabularnewline
+\bottomrule
+\end{longtable}
+
+¿Cómo de puro o mixed es cada plot?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{aux <-}\StringTok{ }\NormalTok{df_tree }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(code, sp) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{count}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{spread}\NormalTok{(}\DataTypeTok{key =}\NormalTok{ sp, }\DataTypeTok{value =}\NormalTok{ n) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{as.data.frame}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## group_by: 2 grouping variables (code, sp)
+\end{verbatim}
+
+\begin{verbatim}
+## count: now 144 rows and 3 columns, 2 group variables remaining (code, sp)
+\end{verbatim}
+
+\begin{verbatim}
+## spread: reorganized (sp, n) into (Adec, Aopa, Cmon, Pdul, Pter, …) [was 144x3, now 117x9]
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df <-}\StringTok{ }\NormalTok{aux }\OperatorTok{%>%}\StringTok{ }
+\StringTok{   }\CommentTok{# replace(is.na(.), 0) %>% }
+\StringTok{   }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{n_total =} \KeywordTok{rowSums}\NormalTok{(dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(., }\OperatorTok{-}\NormalTok{code), }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{),}
+          \DataTypeTok{per_pure =} \KeywordTok{round}\NormalTok{((Qpyr }\OperatorTok{/}\StringTok{ }\NormalTok{n_total)}\OperatorTok{*}\DecValTok{100}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## mutate: new variable 'n_total' with 55 unique values and 0% NA
+\end{verbatim}
+
+\begin{verbatim}
+##         new variable 'per_pure' with 18 unique values and 0% NA
+\end{verbatim}
+
+Añadir datos de la parcela y filtrar por selected
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dicc_plots <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(here}\OperatorTok{::}\KeywordTok{here}\NormalTok{(}\StringTok{"raw_data/dicc_plots.csv"}\NormalTok{), }\DataTypeTok{col_types =} \KeywordTok{cols}\NormalTok{())}
+
+\NormalTok{plot_s <-}\StringTok{ }\NormalTok{dicc_plots }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{inner_join}\NormalTok{(df, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"original_code"}\NormalTok{ =}\StringTok{ "code"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(selected }\OperatorTok{==}\StringTok{ "TRUE"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## inner_join: added 10 columns (Adec, Aopa, Cmon, Pdul, Pter, …)
+\end{verbatim}
+
+\begin{verbatim}
+##             > rows only in x  (  0)
+\end{verbatim}
+
+\begin{verbatim}
+##             > rows only in y  (  0)
+\end{verbatim}
+
+\begin{verbatim}
+##             > matched rows     117
+\end{verbatim}
+
+\begin{verbatim}
+##             >                 =====
+\end{verbatim}
+
+\begin{verbatim}
+##             > rows total       117
+\end{verbatim}
+
+\begin{verbatim}
+## filter: removed 12 rows (10%), 105 rows remaining
+\end{verbatim}
+
+Filtrar datos de los plots seleccionados, y ver que species tenemos
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_tree_sel <-}\StringTok{ }\NormalTok{df_tree }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(code }\OperatorTok{%in%}\StringTok{ }\NormalTok{plot_s}\OperatorTok{$}\NormalTok{original_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## filter: removed 183 rows (5%), 3,159 rows remaining
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_tree_sel }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(sp) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## group_by: one grouping variable (sp)
+\end{verbatim}
+
+\begin{verbatim}
+## count: now 8 rows and 2 columns, one group variable remaining (sp)
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 8 x 2
+## # Groups:   sp [8]
+##   sp        n
+##   <chr> <int>
+## 1 Adec      1
+## 2 Aopa      6
+## 3 Cmon     36
+## 4 Pdul      8
+## 5 Pter      5
+## 6 Qilex     3
+## 7 Qpyr   3082
+## 8 Saria    18
+\end{verbatim}
+
+\hypertarget{componentes-de-la-biomasa}{%
+\subsection{Componentes de la biomasa}\label{componentes-de-la-biomasa}}
+
+\begin{itemize}
+\tightlist
+\item
+  Stem with bark (commercial volume, up to a top diameter of 7 cm)
+\item
+  Thick branches (diameter greater than 7 cm)
+\item
+  Medium branches (diameter between 2 and 7 cm)
+\item
+  Thin branches (diameter smaller than 2 cm)
+\item
+  Leaves
+\end{itemize}
+
+Seguimos la misma nomenclatura que Ruiz-Peinado, Montero, and Del Rio
+(2012)
+
+\begin{itemize}
+\tightlist
+\item
+  \(W_{s}\): Biomass weight of the stem fraction (kg)
+\item
+  \(W_{b7}\): Biomass weight of the thick branches fraction (diameter
+  larger than 7 cm) (kg)
+\item
+  \(W_{b2-7}\): Biomass weight of medium branches fraction (diameter
+  between 2 and 7 cm) (kg)
+\item
+  \(W_{b2+l}\): Biomass weight of thin branches fraction (diameter
+  smaller than 2 cm) with leaves (kg)
+\item
+  \(W_{r}\): Biomass weight of the belowground fraction (kg)
+\end{itemize}
+
+\hypertarget{quercus-pyrenaica}{%
+\subsection{\texorpdfstring{\emph{Quercus
+pyrenaica}}{Quercus pyrenaica}}\label{quercus-pyrenaica}}
+
+Fuente: Ruiz-Peinado, Montero, and Del Rio (2012)
+
+\begin{itemize}
+\tightlist
+\item
+  Stem + Thick branches \(W_{s} + W_{b7} = 0.0261 \cdot d^2 \cdot h\)
+\item
+  Medium branches
+  \(W_{b2-7} = -0.0260 \cdot d^2 + 0.536 \cdot h + 0.00538 \cdot d^2 \cdot h\)
+\item
+  Thin branches \(W_{b2} = 0.898 \cdot d - 0.445 \cdot h\)
+\item
+  Roots \(W_{r} = 0.143 \cdot d^2\)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Proposal function}
+\NormalTok{biomassQpyr <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(d, h, ...)\{}
+  
+\NormalTok{  ws <-}\StringTok{ }\FloatTok{0.0261}\OperatorTok{*}\StringTok{ }\NormalTok{d}\OperatorTok{^}\DecValTok{2} \OperatorTok{*}\StringTok{ }\NormalTok{h}
+\NormalTok{  wb7 <-}\StringTok{ }\OtherTok{NA} 
+\NormalTok{  wb27 <-}\StringTok{ }\NormalTok{(}\OperatorTok{-}\FloatTok{0.0260} \OperatorTok{*}\StringTok{ }\NormalTok{d}\OperatorTok{^}\DecValTok{2}\NormalTok{) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\FloatTok{0.536} \OperatorTok{*}\StringTok{ }\NormalTok{h) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\FloatTok{0.00538} \OperatorTok{*}\StringTok{ }\NormalTok{d}\OperatorTok{^}\DecValTok{2} \OperatorTok{*}\StringTok{ }\NormalTok{h)}
+\NormalTok{  wb2 <-}\StringTok{ }\NormalTok{(}\FloatTok{0.898}\OperatorTok{*}\NormalTok{d) }\OperatorTok{-}\StringTok{ }\NormalTok{(}\FloatTok{0.445}\OperatorTok{*}\NormalTok{h)}
+\NormalTok{  wr <-}\StringTok{ }\FloatTok{0.143} \OperatorTok{*}\StringTok{ }\NormalTok{d}\OperatorTok{^}\DecValTok{2}
+  
+\NormalTok{  out <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(ws, wb7, wb27, wb2, wr)}
+  \KeywordTok{return}\NormalTok{(out)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{computo-de-biomasa-para-qp}{%
+\subsection{Computo de Biomasa para
+Qp}\label{computo-de-biomasa-para-qp}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_qpyr <-}\StringTok{ }\NormalTok{df_tree_sel }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(sp }\OperatorTok{==}\StringTok{ "Qpyr"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(dbh }\OperatorTok{>}\StringTok{ }\DecValTok{7}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{bind_cols}\NormalTok{(}\KeywordTok{map2_dfr}\NormalTok{(.}\OperatorTok{$}\NormalTok{dbh, .}\OperatorTok{$}\NormalTok{h, biomassQpyr)) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## filter: removed 77 rows (2%), 3,082 rows remaining
+\end{verbatim}
+
+\begin{verbatim}
+## filter: removed 976 rows (32%), 2,106 rows remaining
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# tengo varios valores negativos en wb27 }
+\NormalTok{df_qpyr }\OperatorTok{%<>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{wb27 =} \KeywordTok{ifelse}\NormalTok{(wb27 }\OperatorTok{<}\StringTok{ }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, wb27)) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## mutate: changed 3 values (<1%) of 'wb27' (0 new NA)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Biomasa por plot }
+\NormalTok{w_qpyr <-}\StringTok{ }\NormalTok{df_qpyr }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(code) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summarise_at}\NormalTok{(}\KeywordTok{vars}\NormalTok{(}\KeywordTok{starts_with}\NormalTok{(}\StringTok{"w"}\NormalTok{)), sum) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## group_by: one grouping variable (code)
+\end{verbatim}
+
+\begin{verbatim}
+## summarise_at: now 105 rows and 6 columns, ungrouped
+\end{verbatim}
+
+??? Que hacemos con los mas pezqueñines??
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_qpyr7 <-}\StringTok{ }\NormalTok{df_tree_sel }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(sp }\OperatorTok{==}\StringTok{ "Qpyr"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(dbh }\OperatorTok{<}\StringTok{ }\DecValTok{7}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(code) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{count}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## filter: removed 77 rows (2%), 3,082 rows remaining
+\end{verbatim}
+
+\begin{verbatim}
+## filter: removed 2,130 rows (69%), 952 rows remaining
+\end{verbatim}
+
+\begin{verbatim}
+## group_by: one grouping variable (code)
+\end{verbatim}
+
+\begin{verbatim}
+## count: now 36 rows and 2 columns, one group variable remaining (code)
+\end{verbatim}
+
+\hypertarget{quercus-ilex}{%
+\subsection{\texorpdfstring{\emph{Quercus
+ilex}}{Quercus ilex}}\label{quercus-ilex}}
+
+Fuente: Ruiz-Peinado, Montero, and Del Rio (2012)
+
+\begin{itemize}
+\tightlist
+\item
+  Stem \(W_{s} = 0.143 \cdot d^2\)
+\item
+  Thick branches:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If \(d \leq 12.5\) then \(Z = 0\); If \(d > 12.5\) then \(Z = 1\)
+  \item
+    \(W_{b7} = [0.0684 \cdot (d - 12.5)^2 \cdot h ]\cdot Z\)
+  \end{itemize}
+\item
+  Medium branches \(W_{b2-7} = 0.0898 \cdot d^2\)
+\item
+  Thin branches \(W_{b2+l} = 0.0824 \cdot d^2\)
+\item
+  Roots \(W_{r} = 0.254 \cdot d^2\)
+\end{itemize}
+
+Ojo aquellos ind que no tengan d \textgreater{} 12.5, no se considera la
+fracción thick branches.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{biomassQilex <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(d, h, ...)\{}
+  \CommentTok{# aboveground biomass }
+  \CommentTok{# nota: no he incluido la parte de thick branches }
+
+\NormalTok{  ws <-}\StringTok{ }\FloatTok{0.143} \OperatorTok{*}\StringTok{ }\NormalTok{d}\OperatorTok{^}\DecValTok{2}
+\NormalTok{  wb7 <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(d }\OperatorTok{>}\StringTok{ }\FloatTok{12.5}\NormalTok{, }\FloatTok{0.0684} \OperatorTok{*}\StringTok{ }\NormalTok{((d }\OperatorTok{-}\StringTok{ }\FloatTok{12.5}\NormalTok{)}\OperatorTok{^}\DecValTok{2}\NormalTok{) }\OperatorTok{*}\StringTok{ }\NormalTok{h, }\OtherTok{NA}\NormalTok{)}
+\NormalTok{  wb27 <-}\StringTok{ }\FloatTok{0.0898} \OperatorTok{*}\StringTok{ }\NormalTok{d}\OperatorTok{^}\DecValTok{2}
+\NormalTok{  wb2 <-}\StringTok{  }\FloatTok{0.0824} \OperatorTok{*}\StringTok{ }\NormalTok{d}\OperatorTok{^}\DecValTok{2}
+\NormalTok{  wr <-}\StringTok{ }\FloatTok{0.254} \OperatorTok{*}\StringTok{ }\NormalTok{d}\OperatorTok{^}\DecValTok{2}
+  
+\NormalTok{  out <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(ws, wb7, wb27, wb2, wr)}
+  \KeywordTok{return}\NormalTok{(out)}
+\NormalTok{\} }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df_qilex <-}\StringTok{ }\NormalTok{df_tree_sel }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(sp }\OperatorTok{==}\StringTok{ "Qilex"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{bind_cols}\NormalTok{(}\KeywordTok{map2_dfr}\NormalTok{(.}\OperatorTok{$}\NormalTok{dbh, .}\OperatorTok{$}\NormalTok{h, biomassQilex))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## filter: removed 3,156 rows (>99%), 3 rows remaining
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{w_qilex <-}\StringTok{ }\NormalTok{df_qilex }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(code) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summarise_at}\NormalTok{(}\KeywordTok{vars}\NormalTok{(}\KeywordTok{starts_with}\NormalTok{(}\StringTok{"w"}\NormalTok{)), sum) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## group_by: one grouping variable (code)
+\end{verbatim}
+
+\begin{verbatim}
+## summarise_at: now one row and 6 columns, ungrouped
+\end{verbatim}
+
+\hypertarget{otras-especies}{%
+\subsection{Otras especies}\label{otras-especies}}
+
+\hypertarget{pistacia-therebinthus}{%
+\subsubsection{Pistacia therebinthus}\label{pistacia-therebinthus}}
+
+Fuente: Oyonarte and Cerrillo (2003) para datos de arbustos de Andalucía
+
+\(y = 323.49 * x^{1.130}\)
+
+siendo \(y\) la fitomasa, \(x\) el volumen. Se han calculado para
+arbustos, determinando el volumen con dos morfotipos:
+
+\begin{itemize}
+\tightlist
+\item
+  \(V = 4/3\cdot \pi \cdot [(D_m)/2]^2 \cdot h\)
+\item
+  \(V = 4/3\cdot \pi \cdot [(D_m)/2] \cdot h\)
+\end{itemize}
+
+Limitaciones: - \(D_m\) es la media del Crown diameter mayor y menor -
+Solamente aboveground biomass - No fraccionados los componentes de la
+biomasa
+
+\hypertarget{crataegus-monogyna}{%
+\subsubsection{Crataegus monogyna}\label{crataegus-monogyna}}
+
+Fuente: Oyonarte and Cerrillo (2003) para datos de arbustos de Andalucía
+
+\(y = 1280.7 * x^{1.087}\)
+
+siendo \(y\) la fitomasa, \(x\) el volumen. Se han calculado para
+arbustos, determinando el volumen con el morfotipo:
+
+\begin{itemize}
+\tightlist
+\item
+  \(V = 1/3\cdot \pi \cdot [(D_m)/2]^2 \cdot h\)
+\end{itemize}
+
+Limitaciones: - \(D_m\) es la media del Crown diameter mayor y menor -
+Solamente aboveground biomass - No fraccionados los componentes de la
+biomasa
+
+\hypertarget{adenocarpus-decorticans}{%
+\subsection{Adenocarpus decorticans}\label{adenocarpus-decorticans}}
+
+Fuente: Robles et al. (2006) para matorrales de Sierra Nevada
+
+\(y = 6.60588.7 * x^{0.942512}\)
+
+siendo \(y\) la fitomasa, \(x\) el volumen. Se han calculado para
+arbustos, determinando el volumen con el morfotipo cilindro circular:
+
+\begin{itemize}
+\tightlist
+\item
+  \(V = \pi \cdot d^2 \cdot h/4\)
+\end{itemize}
+
+siendo \(d\) el diámetro (crow diameter)
+
+\hypertarget{acer-opalus-granatensis}{%
+\subsection{Acer opalus granatensis}\label{acer-opalus-granatensis}}
+
+\hypertarget{prunus-dulcis-avium}{%
+\subsection{Prunus dulcis / avium}\label{prunus-dulcis-avium}}
+
+\hypertarget{sorbus-aria}{%
+\subsection*{Sorbus aria}\label{sorbus-aria}}
+\addcontentsline{toc}{subsection}{Sorbus aria}
+
+\hypertarget{refs}{}
+\leavevmode\hypertarget{ref-OyonarteCerrillo2003AbovegroundPhytomass}{}%
+Oyonarte, P. Blanco, and R. Navarro Cerrillo. 2003. ``Aboveground
+Phytomass Models for Major Species in Shrub Ecosystems of Western
+Andalusia.'' \emph{Forest Systems} 12 (3): 47--55.
+\url{https://doi.org/10.5424/1078}.
+
+\leavevmode\hypertarget{ref-Roblesetal2006NineNative}{}%
+Robles, A. B., P. Fern\a'andez, J. Ruiz-Mirazo, M. E. Ramos, C. B.
+Passera, and J. L. Gonz\a'alez-Rebollar. 2006. ``Nine Native Leguminous
+Shrub Species: Allometric Regression Equations and Nutritive Values.''
+In \emph{Sustainable Grassland Productivity: Proceedings of the 21st
+General Meeting of the European Grassland Federation, Badajoz, Spain,
+3-6 April, 2006}, edited by J. Lloveras, A. Gonz\a'alez-Rodríguez, O.
+V\a'azquez-Yañez, J. Piñeiro, O. Santamar\a'ıa, L. Olea, and M. J.
+Poblaciones, 309--11. Madrid, Spain: Sociedad Española para el Estudio
+de los Pastos (SEEP).
+
+\leavevmode\hypertarget{ref-RuizPeinadoetal2012BiomassModels}{}%
+Ruiz-Peinado, R., G. Montero, and M. Del Rio. 2012. ``Biomass Models to
+Estimate Carbon Stocks for Hardwood Tree Species.'' \emph{Forest
+Systems} 21 (1): 42. \url{https://doi.org/10.5424/fs/2112211-02193}.
+
+
+\end{document}

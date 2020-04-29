@@ -1,6 +1,6 @@
 ---
 title: "Compute Biomass"
-output: pdf_document
+output: word_document
 bibliography: ../references.bib
 editor_options: 
   chunk_output_type: console
@@ -34,7 +34,11 @@ aux <- df_tree %>% group_by(code, sp) %>%
 df <- aux %>% 
    # replace(is.na(.), 0) %>% 
    mutate(n_total = rowSums(dplyr::select(., -code), na.rm = TRUE),
-          per_pure = round((Qpyr / n_total)*100, 2))
+          per_pure = round((Qpyr / n_total)*100, 2)) 
+
+df %>% filter(per_pure < 100) %>% knitr::kable()
+
+
 ```
 
 Añadir datos de la parcela y filtrar por selected 
