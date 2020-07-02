@@ -294,7 +294,6 @@ df_aux <- df_dbh %>%
   filter(str_detect(code, "CAN"))
   
 
-    
 # Read tipo data 
 df_tipo <- ods_file_names %>% 
   purrr::map_dfr(function(file_name){ 
@@ -317,7 +316,10 @@ df_auxtipo <- df_tipo %>%
   dplyr::select(code, sp, dbh, h, hval, project) %>% 
   filter(str_detect(code, "CAN"))
 
-robledal_lifeData <- df_aux %>% rbind(df_auxtipo)
+robledal_lifeData <- df_aux %>% rbind(df_auxtipo) %>% as.data.frame()
+
+
+
 
 # Cuantas sps? 
 robledal_lifeData %>% group_by(sp) %>% count()
@@ -381,7 +383,9 @@ j <- readxl::read_xlsx(
   rowwise() %>% 
   mutate(dbh = max(c(Dn1, Dn2)),
          project = "obsnev_sjer", 
-         sp = recode(especie, "Quercus pyrenaica" = "Qpyr")) 
+         sp = recode(especie, "Quercus pyrenaica" = "Qpyr")) %>% 
+  as.data.frame()
+  
   
 
 # Get only Data of "tipo" trees from all plots
@@ -391,7 +395,8 @@ j_tipo <- j %>%
   mutate(h = max(c(h1, h2, htot), na.rm = TRUE)) %>%
   filter(h != -Inf) %>% 
   mutate(hval = "field") %>% 
-  dplyr::select(code, sp, dbh, h, hval, project) 
+  dplyr::select(code, sp, dbh, h, hval, project) %>% 
+  as.data.frame()
 
 
 # Get other data 
@@ -445,7 +450,7 @@ sinfo_qp_spa <- SpatialPointsDataFrame(coords = sinfo_qp[,c("decimalLongitude","
 * Tenemos datos del centroide pero no del polígono. 
 
 ### QP_DASOMETRICO
-* Parcelas realizadas en varias de las poblaciones de robledal especificamente para caracterizar la estructura
+* Parcelas realizadas en varias de las poblaciones de robledal especificamente para caracterizar la estructura. Se han hecho muestreos en Durcal, Dilar, POrtugos y Pampaneira 
 
 
 ```{r}
@@ -457,7 +462,7 @@ qp_dasometrico <- rgdal::readOGR(dsn = here::here("/raw_data/geoinfo"),
 qp_dasometrico@data$date <- parse_date(qp_dasometrico@data$date)
 
 # Data 
-qp_dasometricoData <- read_csv(here::here("raw_data/camarate/qp_dasometrico_tree_data.csv"), col_types = cols()) %>% 
+qp_dasometricoData <- read_csv(here::here("raw_data/daso_life/qp_dasometrico_tree_data.csv"), col_types = cols()) %>% 
   filter(dis < 16) %>% 
    mutate(sp = case_when(
     sp == "Quercus pyrenaica" ~ "Qpyr",
@@ -523,7 +528,6 @@ plotsQP@data %>% dplyr::group_by(selected) %>% count()
 ```
 
 ```{r}
-
 plotsQP_selected <- subset(plotsQP, selected == "TRUE")
 
 writeOGR(plotsQP_selected, 
@@ -543,7 +547,7 @@ qp_sn25 <- rgdal::readOGR(dsn="/Users/ajpelu/Google Drive/_phd/qpyr_distribution
 
 qpR <- spTransform(qp_sn25, CRS("+init=epsg:4326"))
 
-mapview::mapview(qpR, color = "red", col.regions = "red", lwd = 1) + mapview::mapview(plotsQP, color = "blue", clo.regions = "blue")
+mapview::mapview(qpR, color = "red", col.regions = "red", lwd = 1) + mapview::mapview(plotsQP_selected, color = "blue", clo.regions = "blue")
 ```
 
 # Generar datos 
