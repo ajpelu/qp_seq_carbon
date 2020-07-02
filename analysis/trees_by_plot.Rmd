@@ -1,0 +1,44 @@
+---
+title: "Trees summary by plots and project"
+output: md_document
+bibliography: ../references.bib
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, message=FALSE, warning=FALSE}
+source(here::here("load_pkgs.R"))
+```
+
+```{r, message=FALSE}
+biomass_tree <- read_csv(here::here("data/biomass_trees.csv"), col_types = cols())
+dicc_plots <- read_csv(here::here("raw_data/dicc_plots.csv"), col_types = cols())   
+
+b <- biomass_tree %>% 
+  inner_join((
+    dicc_plots %>% dplyr::select(
+      id_plot, original_code, loc, type, size_m, size)), 
+    by = c("code"="original_code"))
+
+```
+
+```{r}
+tabla <- b %>% group_by(project) %>% 
+  summarise(
+    n_trees = n(),
+    dbh_m = mean(dbh, na.rm=TRUE), 
+    dbh_min = min(dbh, na.rm=TRUE),
+    dbh_max = max(dbh, na.rm=TRUE),
+    h_m = mean(h, na.rm=TRUE), 
+    h_min = round(min(h, na.rm=TRUE), 1),
+    h_max = round(max(h, na.rm=TRUE), 1)
+  ) %>% 
+  unite("dbh_r", dbh_min:dbh_max, sep= " - ") %>% 
+  unite("h_r", h_min:h_max, sep= " - ")
+```
+
+```{r}
+knitr::kable(tabla)
+```
+
+
