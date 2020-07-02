@@ -40,15 +40,26 @@ biomass_plot <- biomass_plot  %>%
 
 biomass_plot <- biomass_plot %>% 
   mutate(
-    ws_plot_ha = (ws_plot * 10)/size,
-    wb27_plot_ha = (wb27_plot * 10)/size, 
-    wb2_plot_ha = (wb2_plot * 10)/size, 
-    wr_plot_ha = (wr_plot* 10)/size) 
+    ws = (ws_plot * 10)/size,
+    wb27 = (wb27_plot * 10)/size, 
+    wb2 = (wb2_plot * 10)/size, 
+    wr = (wr_plot* 10)/size) 
 
+# Ojo son datos en Mg biomass / ha 
 write_csv(biomass_plot, here::here("data/biomass_plot.csv"))
 
 ```
 
 
-FALTA esto y mandarselo a Mihai 
+```{r}
+plotsQP_selected <- st_read(here::here("/data/geoinfo/plotsQP_selected.shp"))
+
+b <- plotsQP_selected %>% 
+  inner_join(biomass_plot) %>% 
+  dplyr::select(id_plot, code, project, loc, size, ws, wb27, wb2, wr,type, size_m)
+
+st_write(b, here::here("/data/geoinfo/plotsQP_biomass.shp"), append = FALSE)
+```
+
+
 
