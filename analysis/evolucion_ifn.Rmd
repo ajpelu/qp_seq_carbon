@@ -1,0 +1,246 @@
+---
+title: "evolucion_ifn"
+output: 
+  md_document:
+    variant: markdown_github
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("here")
+source(here::here("load_pkgs.R"))
+```
+
+# Lectura de los datos de IFN3 
+
+- Utilizo la tabla `PCEspPar.xlsx' 
+- Filtro por especie Qpyr == 043
+
+```{r}
+pcespPar <- readxl::read_xlsx("raw_data/ifn/ifn3/p18/PCEspParc.xlsx") %>%
+  filter(Especie == "043")
+
+```
+
+Obtengo un total de `r nrow(pcespPar)` parcelas en las que está el Qpyr como especie. Exploramos la posición que ocupa el Qpyr en cada estadillo, y observamos que de las `r nrow(pcespPar)` parcelas, en `r nrow(pcespPar %>% filter(PosEsp == 1))` parcelas aparece como especie mayoritaria (posicion 1). En estas parcelas la ocupación varía entre `r range(pcespPar %>% filter(PosEsp == 1) %>% dplyr::select(Ocupa))` (%). 
+
+Si exploramos en función de la especie dominante y la tipología (parcelas Antigua o Nuevas), observamos: 
+
+```{r}
+pcespPar %>% group_by(PosEsp, Cla) %>% count() %>% knitr::kable()
+```
+
+# Estudiar la evolución de las parcelas antiguas en las que sea la especie princial el Qpyr 
+
+```{r}
+
+plots1 <- pcespPar %>% filter(PosEsp == 1) %>% dplyr::select(Estadillo) %>% as.vector()
+```
+
+## Pies mayores IFN3 e IFN2
+```{r}
+# Proposal function
+biomassQpyr <- function(d, h, ...){
+  
+  ws <- 0.0261* d^2 * h
+  wb7 <- NA 
+  wb27 <- (-0.0260 * d^2) + (0.536 * h) + (0.00538 * d^2 * h)
+  wb2 <- (0.898*d) - (0.445*h)
+  wr <- 0.143 * d^2
+  
+  out <- data.frame(ws, wb7, wb27, wb2, wr)
+  return(out)
+}
+  
+```
+
+Seleccionamos los Pies Mayores de las parcelas que cumplan: 
+
+  - Especie principal (Esp = 1) sea *Q. pyrenaica* 
+  - Parcelas que se hayan medido en el IFN2 
+  
+Posteriormente filtramos aquellos datos de los que no tengamos altura del árbol. Ahora procedemos a calcular con los datos h y dbh los diferentes componentes de la biomasa de Q. pyrenaica en estas parcelas mediante las ecuaciones de Montero 
+
+
+```{r}
+pcmayores <- readxl::read_xlsx("raw_data/ifn/ifn3/p18/PCMayores.xlsx")
+
+biomasa3 <- pcmayores %>% 
+  filter(Estadillo %in% plots1$Estadillo) %>% 
+  filter(Cla == "A") %>% 
+  filter(!is.na(Ht)) %>% 
+  mutate(dbh = rowMeans(cbind(Dn1, Dn2), na.rm=T)/10, 
+         h = Ht) %>% 
+  bind_cols(map2_dfr(.$dbh, .$h, biomassQpyr)) 
+
+
+biomasa3resumen <- biomasa3 %>% 
+  group_by(Estadillo) %>% 
+  summarise(n_trees_ifn3 = n(), 
+            ws_ifn3 = sum(ws), 
+            wb7_ifn3 = sum(wb7), 
+            wb27_ifn3 = sum(wb27),
+            wb2_ifn3 = sum(wb2), 
+            wr_ifn3 = sum(wr)) 
+
+# IFN2 
+pcmayores2 <- readxl::read_xlsx("raw_data/ifn/ifn3/p18/PCMayores2.xlsx", 
+                                col_types = c("text", "text", "numeric",
+                                              "numeric", "text", "numeric", 
+                                              "numeric", "numeric", "numeric", 
+                                              "numeric", "numeric")) 
+
+biomasa2 <- pcmayores2 %>% 
+  filter(Estadillo %in% plots1$Estadillo) %>% 
+  mutate(dbh = rowMeans(cbind(Diametro1, Diametro2), na.rm=T)/10, 
+         h = Altura) %>% 
+  filter(!is.na(h)) %>% 
+  bind_cols(map2_dfr(.$dbh, .$h, biomassQpyr)) 
+
+
+biomasa2resumen <- biomasa2 %>% 
+  group_by(Estadillo) %>% 
+  summarise(n_trees_ifn2 = n(), 
+            ws_ifn2 = sum(ws), 
+            wb7_ifn2 = sum(wb7), 
+            wb27_ifn2 = sum(wb27),
+            wb2_ifn2 = sum(wb2), 
+            wr_ifn2 = sum(wr)) 
+
+
+
+```
+
+# Calcular diferencias 
+
+```{r}
+biomasa_dif <- biomasa2resumen %>% 
+  full_join(biomasa3resumen, by = "Estadillo") %>% 
+  mutate(ntrees_d = n_trees_ifn3 - n_trees_ifn2, 
+         ws_d = ws_ifn3 - ws_ifn2, 
+         wb27_d = wb27_ifn3 - wb27_ifn2,
+         wb2_d = wb2_ifn3 - wb2_ifn2, 
+         wr_d = wr_ifn3 - wr_ifn2) %>% 
+  dplyr::select(-wb7_ifn2, wb7_ifn3) %>% 
+  mutate(above = (ws_d + wb27_d + wb2_d) / 1000, 
+         below = wr_d / 1000, 
+         total = above + below
+         )
+  
+```
+
+
+# Datos de las parcelas 
+
+```{r}
+pcdatosMap <- readxl::read_xlsx("raw_data/ifn/ifn3/p18/PCDatosMap.xlsx", 
+                                col_types = c("text","text","text",
+                                              "text","text",
+                                              "numeric", "numeric", "numeric",
+                                              "numeric", "numeric","numeric",
+                                              "numeric","numeric","numeric",
+                                              "numeric", "numeric", "numeric", "numeric", "numeric", "text")) %>% dplyr::select(Estadillo, CoorX, CoorY, FccArb, DisEsp)
+
+
+biomasa <- biomasa_dif %>% inner_join(pcdatosMap, by="Estadillo") %>% as.data.frame()
+
+
+
+biomasa_sp <- SpatialPointsDataFrame(
+  coords = biomasa[, c("CoorX", "CoorY")],
+  data = biomasa, 
+  proj4string = CRS("+init=epsg:23030"))
+
+
+qp_sn <- rgdal::readOGR(dsn="/Users/ajpelu/Google Drive/_phd/qpyr_distribution/data_raw/geoinfo/",
+                    layer = 'q_pyr_sn_4326', verbose = TRUE, encoding = "UTF-8")
+
+biomasa_sp <- spTransform(biomasa_sp, projection(qp_sn))
+
+mapview::mapview(qp_sn, color = "red", col.regions = "red", lwd = 1) + mapview::mapview(biomasa_sp, color = "blue", clo.regions = "blue")
+
+
+```
+
+
+```{r}
+# Read distribution of pyrenean oak 
+qp <- st_read("/Users/ajpelu/Google Drive/_phd/_geoinfo/dist_SN/q_pyr_sn_4326.shp") 
+  
+# Read limit of SN 
+sn <- st_read("/Users/ajpelu/Google Drive/_phd/_geoinfo/aux/sn_enp.shp")
+sn <- st_transform(sn, st_crs(qp))
+
+
+m <- qp %>% 
+  filter(POBLACION < 9) %>% 
+  mutate(cluster_qp = as.factor(
+    case_when(
+    POBLACION == 1 ~ 1, 
+    between(POBLACION,  1, 5) ~ 2, 
+    TRUE ~ 3 
+  ))) %>% 
+  mutate(
+    centroid = map(geometry, st_centroid),
+    coords = map(centroid, st_coordinates),
+    coords_x = map_dbl(coords, 1),
+    coords_y = map_dbl(coords, 2)
+  )
+
+
+biomasa_spsf <- st_as_sf(biomasa_sp) 
+```
+
+
+```{r}
+pcparcelas <- readxl::read_xlsx("raw_data/ifn/ifn3/p18/PCParcelas.xlsx") %>% 
+  dplyr::select(Estadillo, year3 = Ano) %>% 
+  mutate(year3 = as.numeric(year3))
+  
+
+parcelas2 <- read_csv(here::here("/raw_data/ifn/ifn2/DATEST18.csv")) %>% 
+  dplyr::select(ESTADILLO, year2=ANO) %>% 
+  mutate(ESTADILLO = formatC(ESTADILLO, width = 4, flag = "0"),
+         year2 = as.numeric(year2 + 1900)) %>% 
+  rename("Estadillo" = ESTADILLO)
+
+# area radi = 25 m --> pi*25*25 / 10000 
+a <- ((pi*25*25)/10000)
+biomasa_spsf <- biomasa_spsf %>% 
+  inner_join(pcparcelas) %>% 
+  inner_join(parcelas2) %>% 
+  mutate(years = year3 - year2) %>% 
+  mutate(tot_year = total/years) %>% 
+  mutate(tot_ha = total / a,
+         tot_ha_year = tot_year / a)
+         
+
+```
+
+
+# mapita 
+```{r}
+ggplot() + 
+  geom_sf(data = sn, fill = NA, size = .5) +
+  theme(panel.grid = element_blank(), 
+        legend.position = "bottom") +
+  theme_bw() + xlab("Longitude") + ylab("Latitude") + 
+  geom_sf(data = m, fill="gray", colour=NA) + 
+  annotation_scale(location = "tl", width_hint = 0.2) +
+  annotation_north_arrow(location = "tl", which_north = "true", 
+        pad_x = unit(0.5, "in"), pad_y = unit(0.35, "in"),
+        style = north_arrow_fancy_orienteering) + 
+    geom_sf(data = (biomasa_spsf %>% filter(Estadillo !=1595)), aes(size=tot_ha),
+            color = "red", alpha = 0.5) + 
+  theme(
+    panel.grid = element_blank()
+  ) + 
+  scale_size_continuous(name=expression(Delta~"Total Biomass (Mg /ha)"))
+ 
+```
+
+```
+
+

@@ -10,10 +10,12 @@ library("sp")
 library("rgdal")
 library("raster")
 library("stringr")
-library("parsedate")
+# library("parsedate")
 library("nlstools")
-library("propagate")
+# library("propagate") 
 library("broom")
+library("sf")
+library("ggspatial")
 
 
 

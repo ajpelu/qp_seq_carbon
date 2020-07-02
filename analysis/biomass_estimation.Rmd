@@ -34,27 +34,30 @@ aux <- df_tree %>% group_by(code, sp) %>%
 df <- aux %>% 
    # replace(is.na(.), 0) %>% 
    mutate(n_total = rowSums(dplyr::select(., -code), na.rm = TRUE),
-          per_pure = round((Qpyr / n_total)*100, 2)) 
+          total_trees = rowSums(dplyr::select(., Saria, Qpyr, Qilex, Aopa), na.rm = TRUE),
+          per_pure = round((Qpyr / n_total)*100, 2),
+          per_pure_tree = round((Qpyr / total_trees)*100, 2)) 
 
 df %>% filter(per_pure < 100) %>% knitr::kable()
 
-
+table(df$per_pure_tree)
 ```
 
 Añadir datos de la parcela y filtrar por selected 
 ```{r}
 dicc_plots <- read_csv(here::here("raw_data/dicc_plots.csv"), col_types = cols())
 
-plot_s <- dicc_plots %>% 
-  inner_join(df, by = c("original_code" = "code")) %>% 
+plot_s <- df %>% 
+  inner_join(dicc_plots, by = c("code"="original_code" )) %>% 
   filter(selected == "TRUE")
 ```
+
 
 Filtrar datos de los plots seleccionados, y ver que species tenemos 
 
 ```{r}
 df_tree_sel <- df_tree %>% 
-  filter(code %in% plot_s$original_code)
+  filter(code %in% plot_s$code)
 
 df_tree_sel %>% group_by(sp) %>% count()
 
@@ -104,24 +107,37 @@ biomassQpyr <- function(d, h, ...){
 
 ## Computo de Biomasa para Qp 
 ```{r}
+# df_qpyr <- df_tree_sel %>% 
+#   filter(sp == "Qpyr") %>% 
+#   filter(dbh > 7) %>% 
+#   bind_cols(map2_dfr(.$dbh, .$h, biomassQpyr)) 
+
 df_qpyr <- df_tree_sel %>% 
   filter(sp == "Qpyr") %>% 
-  filter(dbh > 7) %>% 
   bind_cols(map2_dfr(.$dbh, .$h, biomassQpyr)) 
-
-
 # tengo varios valores negativos en wb27 
 df_qpyr %<>% mutate(wb27 = ifelse(wb27 < 0, 0, wb27)) 
 
+write_csv(df_qpyr, here::here("data/biomass_trees.csv"))
+```
+
+
+
+
+
+
+
+
+
+
+
+??? Que hacemos con los mas pezqueñines?? 
+```{r}
 
 # Biomasa por plot 
 w_qpyr <- df_qpyr %>% 
   group_by(code) %>% 
   summarise_at(vars(starts_with("w")), sum) 
-```
-
-??? Que hacemos con los mas pezqueñines?? 
-```{r}
 df_qpyr7 <- df_tree_sel %>% 
   filter(sp == "Qpyr") %>% 
   filter(dbh < 7) %>% 

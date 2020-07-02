@@ -1,0 +1,54 @@
+---
+title: "Plot Biomass"
+output: md_document
+bibliography: ../references.bib
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, message=FALSE, warning=FALSE}
+source(here::here("load_pkgs.R"))
+```
+
+```{r, message=FALSE}
+biomass_tree <- read_csv(here::here("data/biomass_trees.csv"), col_types = cols())
+```
+
+# Group by plot 
+```{r}
+biomass_plot <- biomass_tree %>% 
+  group_by(code) %>% 
+  summarise(
+     ws_plot = sum(ws, na.rm=TRUE),
+     wb27_plot = sum(wb27, na.rm=TRUE),
+     wb2_plot = sum(wb2, na.rm=TRUE),
+     wr_plot = sum(wr, na.rm=TRUE),
+  )
+```
+
+```{r}
+# Scale-up to ha and to Ton (or Megagram. 1 ton = 1 Megagram = 1000 kg )
+dicc_plots <- read_csv(here::here("raw_data/dicc_plots.csv"), col_types = cols())   
+
+biomass_plot <- biomass_plot  %>% 
+  inner_join((
+    dicc_plots %>% dplyr::select(
+      id_plot, original_code, loc, type, size_m, size)), 
+    by = c("code"="original_code"))
+
+# ((biomasa * 10000 m2/1ha) / size) kg * 1Mg /1000 kg --> (biomasa * 10 )/size 
+
+biomass_plot <- biomass_plot %>% 
+  mutate(
+    ws_plot_ha = (ws_plot * 10)/size,
+    wb27_plot_ha = (wb27_plot * 10)/size, 
+    wb2_plot_ha = (wb2_plot * 10)/size, 
+    wr_plot_ha = (wr_plot* 10)/size) 
+
+write_csv(biomass_plot, here::here("data/biomass_plot.csv"))
+
+```
+
+
+FALTA esto y mandarselo a Mihai 
+
