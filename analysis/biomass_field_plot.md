@@ -12,11 +12,15 @@ Group by plot
          wb27_plot = sum(wb27, na.rm=TRUE),
          wb2_plot = sum(wb2, na.rm=TRUE),
          wr_plot = sum(wr, na.rm=TRUE),
+         h_mean = mean(h, na.rm=TRUE),
+         h_min = min(h, na.rm=TRUE),
+         h_max = max(h, na.rm=TRUE),
+         dbh_mean = mean(dbh, na.rm=TRUE)
       )
 
     ## group_by: one grouping variable (code)
 
-    ## summarise: now 113 rows and 5 columns, ungrouped
+    ## summarise: now 113 rows and 9 columns, ungrouped
 
     # Scale-up to ha and to Ton (or Megagram. 1 ton = 1 Megagram = 1000 kg )
     dicc_plots <- read_csv(here::here("raw_data/dicc_plots.csv"), col_types = cols())   
@@ -70,11 +74,13 @@ Group by plot
 
     b <- plotsQP_selected %>% 
       inner_join(biomass_plot) %>% 
-      dplyr::select(id_plot, code, project, loc, size, ws, wb27, wb2, wr,type, size_m)
+      dplyr::select(id_plot, code, project, loc, size, ws, wb27, wb2, wr, type, size_m, h_mean, h_min, h_max, dbh_mean) %>% 
+      mutate(across(where(is.numeric), ~ round(., digits = 2))) %>% 
+      mutate(id_plot = as.integer(id_plot)) 
 
     ## Joining, by = c("code", "id_plot", "loc", "type", "size_m", "size")
 
-    ## inner_join: added 8 columns (ws_plot, wb27_plot, wb2_plot, wr_plot, ws, …)
+    ## inner_join: added 12 columns (ws_plot, wb27_plot, wb2_plot, wr_plot, h_mean, …)
 
     ##             > rows only in x  (  0)
 
@@ -86,8 +92,28 @@ Group by plot
 
     ##             > rows total       113
 
+    ## mutate: changed 80 values (71%) of 'size' (0 new NA)
+
+    ##         changed 113 values (100%) of 'ws' (0 new NA)
+
+    ##         changed 113 values (100%) of 'wb27' (0 new NA)
+
+    ##         changed 113 values (100%) of 'wb2' (0 new NA)
+
+    ##         changed 113 values (100%) of 'wr' (0 new NA)
+
+    ##         changed 101 values (89%) of 'h_mean' (0 new NA)
+
+    ##         changed 15 values (13%) of 'h_min' (0 new NA)
+
+    ##         changed 16 values (14%) of 'h_max' (0 new NA)
+
+    ##         changed 102 values (90%) of 'dbh_mean' (0 new NA)
+
+    ## mutate: converted 'id_plot' from double to integer (0 new NA)
+
     st_write(b, here::here("/data/geoinfo/plotsQP_biomass.shp"), append = FALSE)
 
     ## Deleting layer `plotsQP_biomass' using driver `ESRI Shapefile'
     ## Writing layer `plotsQP_biomass' to data source `/Users/ajpelu/Google Drive/_phd/04_seq_carbon/qp_seq_carbon//data/geoinfo/plotsQP_biomass.shp' using driver `ESRI Shapefile'
-    ## Writing 113 features with 11 fields and geometry type Polygon.
+    ## Writing 113 features with 15 fields and geometry type Polygon.

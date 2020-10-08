@@ -90,3 +90,85 @@
 </tr>
 </tbody>
 </table>
+
+    b %>% group_by(project, loc) %>% 
+      summarise(nplots = unique(code)) %>% 
+      summarise(n = n()) %>% knitr::kable()
+
+    ## group_by: 2 grouping variables (project, loc)
+
+    ## summarise: now 113 rows and 3 columns, 2 group variables remaining (project, loc)
+
+    ## summarise: now 12 rows and 3 columns, one group variable remaining (project)
+
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">project</th>
+<th style="text-align: left;">loc</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">dendro_life</td>
+<td style="text-align: left;">CAN</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">dendro_sn</td>
+<td style="text-align: left;">CAN</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">dendro_sn</td>
+<td style="text-align: left;">GEN</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">migrame</td>
+<td style="text-align: left;">CAN</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">migrame</td>
+<td style="text-align: left;">GEN</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">obsnev_sjer</td>
+<td style="text-align: left;">MON</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">qp_dasometrico</td>
+<td style="text-align: left;">CAM</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">qp_dasometrico</td>
+<td style="text-align: left;">DIL</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">qp_dasometrico</td>
+<td style="text-align: left;">DUR</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">qp_dasometrico</td>
+<td style="text-align: left;">POQ</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">qp_dasometrico</td>
+<td style="text-align: left;">TRE</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">robledal_life</td>
+<td style="text-align: left;">CAN</td>
+<td style="text-align: right;">16</td>
+</tr>
+</tbody>
+</table>

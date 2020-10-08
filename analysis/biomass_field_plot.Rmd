@@ -23,6 +23,10 @@ biomass_plot <- biomass_tree %>%
      wb27_plot = sum(wb27, na.rm=TRUE),
      wb2_plot = sum(wb2, na.rm=TRUE),
      wr_plot = sum(wr, na.rm=TRUE),
+     h_mean = mean(h, na.rm=TRUE),
+     h_min = min(h, na.rm=TRUE),
+     h_max = max(h, na.rm=TRUE),
+     dbh_mean = mean(dbh, na.rm=TRUE)
   )
 ```
 
@@ -56,7 +60,9 @@ plotsQP_selected <- st_read(here::here("/data/geoinfo/plotsQP_selected.shp"))
 
 b <- plotsQP_selected %>% 
   inner_join(biomass_plot) %>% 
-  dplyr::select(id_plot, code, project, loc, size, ws, wb27, wb2, wr,type, size_m)
+  dplyr::select(id_plot, code, project, loc, size, ws, wb27, wb2, wr, type, size_m, h_mean, h_min, h_max, dbh_mean) %>% 
+  mutate(across(where(is.numeric), ~ round(., digits = 2))) %>% 
+  mutate(id_plot = as.integer(id_plot)) 
 
 st_write(b, here::here("/data/geoinfo/plotsQP_biomass.shp"), append = FALSE)
 ```

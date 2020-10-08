@@ -41,4 +41,10 @@ tabla <- b %>% group_by(project) %>%
 knitr::kable(tabla)
 ```
 
+```{r}
+b %>% group_by(project, loc) %>% 
+  summarise(nplots = unique(code)) %>% 
+  summarise(n = n()) %>% knitr::kable()
+```
+
 
