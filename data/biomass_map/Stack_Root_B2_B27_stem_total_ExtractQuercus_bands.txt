@@ -1,0 +1,5 @@
+Root Biomass
+Branches <2 cm Biomass
+Branches 2-7 cm Biomass
+Stem Biomass
+Total Biomass

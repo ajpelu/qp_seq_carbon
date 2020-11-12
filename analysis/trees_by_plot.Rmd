@@ -26,15 +26,27 @@ b <- biomass_tree %>%
 tabla <- b %>% group_by(project) %>% 
   summarise(
     n_trees = n(),
-    dbh_m = mean(dbh, na.rm=TRUE), 
-    dbh_min = min(dbh, na.rm=TRUE),
-    dbh_max = max(dbh, na.rm=TRUE),
-    h_m = mean(h, na.rm=TRUE), 
+    dbh_m = round(mean(dbh, na.rm=TRUE),2), 
+    dbh_min = round(min(dbh, na.rm=TRUE),2),
+    dbh_max = round(max(dbh, na.rm=TRUE), 2),
+    h_m = round(mean(h, na.rm=TRUE),2), 
     h_min = round(min(h, na.rm=TRUE), 1),
     h_max = round(max(h, na.rm=TRUE), 1)
   ) %>% 
-  unite("dbh_r", dbh_min:dbh_max, sep= " - ") %>% 
-  unite("h_r", h_min:h_max, sep= " - ")
+  unite("dbh_r", dbh_min:dbh_max, sep= "-") %>% 
+  unite("h_r", h_min:h_max, sep= "-") %>% 
+  mutate(hrr = paste0("(",h_r,")")) %>% 
+  mutate(dbhrr = paste0("(",dbh_r,")")) %>% 
+  unite("h", h_m,hrr, sep = " ") %>%  
+  unite("dbh", dbh_m,dbhrr, sep = " ") %>% 
+  dplyr::select(-dbh_r, -h_r)
+
+write_csv(tabla, here::here("data/summary_trees_by_project.csv"))
+knitr::kable(tabla)
+library(flextable)
+
+tabla %>% flextable()
+
 ```
 
 ```{r}
@@ -44,7 +56,14 @@ knitr::kable(tabla)
 ```{r}
 b %>% group_by(project, loc) %>% 
   summarise(nplots = unique(code)) %>% 
-  summarise(n = n()) %>% knitr::kable()
+  summarise(n = n()) %>% 
+  pivot_wider(names_from=loc, values_from = n) %>% 
+  knitr::kable()
+```
+
+
+```{r}
+bp <- read_csv(here::here("data/biomass_plot.csv"), col_types = cols())
 ```
 
 
