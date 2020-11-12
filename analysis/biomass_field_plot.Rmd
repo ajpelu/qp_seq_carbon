@@ -26,7 +26,8 @@ biomass_plot <- biomass_tree %>%
      h_mean = mean(h, na.rm=TRUE),
      h_min = min(h, na.rm=TRUE),
      h_max = max(h, na.rm=TRUE),
-     dbh_mean = mean(dbh, na.rm=TRUE)
+     dbh_mean = mean(dbh, na.rm=TRUE), 
+     n_tree = n()
   )
 ```
 
