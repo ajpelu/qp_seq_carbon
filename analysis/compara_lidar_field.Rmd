@@ -1,0 +1,165 @@
+---
+title: "Biomass Field vs. Lidar"
+output: md_document
+bibliography: ../references.bib
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, message=FALSE, warning=FALSE}
+source(here::here("load_pkgs.R"))
+```
+
+# Read data 
+```{r, message=FALSE, eval=FALSE}
+# field data 
+biomass_field <- read_csv(here::here("data/biomass_plot.csv"), col_types = cols())
+
+# biomass lidar data 
+s <- stack(here::here("/data/biomass_map/Stack_Root_B2_B27_stem_total_ExtractQuercus.tif"))
+names(s) <- c("wr", "w2", "w27", "ws", "wt")
+
+# spatial data (field)
+qp_plot <- st_read(here::here("data/geoinfo/plotsQP_biomass.shp")) 
+qp_plot <- st_transform(qp_plot, 25830)
+# get centroid 
+qp_plot_cent <- st_centroid(qp_plot)
+
+# Extract data of centroid 
+p <- raster::extract(s, qp_plot_cent, fun = max, df = TRUE) 
+names(p) <- c("ID","wr_lid","w2_lid","w27_lid","ws_lid","wt_lid")
+
+# Create df  
+df <- qp_plot_cent %>% as.data.frame() %>% bind_cols(p) %>% 
+  dplyr::select(-project, -size, -type, -geometry, -ID, -size_m)
+
+write_csv(df, here::here("data/compara_lidar_field.csv"))
+```
+
+
+```{r}
+library(purrr)
+df <- read_csv(here::here("data/compara_lidar_field.csv")) %>% 
+  mutate(oakCluster = case_when(
+    loc == "CAM" ~ "N", 
+    loc %in% c("GEN", "MON", "DIL", "DUR") ~ "NW",
+    TRUE ~ "S")
+    ) %>% 
+  mutate(wt = rowSums(dplyr::across(ws:wr), na.rm=TRUE))
+
+
+cp = "#0073C2FF"
+
+# WS 
+ws <- df %>% 
+  ggscatter(y="ws", x="ws_lid", color = cp, 
+                size = 3, alpha=.8, shape = 19, 
+              add.params = list(color = cp, fill = "lightgray"), 
+              add = "reg.line", conf.int = TRUE, 
+              xlab = expression(paste("ALS estimated ", W[s], " (Mg ", ha^-1, ")")),
+              ylab = expression(paste("Field ", W[s], " (Mg ", ha^-1, ")"))) + 
+    stat_cor(method = "spearman", 
+           cor.coef.name = "R", 
+           p.accuracy = 0.001, r.accuracy = 0.01, 
+           aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~")))
+  
+ws
+      
+
+# WB27 
+wb27 <- df %>% 
+  filter(w27_lid >= 0) %>% 
+  ggscatter(y="wb27", x="w27_lid", color = cp, 
+                size = 3, alpha=.8, shape = 19, 
+              add.params = list(color = cp, fill = "lightgray"), 
+              add = "reg.line", conf.int = TRUE, 
+              xlab = expression(paste("ALS estimated ", W[b27], " (Mg ", ha^-1, ")")),
+              ylab = expression(paste("Field ", W[b27], " (Mg ", ha^-1, ")"))) + 
+  stat_cor(method = "spearman", 
+           cor.coef.name = "R", 
+           p.accuracy = 0.001, r.accuracy = 0.01, 
+           aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~")))
+  
+wb27
+      
+
+
+# WB2 
+wb2 <- df %>% 
+  ggscatter(y="wb2", x="w2_lid", color = cp, 
+                size = 3, alpha=.8, shape = 19, 
+              add.params = list(color = cp, fill = "lightgray"), 
+              add = "reg.line", conf.int = TRUE, 
+              xlab = expression(paste("ALS estimated ", W[b2], " (Mg ", ha^-1, ")")),
+              ylab = expression(paste("Field ", W[b2], " (Mg ", ha^-1, ")"))) +
+    stat_cor(method = "spearman", 
+           cor.coef.name = "R", 
+           p.accuracy = 0.001, r.accuracy = 0.01, 
+           aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~")))
+  
+wb2
+      
+       
+# WR 
+wr <- df %>% 
+  ggscatter(y="wr", x="wr_lid", color = cp, 
+                size = 3, alpha=.8, shape = 19, 
+              add.params = list(color = cp, fill = "lightgray"), 
+              add = "reg.line", conf.int = TRUE, 
+              xlab = expression(paste("ALS estimated ", W[r], " (Mg ", ha^-1, ")")),
+              ylab = expression(paste("Field ", W[r], " (Mg ", ha^-1, ")"))) + 
+  stat_cor(method = "spearman", 
+           cor.coef.name = "R", 
+           p.accuracy = 0.001, r.accuracy = 0.01, 
+           aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~")))
+  
+wr
+      
+# Wt 
+wt <- df %>% 
+  ggscatter(y="wt", x="wt_lid", color = cp, 
+                size = 3, alpha=.8, shape = 19, 
+              # margin.params = list(fill = "lightgray"),
+              add.params = list(color = cp, fill = "lightgray"), 
+              add = "reg.line", conf.int = TRUE, 
+              xlab = expression(paste("ALS estimated ", W[t], " (Mg ", ha^-1, ")")),
+              ylab = expression(paste("Field ", W[t], " (Mg ", ha^-1, ")"))) + 
+    stat_cor(method = "spearman", 
+           cor.coef.name = "R", 
+           p.accuracy = 0.001, r.accuracy = 0.01, 
+           aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~")))
+  
+wt  
+
+
+```
+
+```{r}
+library(cowplot)
+
+top_plots <- plot_grid(ws, wr, labels = c("a", "b")) 
+bottom_plots <- plot_grid(wb2, wb27, wt, nrow = 1, 
+                          labels = c("c","d","e"))
+
+plots_compara <- plot_grid(top_plots, bottom_plots, nrow = 2)
+
+ggsave(plots_compara, 
+       filename = here::here("fig/plots_compara_lidar_field.jpg"),
+       width = 29.7, height = 21, units = "cm")
+
+ggsave2(plots_compara, 
+       filename = here::here("fig/plots_compara_lidar_field.jpg"),
+       width = 29.7, height = 21, units = "cm",
+       dpi = 300)
+```
+
+
+
+
+
+
+
+
+
+
+
