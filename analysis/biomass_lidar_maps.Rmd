@@ -1,0 +1,647 @@
+---
+title: "Mapas biomasa lidar"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("here")
+source(here::here("load_pkgs.R"))
+```
+
+# Generate stacks and save 
+not run
+
+```{r, echo=FALSE, eval=FALSE}
+b <- stack(here::here("/data/biomass_map/Stack_Root_B2_B27_stem_total_ExtractQuercus.tif"))
+b <- projectRaster(b, crs = CRS("+init=EPSG:4326"))
+
+# Set NA 
+b[b < 0 ] <- NA
+
+# Rename bands
+# Root Biomass, Branches <2 cm Biomass, Branches 2-7 cm Biomass, Stem Biomass, Total Biomass
+names(b) <- c("wr", "w2", "w27", "ws", "wt")
+
+# Compute Carbon content 
+# multiply values with 1.74325 (i.e.= 0.475 and 3.67) 
+fun <- function(x) { x * 1.74325 }
+
+b_carbon <- calc(b, fun)
+names(b_carbon) <- c("cr", "c2", "c27", "cs", "ct")
+
+# Crop remove 9 pob
+qp_sn <- st_read(here::here("data/geoinfo/q_pyr_sn_4326_8pobs.shp"))
+
+b_crop <- crop(b, qp_sn)
+b_crop_carbon <- crop(b_carbon, qp_sn)
+
+
+# Export stacks 
+temp <- getwd()
+setwd(here::here("/data/biomass_map/"))
+writeRaster(b_crop, filename = 'stackBiomass', overwrite =TRUE) 
+writeRaster(b_crop_carbon, filename = 'stackCarbon', overwrite =TRUE) 
+setwd(temp)
+
+# qp_sn <- st_transform(qp_sn, 25830)
+
+```
+
+
+
+```{r}
+biomass <- stack(here::here("/data/biomass_map/stackBiomass"))
+carbon <- stack(here::here("/data/biomass_map/stackCarbon"))
+qp_sn <- st_read(here::here("data/geoinfo/q_pyr_sn_4326_8pobs.shp")) %>% 
+    mutate(
+    centroid = map(geometry, st_centroid),
+    coords = map(centroid, st_coordinates),
+    coords_x = map_dbl(coords, 1),
+    coords_y = map_dbl(coords, 2)
+  )
+# Read limit of SN 
+sn <- st_read("/Users/ajpelu/Google Drive/_phd/_geoinfo/aux/sn_enp.shp")
+sn <- st_transform(sn, 4326)
+```
+
+
+
+# Map with ggspatial 
+
+```{r}
+
+bt <- ggplot() + 
+  layer_spatial(biomass[["wt"]]) +
+  scico::scale_fill_scico(palette = "imola", na.value = NA, direction = -1) + 
+  theme_minimal() + 
+  theme(
+    legend.position = "bottom"
+  ) + 
+  guides(
+    fill = guide_colorbar(
+      title = expression(paste(W[total], " (Mg ", ha^-1, ")")),
+      barwidth = 7, barheight = .7)
+  ) + 
+  annotation_scale(location = "tl", width_hint = 0.2, pad_x = unit(0.3, "in")) +
+  annotation_north_arrow(location = "tl", which_north = "true", 
+        pad_x = unit(0.5, "in"), pad_y = unit(0.35, "in"),
+        style = north_arrow_fancy_orienteering)  +
+      geom_text_repel(data = qp_sn,
+                  aes(x = coords_x, y = coords_y,
+                      label = loc),
+                  point.padding = NA,
+                  nudge_x = -0.02, nudge_y = 0.01,
+                  size = 3.5,
+                  segment.color = "NA") + 
+    xlab("") + ylab("")
+
+
+ct <- ggplot() + 
+  layer_spatial(carbon[["ct"]]) + 
+  scico::scale_fill_scico(palette = "lajolla", na.value = NA, direction = -1) + 
+  theme_minimal() + 
+  theme(
+    legend.position = "bottom"
+  ) + 
+  guides(
+    fill = guide_colorbar(
+      title = expression(paste(CO[2], " (Mg ", ha^-1, ")")),
+      barwidth = 7, barheight = .7)
+  ) + 
+    coord_sf(label_axes = "-NE-", ) + 
+    geom_text_repel(data = qp_sn,
+                  aes(x = coords_x, y = coords_y,
+                      label = loc),
+                  point.padding = NA,
+                  nudge_x = -0.02, nudge_y = 0.01,
+                  size = 3.5,
+                  segment.color = "NA") +
+    xlab("") + ylab("")
+
+
+
+mapa <- bt + ct + plot_annotation(tag_levels = "a") 
+ggsave(filename=here::here("fig/mapas_biomasa_carbon.pdf"), 
+       plot=mapa, width=10, height = 7, dpi = 500) 
+
+
+```
+
+
+# Generate raster by pobs 
+
+```{r}
+# Get bounding box of each Oak population 
+for (i in 1:nrow(qp_sn)) {
+  sel <- qp_sn %>% filter(POBLACION == i) 
+  loc <- (sel %>% as.data.frame())$loc
+  sel <- st_geometry(sel)
+  bb <- st_as_sfc(st_bbox(sel, crs = st_crs(4326)))
+  namebb <- paste0("bb_", loc)
+  assign(namebb, bb)
+}
+
+
+# Merge stacks 
+b <- stack(biomass, carbon)
+
+# Crop rasters brick by populations  
+for (i in (qp_sn$loc)){
+  r <- crop(b, extent(qp_sn[qp_sn$loc==i,]))
+  names(r) <- c("wr", "w2", "w27", "ws", "wt",  "cr", "c2", "c27", "cs", "ct" )
+  assign(paste0("b_",i), r)
+}
+```
+
+
+
+# Mapas 
+- mapa de localización de los plots, junto con los mapas de biomasa de Wr, Wt y Ws 
+
+```{r}
+
+for (i in 1:nrow(qp_sn)) {
+  sel <- qp_sn %>% filter(POBLACION == i) 
+  loc <- (sel %>% as.data.frame())$loc
+  sel_loc <- sf::as_Spatial(sel$geometry)
+  sel_loc$loc <- loc
+  name_loc <- paste0("shape", loc)
+  assign(name_loc, sel_loc)
+}
+
+# Mapas 
+# Specify the color palette
+mypal <- brewer.pal(9, "Greens")
+myTheme=rasterTheme(region=mypal)
+
+
+# names_fractions <- c(expression(W[stem]), expression(W[root]))
+# names_fractions <- expression(W[stem]) 
+
+# W stem 
+names_fractions <- expression(paste(W[stem], " (Mg ", ha^-1, ")"))
+
+mapitas <- function(r, loc, ...){
+  levelplot(r, 
+            layers = c("ws"),
+            par.settings=myTheme, 
+            # layout = c(2,1), 
+            xlab=NULL, ylab=NULL,
+            scales=list(x=list(cex=.5),y=list(cex=.5)),
+            # scales=list(draw=FALSE),
+            margin = FALSE, 
+            names.attr = names_fractions,
+            colorkey=list(space="bottom"), 
+            main = names_fractions) 
+  
+}
+
+mapCAM <- mapitas(b_CAM)+ layer(sp::sp.polygons(shapeCAM)) +
+  layer(sp::sp.text(coordinates(shapeCAM), txt = shapeCAM$loc, pos = 1))
+mapGEN <- mapitas(b_GEN)+ layer(sp::sp.polygons(shapeGEN)) +
+  layer(sp::sp.text(coordinates(shapeGEN), txt = shapeGEN$loc, pos = 1))
+mapMON <- mapitas(b_MON)+ layer(sp::sp.polygons(shapeMON)) +
+  layer(sp::sp.text(coordinates(shapeMON), txt = shapeMON$loc, pos = 1))
+mapDIL <- mapitas(b_DIL)+ layer(sp::sp.polygons(shapeDIL))+
+  layer(sp::sp.text(coordinates(shapeDIL), txt = shapeDIL$loc, pos = 1))
+mapDUR <- mapitas(b_DUR)+ layer(sp::sp.polygons(shapeDUR)) +
+  layer(sp::sp.text(coordinates(shapeDUR), txt = shapeDUR$loc, pos = 1))
+mapCAN <- mapitas(b_CAN)+ layer(sp::sp.polygons(shapeCAN)) +
+  layer(sp::sp.text(coordinates(shapeCAN), txt = shapeCAN$loc, pos = 1))
+mapPOQ <- mapitas(b_POQ)+ layer(sp::sp.polygons(shapePOQ)) +
+  layer(sp::sp.text(coordinates(shapePOQ), txt = shapePOQ$loc, pos = 1))
+mapTRE <- mapitas(b_TRE)+ layer(sp::sp.polygons(shapeTRE)) +
+  layer(sp::sp.text(coordinates(shapeTRE), txt = shapeTRE$loc, pos = 1))
+
+
+mapa_ws <- c(mapCAM, mapGEN, mapMON, mapDIL, mapDUR, mapCAN, mapPOQ, mapTRE,
+  merge.legends = FALSE, layout = c(4,2)) 
+
+# Export maps 
+
+trellis.device(pdf, file=here::here("fig/mapas_ws.pdf"),
+               theme = list(fontsize = list(text = 7, points = 6)),
+               width = 8, height = 6) 
+  print(mapa_ws)
+  dev.off()
+
+
+
+# ------------------
+
+# W root 
+
+names_fractions <- expression(paste(W[root], " (Mg ", ha^-1, ")"))
+
+mapitas <- function(r, ...){
+  levelplot(r, 
+            layers = c("wr"),
+            par.settings=myTheme, 
+            # layout = c(2,1), 
+            xlab=NULL, ylab=NULL,
+            # scales=list(draw=FALSE),
+            scales=list(x=list(cex=.5),y=list(cex=.5)),
+            margin = FALSE, 
+            names.attr = names_fractions,
+            colorkey=list(space="bottom"), 
+            main = names_fractions) 
+  
+}
+
+
+mapCAM <- mapitas(b_CAM)+ layer(sp::sp.polygons(shapeCAM)) +
+  layer(sp::sp.text(coordinates(shapeCAM), txt = shapeCAM$loc, pos = 1))
+mapGEN <- mapitas(b_GEN)+ layer(sp::sp.polygons(shapeGEN)) +
+  layer(sp::sp.text(coordinates(shapeGEN), txt = shapeGEN$loc, pos = 1))
+mapMON <- mapitas(b_MON)+ layer(sp::sp.polygons(shapeMON)) +
+  layer(sp::sp.text(coordinates(shapeMON), txt = shapeMON$loc, pos = 1))
+mapDIL <- mapitas(b_DIL)+ layer(sp::sp.polygons(shapeDIL))+
+  layer(sp::sp.text(coordinates(shapeDIL), txt = shapeDIL$loc, pos = 1))
+mapDUR <- mapitas(b_DUR)+ layer(sp::sp.polygons(shapeDUR)) +
+  layer(sp::sp.text(coordinates(shapeDUR), txt = shapeDUR$loc, pos = 1))
+mapCAN <- mapitas(b_CAN)+ layer(sp::sp.polygons(shapeCAN)) +
+  layer(sp::sp.text(coordinates(shapeCAN), txt = shapeCAN$loc, pos = 1))
+mapPOQ <- mapitas(b_POQ)+ layer(sp::sp.polygons(shapePOQ)) +
+  layer(sp::sp.text(coordinates(shapePOQ), txt = shapePOQ$loc, pos = 1))
+mapTRE <- mapitas(b_TRE)+ layer(sp::sp.polygons(shapeTRE)) +
+  layer(sp::sp.text(coordinates(shapeTRE), txt = shapeTRE$loc, pos = 1))
+
+
+
+mapa_wr <- c(mapCAM, mapGEN, mapMON, mapDIL, mapDUR, mapCAN, mapPOQ, mapTRE,
+  merge.legends = FALSE, layout = c(4,2)) 
+
+trellis.device(pdf, file=here::here("fig/mapas_wr.pdf"),
+               theme = list(fontsize = list(text = 7, points = 6)),
+               width = 8, height = 6) 
+  print(mapa_wr)
+  dev.off()
+
+# ------------------
+
+# W total 
+names_fractions <- expression(paste(W[total], " (Mg ", ha^-1, ")"))
+
+mapitas <- function(r, ...){
+  levelplot(r, 
+            layers = c("wt"),
+            par.settings=myTheme, 
+            # layout = c(2,1), 
+            xlab=NULL, ylab=NULL,
+            # scales=list(draw=FALSE),
+            scales=list(x=list(cex=.5),y=list(cex=.5)),
+            margin = FALSE, 
+            names.attr = names_fractions,
+            colorkey=list(space="bottom"), 
+            main = names_fractions) 
+  
+}
+
+
+mapCAM <- mapitas(b_CAM)+ layer(sp::sp.polygons(shapeCAM)) +
+  layer(sp::sp.text(coordinates(shapeCAM), txt = shapeCAM$loc, pos = 1))
+mapGEN <- mapitas(b_GEN)+ layer(sp::sp.polygons(shapeGEN)) +
+  layer(sp::sp.text(coordinates(shapeGEN), txt = shapeGEN$loc, pos = 1))
+mapMON <- mapitas(b_MON)+ layer(sp::sp.polygons(shapeMON)) +
+  layer(sp::sp.text(coordinates(shapeMON), txt = shapeMON$loc, pos = 1))
+mapDIL <- mapitas(b_DIL)+ layer(sp::sp.polygons(shapeDIL))+
+  layer(sp::sp.text(coordinates(shapeDIL), txt = shapeDIL$loc, pos = 1))
+mapDUR <- mapitas(b_DUR)+ layer(sp::sp.polygons(shapeDUR)) +
+  layer(sp::sp.text(coordinates(shapeDUR), txt = shapeDUR$loc, pos = 1))
+mapCAN <- mapitas(b_CAN)+ layer(sp::sp.polygons(shapeCAN)) +
+  layer(sp::sp.text(coordinates(shapeCAN), txt = shapeCAN$loc, pos = 1))
+mapPOQ <- mapitas(b_POQ)+ layer(sp::sp.polygons(shapePOQ)) +
+  layer(sp::sp.text(coordinates(shapePOQ), txt = shapePOQ$loc, pos = 1))
+mapTRE <- mapitas(b_TRE)+ layer(sp::sp.polygons(shapeTRE)) +
+  layer(sp::sp.text(coordinates(shapeTRE), txt = shapeTRE$loc, pos = 1))
+
+
+
+mapa_wt <- c(mapCAM, mapGEN, mapMON, mapDIL, mapDUR, mapCAN, mapPOQ, mapTRE,
+  merge.legends = FALSE, layout = c(4,2)) 
+
+trellis.device(pdf, file=here::here("fig/mapas_wt.pdf"),
+               theme = list(fontsize = list(text = 7, points = 6)),
+               width = 8, height = 6) 
+  print(mapa_wt)
+  dev.off()
+
+# ------------------
+
+
+# Carbon stem  
+names_fractions <- expression(paste(CO[2], " stem (Mg ", ha^-1, ")"))
+
+mapitas <- function(r, ...){
+  levelplot(r, 
+            layers = c("cs"),
+            par.settings=viridisTheme(region = viridis(10, direction = -1)), 
+            # layout = c(2,1), 
+            xlab=NULL, ylab=NULL,
+            # scales=list(draw=FALSE),
+            scales=list(x=list(cex=.5),y=list(cex=.5)),
+            margin = FALSE, 
+            names.attr = names_fractions,
+            colorkey=list(space="bottom"), 
+            main = names_fractions) 
+  
+}
+
+mapCAM <- mapitas(b_CAM)+ layer(sp::sp.polygons(shapeCAM)) +
+  layer(sp::sp.text(coordinates(shapeCAM), txt = shapeCAM$loc, pos = 1))
+mapGEN <- mapitas(b_GEN)+ layer(sp::sp.polygons(shapeGEN)) +
+  layer(sp::sp.text(coordinates(shapeGEN), txt = shapeGEN$loc, pos = 1))
+mapMON <- mapitas(b_MON)+ layer(sp::sp.polygons(shapeMON)) +
+  layer(sp::sp.text(coordinates(shapeMON), txt = shapeMON$loc, pos = 1))
+mapDIL <- mapitas(b_DIL)+ layer(sp::sp.polygons(shapeDIL))+
+  layer(sp::sp.text(coordinates(shapeDIL), txt = shapeDIL$loc, pos = 1))
+mapDUR <- mapitas(b_DUR)+ layer(sp::sp.polygons(shapeDUR)) +
+  layer(sp::sp.text(coordinates(shapeDUR), txt = shapeDUR$loc, pos = 1))
+mapCAN <- mapitas(b_CAN)+ layer(sp::sp.polygons(shapeCAN)) +
+  layer(sp::sp.text(coordinates(shapeCAN), txt = shapeCAN$loc, pos = 1))
+mapPOQ <- mapitas(b_POQ)+ layer(sp::sp.polygons(shapePOQ)) +
+  layer(sp::sp.text(coordinates(shapePOQ), txt = shapePOQ$loc, pos = 1))
+mapTRE <- mapitas(b_TRE)+ layer(sp::sp.polygons(shapeTRE)) +
+  layer(sp::sp.text(coordinates(shapeTRE), txt = shapeTRE$loc, pos = 1))
+
+
+
+mapa_cs <- c(mapCAM, mapGEN, mapMON, mapDIL, mapDUR, mapCAN, mapPOQ, mapTRE,
+  merge.legends = FALSE, layout = c(4,2)) 
+
+trellis.device(pdf, file=here::here("fig/mapas_cs.pdf"),
+               theme = list(fontsize = list(text = 7, points = 6)),
+               width = 8, height = 6) 
+  print(mapa_cs)
+  dev.off()
+
+
+
+# Carbon root  
+names_fractions <- expression(paste(CO[2], " root (Mg ", ha^-1, ")"))
+
+mapitas <- function(r, ...){
+  levelplot(r, 
+            layers = c("cr"),
+            par.settings=viridisTheme(region = viridis(10, direction = -1)), 
+            # layout = c(2,1), 
+            xlab=NULL, ylab=NULL,
+            # scales=list(draw=FALSE),
+            scales=list(x=list(cex=.5),y=list(cex=.5)),
+            margin = FALSE, 
+            names.attr = names_fractions,
+            colorkey=list(space="bottom"), 
+            main = names_fractions) 
+  
+}
+
+
+mapCAM <- mapitas(b_CAM)+ layer(sp::sp.polygons(shapeCAM)) +
+  layer(sp::sp.text(coordinates(shapeCAM), txt = shapeCAM$loc, pos = 1))
+mapGEN <- mapitas(b_GEN)+ layer(sp::sp.polygons(shapeGEN)) +
+  layer(sp::sp.text(coordinates(shapeGEN), txt = shapeGEN$loc, pos = 1))
+mapMON <- mapitas(b_MON)+ layer(sp::sp.polygons(shapeMON)) +
+  layer(sp::sp.text(coordinates(shapeMON), txt = shapeMON$loc, pos = 1))
+mapDIL <- mapitas(b_DIL)+ layer(sp::sp.polygons(shapeDIL))+
+  layer(sp::sp.text(coordinates(shapeDIL), txt = shapeDIL$loc, pos = 1))
+mapDUR <- mapitas(b_DUR)+ layer(sp::sp.polygons(shapeDUR)) +
+  layer(sp::sp.text(coordinates(shapeDUR), txt = shapeDUR$loc, pos = 1))
+mapCAN <- mapitas(b_CAN)+ layer(sp::sp.polygons(shapeCAN)) +
+  layer(sp::sp.text(coordinates(shapeCAN), txt = shapeCAN$loc, pos = 1))
+mapPOQ <- mapitas(b_POQ)+ layer(sp::sp.polygons(shapePOQ)) +
+  layer(sp::sp.text(coordinates(shapePOQ), txt = shapePOQ$loc, pos = 1))
+mapTRE <- mapitas(b_TRE)+ layer(sp::sp.polygons(shapeTRE)) +
+  layer(sp::sp.text(coordinates(shapeTRE), txt = shapeTRE$loc, pos = 1))
+
+
+
+mapa_cr <- c(mapCAM, mapGEN, mapMON, mapDIL, mapDUR, mapCAN, mapPOQ, mapTRE,
+  merge.legends = FALSE, layout = c(4,2)) 
+
+trellis.device(pdf, file=here::here("fig/mapas_cr.pdf"),
+               theme = list(fontsize = list(text = 7, points = 6)),
+               width = 8, height = 6) 
+  print(mapa_cr)
+  dev.off()
+
+
+
+
+# Carbon total  
+names_fractions <- expression(paste(CO[2], " total (Mg ", ha^-1, ")"))
+
+mapitas <- function(r, ...){
+  levelplot(r, 
+            layers = c("ct"),
+            par.settings=viridisTheme(region = viridis(10, direction = -1)), 
+            # layout = c(2,1), 
+            xlab=NULL, ylab=NULL,
+            # scales=list(draw=FALSE),
+            scales=list(x=list(cex=.5),y=list(cex=.5)),
+            margin = FALSE, 
+            names.attr = names_fractions,
+            colorkey=list(space="bottom"), 
+            main = names_fractions) 
+  
+}
+
+
+mapCAM <- mapitas(b_CAM)+ layer(sp::sp.polygons(shapeCAM)) +
+  layer(sp::sp.text(coordinates(shapeCAM), txt = shapeCAM$loc, pos = 1))
+mapGEN <- mapitas(b_GEN)+ layer(sp::sp.polygons(shapeGEN)) +
+  layer(sp::sp.text(coordinates(shapeGEN), txt = shapeGEN$loc, pos = 1))
+mapMON <- mapitas(b_MON)+ layer(sp::sp.polygons(shapeMON)) +
+  layer(sp::sp.text(coordinates(shapeMON), txt = shapeMON$loc, pos = 1))
+mapDIL <- mapitas(b_DIL)+ layer(sp::sp.polygons(shapeDIL))+
+  layer(sp::sp.text(coordinates(shapeDIL), txt = shapeDIL$loc, pos = 1))
+mapDUR <- mapitas(b_DUR)+ layer(sp::sp.polygons(shapeDUR)) +
+  layer(sp::sp.text(coordinates(shapeDUR), txt = shapeDUR$loc, pos = 1))
+mapCAN <- mapitas(b_CAN)+ layer(sp::sp.polygons(shapeCAN)) +
+  layer(sp::sp.text(coordinates(shapeCAN), txt = shapeCAN$loc, pos = 1))
+mapPOQ <- mapitas(b_POQ)+ layer(sp::sp.polygons(shapePOQ)) +
+  layer(sp::sp.text(coordinates(shapePOQ), txt = shapePOQ$loc, pos = 1))
+mapTRE <- mapitas(b_TRE)+ layer(sp::sp.polygons(shapeTRE)) +
+  layer(sp::sp.text(coordinates(shapeTRE), txt = shapeTRE$loc, pos = 1))
+
+
+
+mapa_ct <- c(mapCAM, mapGEN, mapMON, mapDIL, mapDUR, mapCAN, mapPOQ, mapTRE,
+  merge.legends = FALSE, layout = c(4,2)) 
+
+trellis.device(pdf, file=here::here("fig/mapas_ct.pdf"),
+               theme = list(fontsize = list(text = 7, points = 6)),
+               width = 8, height = 6) 
+  print(mapa_ct)
+  dev.off()
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+mapCAM <- levelplot(b_CAM, layers = c("ws", "wr", "wt"),
+                    par.settings=myTheme, layout = c(3,1), xlab=NULL, ylab=NULL,
+                   # scales=list(draw=FALSE),  
+                    names.attr = names_fractions,
+                    colorkey=list(space="bottom")) +
+  layer(sp.polygons(shapeCAM))
+
+mapGEN <- levelplot(b_GEN, layers = c("ws", "wr", "wt"),
+                    par.settings=myTheme, layout = c(3,1), 
+                    scales=list(draw=FALSE), xlab=NULL, ylab=NULL, 
+                    names.attr = names_fractions)  +
+  layer(sp.polygons(shapeGEN))
+
+mapMON <- levelplot(b_MON, layers = c("ws", "wr", "wt"),
+                    par.settings=myTheme, layout = c(3,1), 
+                    scales=list(draw=FALSE), xlab=NULL, ylab=NULL, 
+                    names.attr = names_fractions)  +
+  layer(sp.polygons(shapeMON))
+
+mapDIL <- levelplot(b_DIL, layers = c("ws", "wr", "wt"),
+                    par.settings=myTheme, layout = c(3,1), 
+                    scales=list(draw=FALSE), xlab=NULL, ylab=NULL, 
+                    names.attr = names_fractions)  +
+  layer(sp.polygons(shapeDIL))
+
+mapDUR <- levelplot(b_DUR, layers = c("ws", "wr", "wt"),
+                    par.settings=myTheme, layout = c(3,1), 
+                    scales=list(draw=FALSE), xlab=NULL, ylab=NULL, 
+                    names.attr = names_fractions)  +
+  layer(sp.polygons(shapeDUR))
+
+mapCAN <- levelplot(b_CAN, layers = c("ws", "wr", "wt"),
+                    par.settings=myTheme, layout = c(3,1), 
+                    scales=list(draw=FALSE), xlab=NULL, ylab=NULL, 
+                    names.attr = names_fractions)  +
+  layer(sp.polygons(shapeCAN))
+
+
+mapPOQ <- levelplot(b_POQ, layers = c("ws", "wr", "wt"),
+                    par.settings=myTheme, layout = c(3,1), 
+                    scales=list(draw=FALSE), xlab=NULL, ylab=NULL, 
+                    names.attr = names_fractions)  +
+  layer(sp.polygons(shapePOQ))
+
+
+mapTRE <- levelplot(b_TRE, layers = c("ws", "wr", "wt"),
+                    par.settings=myTheme, layout = c(3,1), 
+                    scales=list(draw=FALSE), xlab=NULL, ylab=NULL, 
+                    names.attr = names_fractions)  +
+  layer(sp.polygons(shapeTRE))
+
+
+
+
+
+
+
+
+
+
+# 
+# 
+# mapCAM$par.settings$layout.heights[c('bottom.padding', 'key.sub.padding', 'axis.xlab.padding', 'key.axis.padding', 'main.key.padding') ] <- -1
+# mapCAM$aspect.fill <- TRUE
+# 
+# mapGEN$par.settings$layout.heights[c( 'bottom.padding', 'top.padding', 'key.sub.padding', 'axis.xlab.padding', 'key.axis.padding', 'main.key.padding') ] <- -1
+# mapGEN$aspect.fill <- TRUE
+# 
+# mapMON$par.settings$layout.heights[c( 'bottom.padding', 'top.padding', 'key.sub.padding', 'axis.xlab.padding', 'key.axis.padding', 'main.key.padding') ] <- -1
+# mapMON$aspect.fill <- TRUE
+# 
+# mapDIL$par.settings$layout.heights[c( 'bottom.padding', 'top.padding', 'key.sub.padding', 'axis.xlab.padding', 'key.axis.padding', 'main.key.padding') ] <- -1
+# mapDIL$aspect.fill <- TRUE
+# 
+# mapDUR$par.settings$layout.heights[c( 'bottom.padding', 'top.padding', 'key.sub.padding', 'axis.xlab.padding', 'key.axis.padding', 'main.key.padding') ] <- -1
+# mapDUR$aspect.fill <- TRUE
+# 
+# mapCAN$par.settings$layout.heights[c( 'bottom.padding', 'top.padding', 'key.sub.padding', 'axis.xlab.padding', 'key.axis.padding', 'main.key.padding') ] <- -1
+# mapCAN$aspect.fill <- TRUE
+# 
+# mapPOQ$par.settings$layout.heights[c( 'bottom.padding', 'top.padding', 'key.sub.padding', 'axis.xlab.padding', 'key.axis.padding', 'main.key.padding') ] <- -1
+# mapPOQ$aspect.fill <- TRUE
+# 
+# mapTRE$par.settings$layout.heights[c('top.padding', 'key.sub.padding', 'axis.xlab.padding', 'key.axis.padding', 'main.key.padding') ] <- -1
+# mapTRE$aspect.fill <- TRUE
+# 
+
+
+map_completo <- c(mapCAM, mapGEN, mapMON, mapDIL, mapDUR, mapCAN, mapPOQ, mapTRE,
+  merge.legends = FALSE, layout = c(3,8))
+
+
+png(file=here::here("fig/mapas_biomasa.png"), width=1700, height=1700*(8/3), res=300)
+print(map_completo)
+dev.off()
+
+
+trellis.device(pdf, file=here::here("fig/mapas_biomasa.pdf"),
+               theme = list(fontsize = list(text = 10, points = 6)),
+               width =  5, height = 5*(8/3)) 
+  print(map_completo)
+  dev.off()
+
+```
+
+
+Generate dataframe by pobs 
+```{r, eval=FALSE}
+# Convert rasters to dataframe 
+aux <- paste0("b_", qp_sn$loc)
+
+out <- data.frame()
+for (i in 1:length(aux)){
+  g <- get(aux[i])
+  df <- cbind(as.data.frame(rasterToPoints(g, spatial = FALSE)), loc=gsub("b_","",aux[i]))
+  out <- rbind(out, df)
+}
+
+
+out <- out %>% mutate(oakCluster = case_when(
+    loc == "CAM" ~ "N", 
+    loc %in% c("GEN", "MON", "DIL", "DUR") ~ "NW",
+    TRUE ~ "S")
+    ) %>% 
+  mutate(cluster = case_when(
+    oakCluster== "N" ~ as.numeric(0),
+    oakCluster == "NW"~ as.numeric(1),
+    oakCluster == "S" ~ as.numeric(2)
+  ))
+
+write_csv(out, here::here("data/biomass_lidar_maps_df.csv"))
+
+```
+
+
+
+
+
+
+
+
+
