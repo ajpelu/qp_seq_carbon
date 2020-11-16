@@ -1,0 +1,216 @@
+---
+title: "compare oak clusters Biomass_LIDAR"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+source(here::here("load_pkgs.R"))
+```
+
+
+
+```{r, message=FALSE}
+dfraw <- read_csv(here::here("data/biomass_lidar_maps_df.csv"), col_types = cols())
+```
+
+# Compute differences between locs 
+
+```{r}
+df_loc <- dfraw %>% 
+  dplyr::select(-x,-y, -cluster, -oakCluster) %>% 
+  pivot_longer(!loc, names_to = "variables", values_to = "values") 
+    
+kw_loc <- df_loc %>% 
+  group_by(variables) %>% 
+  group_modify(
+    ~broom::tidy(kruskal.test(values ~ loc, data=.x))) %>% 
+  mutate(parameter = as.character(parameter))
+```
+
+
+
+```{r}
+se <- function(x) sd(x, na.rm=TRUE)/sqrt(length(x))
+
+s <- dfraw %>% 
+  dplyr::select(ws, w27, w2, wr, wt, cr, cs, c2, c27, ct, loc) %>% 
+  tbl_summary(by = loc,
+              statistic = list(all_continuous() ~ "{mean} ({se})"), 
+              digits = list(everything() ~ 2), 
+              missing = "no") %>% 
+  modify_header(stat_by = "**{level}**")  %>% 
+  modify_footnote(update = everything() ~ NA) %>% 
+  as_tibble() %>% 
+  as.data.frame() 
+
+names(s) <- str_remove_all(names(s), "[**]")
+names(s)[1] <- "variables"
+
+
+# Custom function
+letritas <- function(df, v, g){
+  m <- pairwise.wilcox.test(df[,v], df[,g], exact=FALSE)
+  l <- biostat::make_cld(m) %>% 
+    dplyr::select(group, cld) %>% 
+    mutate(variables = v) %>% 
+    pivot_wider(names_from = group, values_from = cld)
+  return(l)
+}
+
+
+df <- dfraw %>% 
+  dplyr::select(ws, w27, w2, wr, wt, cr, cs, c2, c27, ct, loc) %>% 
+  as.data.frame()
+
+all_variables <- names(df[,-11])
+
+out <- data.frame()
+for (i in seq_along(all_variables)){
+ m <- letritas(df = df, v=all_variables[i], "loc") %>% as.data.frame()
+ out <- rbind(out, m)
+}
+
+out <- out %>% rename_with(tolower)
+
+m <- s %>% 
+  inner_join(out) %>% 
+  unite("CAM", c("CAM", "cam"), sep=" ") %>% 
+  unite("CAN", c("CAN", "can"), sep=" ") %>% 
+  unite("DIL", c("DIL", "dil"), sep=" ") %>% 
+  unite("DUR", c("DUR", "dur"), sep=" ") %>% 
+  unite("GEN", c("GEN", "gen"), sep=" ") %>% 
+  unite("MON", c("MON", "mon"), sep=" ") %>% 
+  unite("POQ", c("POQ", "poq"), sep=" ") %>% 
+  unite("TRE", c("TRE", "tre"), sep=" ") 
+
+write_csv(m, file = here::here("data/kw_lidar_locs.csv"))
+```
+
+
+# Graficos?? 
+
+```{r}
+compara <- list(
+  c("CAM", "GEN"), c("CAM", "MON"), c("CAM", "DIL"), c("CAM", "DUR"), c("CAM", "CAN"), c("CAM", "POQ"), c("CAM", "TRE"),
+  c("GEN", "MON"),c("GEN", "DIL"),c("GEN", "DUR"),c("GEN", "CAN"),c("GEN", "POQ"),c("GEN", "TRE"),
+  c("MON", "DIL"),c("MON", "DUR"),c("MON", "CAN"),c("MON", "POQ"),c("MON", "TRE"),
+  c("DIL", "DUR"),c("DIL", "CAN"),c("DIL", "POQ"),c("DIL", "TRE"),
+  c("DUR", "CAN"),c("DUR", "POQ"),c("DUR", "TRE"),
+  c("CAN", "POQ"),c("CAN", "TRE"),
+  c("POQ", "TRE"))
+  
+
+df %>%  
+  ggerrorplot(x="loc", y = c("ws",  "wr"), 
+            desc_stat = "mean_sd", color = "black",
+            add = "violin", add.params = list(color = "darkgray"), 
+            combine = TRUE
+            ) +
+  stat_compare_means(
+    comparisons = compara, 
+    label = "p.signif"
+    )
+
+```
+
+
+
+# Compute differences between oakClusters
+
+```{r}
+df_clus <- dfraw %>% 
+  dplyr::select(-x,-y,-loc, -cluster) %>% 
+  pivot_longer(!oakCluster, names_to = "variables", values_to = "values") 
+    
+kw_clus <- df_clus %>% 
+  group_by(variables) %>% 
+  group_modify(
+    ~broom::tidy(kruskal.test(values ~ oakCluster, data=.x))) %>% 
+  mutate(parameter = as.character(parameter))
+```
+
+
+
+```{r}
+se <- function(x) sd(x, na.rm=TRUE)/sqrt(length(x))
+
+s <- dfraw %>% 
+  dplyr::select(ws, w27, w2, wr, wt, cr, cs, c2, c27, ct, oakCluster) %>% 
+  tbl_summary(by = oakCluster,
+              statistic = list(all_continuous() ~ "{mean} ({se})"), 
+              digits = list(everything() ~ 2), 
+              missing = "no") %>% 
+  modify_header(stat_by = "**{level}**")  %>% 
+  modify_footnote(update = everything() ~ NA) %>% 
+  as_tibble() %>% 
+  as.data.frame() 
+
+names(s) <- str_remove_all(names(s), "[**]")
+names(s)[1] <- "variables"
+
+
+# Custom function
+letritas <- function(df, v, g){
+  m <- pairwise.wilcox.test(df[,v], df[,g], exact=FALSE)
+  l <- biostat::make_cld(m) %>% 
+    dplyr::select(group, cld) %>% 
+    mutate(variables = v) %>% 
+    pivot_wider(names_from = group, values_from = cld)
+  return(l)
+}
+
+
+df <- dfraw %>% 
+  dplyr::select(ws, w27, w2, wr, wt, cr, cs, c2, c27, ct, oakCluster) %>% 
+  as.data.frame()
+
+all_variables <- names(df[,-11])
+
+out <- data.frame()
+for (i in seq_along(all_variables)){
+ m <- letritas(df = df, v=all_variables[i], "oakCluster") %>% as.data.frame()
+ out <- rbind(out, m)
+}
+
+out <- out %>% rename_with(tolower)
+
+m <- s %>% 
+  inner_join(out) %>% 
+  unite("N", c("N", "n"), sep=" ") %>% 
+  unite("NW", c("NW", "nw"), sep=" ") %>% 
+  unite("S", c("S", "s"), sep=" ")
+
+write_csv(m, file = here::here("data/kw_lidar_cluster.csv"))
+```
+
+
+# Graficos?? 
+
+```{r}
+compara <- list(c("N", "NW"), c("N", "S"), c("NW", "S"))
+
+
+df %>%  
+  ggerrorplot(x="oakCluster", y = c("ws",  "wr"), 
+            desc_stat = "mean_sd", color = "black",
+            add = "violin", add.params = list(color = "darkgray"), 
+            combine = TRUE
+            ) +
+  stat_compare_means(
+    comparisons = compara, 
+    label = "p.signif"
+    )
+
+```
+
+
+
+
+
