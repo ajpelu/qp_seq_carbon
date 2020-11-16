@@ -16,7 +16,14 @@ library("nlstools")
 library("broom")
 library("sf")
 library("ggspatial")
-
-
-
+library("ggpubr")
+library("gtsummary")
+library("raster")
+library("rasterVis")
+library("RColorBrewer")
+library("gridExtra")
+library("ggspatial")
+library("ggrepel") 
+library("viridisLite")
+library("patchwork")
 
