@@ -12,7 +12,7 @@ source(here::here("load_pkgs.R"))
 
 ```{r, message=FALSE}
 biomass_plot <- read_csv(here::here("data/biomass_plot.csv"), col_types = cols()) %>% 
-    dplyr::select(id_plot, code, loc, size, ws, wb27, wb2, wr, type, size_m, h_mean, h_min, h_max, dbh_mean) %>% 
+    dplyr::select(id_plot, code, loc, size, ws, wb27, wb2, wr, type, size_m, h_mean, h_min, h_max, dbh_mean, ba, density) %>% 
   mutate(cluster = case_when(
     loc %in% c("MON", "GEN", "DIL", "DUR") ~ "NW",
     loc %in% c("CAN", "POQ", "TRE") ~ "S",
@@ -26,7 +26,7 @@ biomass_plot <- read_csv(here::here("data/biomass_plot.csv"), col_types = cols()
 
 ```{r}
 b <- biomass_plot %>% 
-  dplyr::select(id_plot, ws, wb27, wb2, wr, h_mean, h_min, h_max, dbh_mean, cluster) %>% 
+  dplyr::select(id_plot, ws, wb27, wb2, wr, h_mean, h_min, h_max, dbh_mean, ba, density, cluster) %>% 
   pivot_longer(!cluster, names_to = "variables", values_to = "values") 
     
 
@@ -36,7 +36,6 @@ kw <- b %>%
   group_modify(
     ~broom::tidy(kruskal.test(values ~ cluster, data=.x))) %>% 
   mutate(parameter = as.character(parameter))
-  
 ```
 
 
@@ -47,7 +46,7 @@ kw <- b %>%
 se <- function(x) sd(x, na.rm=TRUE)/sqrt(length(x))
 
 s <- biomass_plot %>% 
-  dplyr::select(ws, wb27, wb2, wr, h_mean, h_min, h_max, dbh_mean, cluster) %>% 
+  dplyr::select(ws, wb27, wb2, wr, h_mean, h_min, h_max, dbh_mean, ba, density, cluster) %>% 
   tbl_summary(by = cluster,
               statistic = list(all_continuous() ~ "{mean} ({se})"), 
               digits = list(everything() ~ 2)) %>% 
@@ -75,7 +74,7 @@ letritas <- function(df, v, g){
 
 
 df <- biomass_plot %>% 
-  dplyr::select(cluster, ws, wb27, wb2, wr, h_mean, h_min, h_max, dbh_mean) %>% 
+  dplyr::select(cluster, ws, wb27, wb2, wr, h_mean, h_min, h_max, dbh_mean, ba, density) %>% 
   as.data.frame()
 
 all_variables <- names(df[,-1])
@@ -97,6 +96,7 @@ m <- s %>%
   unite("NW", c("NW", "nw"), sep=" ") %>% 
   unite("S", c("S", "s"), sep=" ")
 
+write_csv(m, file = here::here("data/kw_field_cluster.csv"))
 ```
 
 ```{r}
@@ -121,7 +121,17 @@ p_hmean <- ggboxplot(df, x="cluster", y="h_mean", color = "cluster", palette = "
   stat_compare_means(comparisons = my_comparisons) +
   stat_compare_means(label.y = 25) + xsd 
 
-  
+
+p_ba <- ggboxplot(df, x="cluster", y="ba", color = "cluster", palette = "jco",
+                     xlab = "", ylab = expression(paste("Basal Area (", m^2, " ", ha^-1, ")"))) +
+  stat_compare_means(comparisons = my_comparisons) +
+  stat_compare_means(label.y = 75) + xsd 
+
+p_den <- ggboxplot(df, x="cluster", y="density", color = "cluster", palette = "jco",
+                     xlab = "", ylab = expression(paste("Tree Density (trees ",ha^-1, ")"))) +
+  stat_compare_means(comparisons = my_comparisons) +
+  stat_compare_means(label.y = 3000) + xsd + scale_y_continuous(limits = c(0,3000))
+
 p_hmin <- ggboxplot(df, x="cluster", y="h_min", color = "cluster", palette = "jco",
                      xlab = "", ylab = "Tree height min (m)") + 
   stat_compare_means(comparisons = my_comparisons) +
@@ -140,28 +150,28 @@ p_dbh <- ggboxplot(df, x="cluster", y="dbh_mean", color = "cluster", palette = "
 
 
 p_ws <- ggboxplot(df, x="cluster", y="ws", color = "cluster", palette = "jco",
-                     xlab = "", ylab = "Biomass Ws (ton/ha)") + 
+                     xlab = "", ylab = expression(paste(W[stem], " (Mg ", ha^-1, ")"))) + 
   stat_compare_means(comparisons = my_comparisons) + 
   stat_compare_means(label.y = 700) + xsd 
 
 p_wb27 <- ggboxplot(df, x="cluster", y="wb27", color = "cluster", palette = "jco",
-                     xlab = "", ylab = "Biomass Wb27 (ton/ha)") + 
+                     xlab = "", ylab = expression(paste(W[b27], " (Mg ", ha^-1, ")"))) + 
   stat_compare_means(comparisons = my_comparisons) + 
   stat_compare_means(label.y = 100) + xsd 
 
 p_wb2 <- ggboxplot(df, x="cluster", y="wb2", color = "cluster", palette = "jco",
-                     xlab = "", ylab = "Biomass Wb2 (ton/ha)") + 
+                     xlab = "", ylab = expression(paste(W[b2], " (Mg ", ha^-1, ")"))) +  
   stat_compare_means(comparisons = my_comparisons) + 
   stat_compare_means(label.y = 35) + xsd
 
 p_wr <- ggboxplot(df, x="cluster", y="wr", color = "cluster", palette = "jco",
-                     xlab = "", ylab = "Biomass Wr (ton/ha)") + 
+                     xlab = "",  ylab = expression(paste(W[root], " (Mg ", ha^-1, ")"))) + 
   stat_compare_means(comparisons = my_comparisons) + 
   stat_compare_means(label.y = 250) + xsd
 
 
 
-ph <- ggarrange(p_hmean, p_hmax, p_hmin, p_dbh, legend = "none", nrow = 1)
+ph <- ggarrange(p_hmean, p_dbh, p_ba, p_den, legend = "none", nrow = 1)
 ggsave(here::here("/fig/kw_height.pdf"), ph, width = 20, height = 20, units = "cm")
 pb <- ggarrange(p_ws, p_wb27, p_wb2, p_wr, legend = "none", nrow = 1) 
 ggsave(here::here("/fig/kw_biomass.pdf"), pb, width = 20, height = 20, units = "cm")
