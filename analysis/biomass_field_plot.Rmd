@@ -27,7 +27,8 @@ biomass_plot <- biomass_tree %>%
      h_min = min(h, na.rm=TRUE),
      h_max = max(h, na.rm=TRUE),
      dbh_mean = mean(dbh, na.rm=TRUE), 
-     n_tree = n()
+     n_tree = n(),
+     dbh2 = sum(dbh^2, na.rm=TRUE)
   )
 ```
 
@@ -42,13 +43,17 @@ biomass_plot <- biomass_plot  %>%
     by = c("code"="original_code"))
 
 # ((biomasa * 10000 m2/1ha) / size) kg * 1Mg /1000 kg --> (biomasa * 10 )/size 
+# Basal Area = pi/4 sum(dbh2)/area (ojo se expresa en m2 ha-1) 
+# BA = pi/4 * sum(dbh2)/area * 1 m2 / 10000cm2 * 10000m2 / 1ha --> BA = pi/4 * sum(dbh2)/area
 
 biomass_plot <- biomass_plot %>% 
   mutate(
     ws = (ws_plot * 10)/size,
     wb27 = (wb27_plot * 10)/size, 
     wb2 = (wb2_plot * 10)/size, 
-    wr = (wr_plot* 10)/size) 
+    wr = (wr_plot* 10)/size,
+    ba = pi/4 * (dbh2/size), 
+    density = n_tree * 10000/size) 
 
 # Ojo son datos en Mg biomass / ha 
 write_csv(biomass_plot, here::here("data/biomass_plot.csv"))
@@ -61,7 +66,7 @@ plotsQP_selected <- st_read(here::here("/data/geoinfo/plotsQP_selected.shp"))
 
 b <- plotsQP_selected %>% 
   inner_join(biomass_plot) %>% 
-  dplyr::select(id_plot, code, project, loc, size, ws, wb27, wb2, wr, type, size_m, h_mean, h_min, h_max, dbh_mean) %>% 
+  dplyr::select(id_plot, code, project, loc, size, ws, wb27, wb2, wr, type, size_m, h_mean, h_min, h_max, dbh_mean, ba, density, n_tree) %>% 
   mutate(across(where(is.numeric), ~ round(., digits = 2))) %>% 
   mutate(id_plot = as.integer(id_plot)) 
 
