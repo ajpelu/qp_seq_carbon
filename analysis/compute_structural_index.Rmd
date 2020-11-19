@@ -1,0 +1,89 @@
+---
+title: "Compute Shannon structural diversity index"
+output: md_document
+bibliography: ../references.bib
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, message=FALSE, warning=FALSE}
+source(here::here("load_pkgs.R"))
+```
+
+```{r, message=FALSE}
+biomass_tree <- read_csv(here::here("data/biomass_trees.csv"), col_types = cols())
+```
+
+# Indice de diversidad estructural 
+- Ver del Río et al 2003. Revisión: Índices de diversidad estructural en masas forestales. https://recyt.fecyt.es/index.php/IA/article/view/2490 
+
+
+He computado los siguientes índices 
+
+  - índice de Shannon aplicado a estratos (`sh`): $H = - \sum p_i\cdot ln p_i$, siendo $p_i$ el número de individuos en el estrato $i$. 
+  - índice de Shannon aplicado a estratos con corrección propuesta por Weber (2000) que pondera según la altura de los estratos (`shc`: $H = - \sum \left (\frac{h \cdot p_i}{n_{strata} \cdot h_i} \right )\cdot ln\left (\frac{h \cdot p_i}{n_{strata} \cdot h_i} \right )$. En este caso he tenido en cuenta el número de estratos presentes en la parcela. 
+  - Idem anterior, pero considerando el numero de estratos totales de todas las parcelas (i.e. 12) (`shc2`)
+
+```{r}
+
+# how many strata 
+range(biomass_tree$dbh)
+
+# clases diamétricas <2.5 DBH, luego cada 5 cm , y mayor de 52.5 
+clasesdiametricas <- c(0, seq(2.5, 52.5, by = 5), floor(max(biomass_tree$dbh) + 5))
+
+
+# classify by clases diametricas 
+d <- biomass_tree %>% 
+  mutate(cd = cut(dbh, breaks = clasesdiametricas)) 
+  
+cd_by_plot <- d %>% 
+  group_by(code, cd) %>% 
+  summarise(h_mean = mean(h, na.rm=TRUE),
+            n = n())
+
+
+shanon_str <- data.frame()
+codeplots <- unique(biomass_tree$code)
+for (code_plot in codeplots){ 
+  
+  aux <- biomass_tree %>% 
+  filter(code == code_plot) %>% 
+  group_by(code) %>% 
+  summarise(h_mean = mean(h, na.rm=TRUE),
+            n_tree = n()) 
+  
+  hstand <- aux$h_mean
+  ntotal <- aux$n_tree
+  
+  f <- cd_by_plot %>% 
+  filter(code == code_plot) %>% 
+  mutate(hcorrected = hstand / (n() * h_mean), 
+         hcorrected2 = hstand / (12 * h_mean), 
+         pi = n / sum(n), 
+         lnpi = log(pi, exp(1)),
+         pilnpi = pi * lnpi, 
+         pic = pi*hcorrected, 
+         lnpic = log(pic, exp(1)),
+         pilnpi_c = pic * lnpic,
+         pic2 = pi*hcorrected2, 
+         lnpic2 = log(pic2, exp(1)), 
+         pilnpi_c2 = pic2 * lnpic2,
+         ) 
+  out_aux <- f %>% group_by(code) %>% 
+  summarise(sh = -1*sum(pilnpi), 
+            shc = -1*sum(pilnpi_c),
+            sh_c2 = -1*sum(pilnpi_c2),
+            n_strata = n()) %>% 
+    as.data.frame()
+  
+  shanon_str <- rbind(shanon_str, out_aux)
+  }
+
+write_csv(shanon_str, file=here::here("data/shannon_str.csv"))
+```
+
+
+
+
+
