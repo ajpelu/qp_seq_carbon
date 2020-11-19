@@ -1,0 +1,73 @@
+---
+title: "Compute Topographical values per plot"
+output: md_document
+bibliography: ../references.bib
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, message=FALSE, warning=FALSE}
+source(here::here("load_pkgs.R"))
+```
+
+
+# Prepare DEM data 
+```{r, message=FALSE, eval=FALSE}
+demsn <- raster("/Users/ajpelu/Google Drive/_phd/_geoinfo/aux/dem_qp.asc")
+crs(demsn) <- "+proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+
+slopesn <- terrain(demsn, opt="slope", unit = 'degrees')
+aspectsn10 <- terrain(demsn, opt="aspect", unit = 'degrees')
+library(dynatopmodel)
+twi <- dynatopmodel::upslope.area(demsn, atb = TRUE)
+writeRaster(slopesn, "/Users/ajpelu/Google Drive/_phd/_geoinfo/aux/slope_qp.asc")
+writeRaster(aspectsn10, "/Users/ajpelu/Google Drive/_phd/_geoinfo/aux/aspect_qp.asc")
+names(twi) <- c("upsole_area", "twi")
+writeRaster(twi, "/Users/ajpelu/Google Drive/_phd/_geoinfo/aux/twi_qp.grd")
+
+names(twi) <- c("upsole_area", "twi")
+# See http://slideplayer.com/slide/9605691/ for interpretation 
+```
+
+```{r}
+demsn <- raster("/Users/ajpelu/Google Drive/_phd/_geoinfo/aux/dem_qp.asc")
+aspect <- raster("/Users/ajpelu/Google Drive/_phd/_geoinfo/aux/aspect_qp.asc")
+slope <-  raster("/Users/ajpelu/Google Drive/_phd/_geoinfo/aux/slope_qp.asc")
+twi <- stack("/Users/ajpelu/Google Drive/_phd/_geoinfo/aux/twi_qp.grd")
+twi <- twi[["twi"]]
+```
+
+
+```{r}
+# spatial data (field)
+qp_plot <- st_read(here::here("data/geoinfo/plotsQP.shp")) %>% dplyr::select(code, loc, geometry)
+# qp_plot <- st_transform(qp_plot, 25830)
+# get centroid 
+qp_plot_cent <- st_centroid(qp_plot)
+qp_plot_cent <- st_transform(qp_plot_cent, 25830)
+```
+
+
+```{r}
+r <- stack(demsn, slope, aspect, twi)
+qp_plot_topo <- raster::extract(r, qp_plot_cent, method='simple', sp=TRUE)
+
+topo <- qp_plot_topo@data %>% 
+  mutate(aspectF = cut(aspect_qp, 
+                       breaks= c(0,22.5, 67.5, 112.5, 157.5, 202.5, 247.5, 292.5, 337.5, 359.5),
+                       labels = c("N", "NE", "E", "SE", "S", "SW", "W", "NW","N"))) %>% 
+  rename(dem = dem_qp, slope = slope_qp, aspect = aspect_qp) %>% 
+  mutate(dem = round(dem), 
+         slope = round(slope,1), 
+         aspect = round(aspect))
+
+
+write_csv(topo, here::here("/data/topo_plots.csv"))
+```
+
+
+
+
+
+
+
