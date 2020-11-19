@@ -18,7 +18,7 @@ crs(demsn) <- "+proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
 
 slopesn <- terrain(demsn, opt="slope", unit = 'degrees')
 aspectsn10 <- terrain(demsn, opt="aspect", unit = 'degrees')
-library(dynatopmodel)
+
 twi <- dynatopmodel::upslope.area(demsn, atb = TRUE)
 writeRaster(slopesn, "/Users/ajpelu/Google Drive/_phd/_geoinfo/aux/slope_qp.asc")
 writeRaster(aspectsn10, "/Users/ajpelu/Google Drive/_phd/_geoinfo/aux/aspect_qp.asc")
