@@ -125,7 +125,7 @@ p_hmean <- ggboxplot(df, x="cluster", y="h_mean", color = "cluster", palette = "
 p_ba <- ggboxplot(df, x="cluster", y="ba", color = "cluster", palette = "jco",
                      xlab = "", ylab = expression(paste("Basal Area (", m^2, " ", ha^-1, ")"))) +
   stat_compare_means(comparisons = my_comparisons) +
-  stat_compare_means(label.y = 75) + xsd 
+  stat_compare_means(label.y = 125) + xsd 
 
 p_den <- ggboxplot(df, x="cluster", y="density", color = "cluster", palette = "jco",
                      xlab = "", ylab = expression(paste("Tree Density (trees ",ha^-1, ")"))) +
