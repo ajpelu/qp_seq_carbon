@@ -11,7 +11,7 @@ source(here::here("load_pkgs.R"))
 ```
 
 # Read data 
-```{r, message=FALSE, eval=FALSE}
+```{r, message=FALSE}
 # field data 
 biomass_field <- read_csv(here::here("data/biomass_plot.csv"), col_types = cols()) %>% 
   dplyr::select(code, h_mean, dbh_mean, n_tree, ba, density)
@@ -35,11 +35,10 @@ df <- biomass_field %>%
 # Explore data 
 
 ## Explore relationships 
-```{r}
-df %>% 
-  dplyr::select(code, wt_lid, ba,density, dem, slope, aspect, twi, sh_c2, n_strata) %>% 
+```{r, eval=FALSE}
+df %>% dplyr::select(df, wt_lid, ba, density, dem, slope, aspect, twi, sh_c2, n_strata) %>% 
   pivot_longer(cols = ba:n_strata, names_to = "variables") %>% 
-  ggplot(aes(y=wt_lid, x = value)) + 
+  ggplot(rela, aes(y=wt_lid, x = value)) + 
   geom_point() + geom_smooth() + 
   facet_wrap(~variables, scales = "free_x")
 ```
@@ -97,7 +96,14 @@ summary(select_m0@objects[[1]])
 m <- glm(wt_lid ~ ba + density + dem + sh_c2 + ba:sh_c2, 
           family = "gaussian", data = df)
 tabglm(m)
-stargazer(m, type="text")
+```
+
+```{r, results='asis'}
+stargazer(m)
+```
+
+```{r}
+stargazer(m, type="html")
 
 # How many variance explained 
 (m$null.deviance - m$deviance)/m$null.deviance*100
@@ -114,14 +120,6 @@ testDispersion(diagnosis_m)
 #devtools::install_github("cardiomoon/ggiraphExtra")
 # wt_lid ~ ba + density + dem + sh_c2 + ba:sh_c2
 plot_model(m, sort.est = TRUE, type="std2")
-
-plot_model(m, type = "pred", 
-           terms = c("ba"),
-           ci.lvl = NA)
-           +
-             + theme_bw() + scale_y_continuous(lim=c(0,500))
-
-
 
 ytitle <- expression(paste(W[total], " (Mg ", ha^-1,")"))
 batitle <- expression(paste("Basal Area (",m^2, " ", ha^-1,")"))
@@ -140,34 +138,42 @@ visreg(m, ylab = ytitle, "sh_c2", xlab = shtitle)
 dev.off()
 ```
 
+```{r}
+# Plots interactions
+visreg(m, "density", by="sh_c2")
+visreg(m, "dem", by="sh_c2")
+visreg(m, "ba", by="sh_c2")
+visreg(m, "sh_c2", by="ba")
+```
 
 
+# Surface responses 
 
+```{r}
+batitle_pers <- "\n\nBasal Area \n(m2 ha-1)"
+wt_title <- "\n\nW total \n(Mg ha-1)"
 
-pba + pdem + pden + psh + plot_layout(nrow = 2, ncol = 2)
+png(here::here("/fig/glm_wtotal_surface.png"), width=1500, height=500, res=200)
+par(mfrow=c(1,3),
+    mar = c(5,0,0,0))
+visreg2d(m, "dem", "ba", scale = "response", plot.type = "persp", theta = -45, phi =30,
+         xlab = "\nElevation (m)", ylab = batitle_pers, zlab = wt_title,
+         cex.lab = 1, cex.axis = 0.7, color = "green", shade =.4)
 
+visreg2d(m,  "density", "ba", scale = "response", plot.type = "persp", theta = -45, phi = 30, 
+         xlab = "\n\nTree density \n(trees ha-1)", ylab = batitle_pers, zlab = wt_title,
+         cex.lab = 1, cex.axis = 0.7, color = "green", shade =.4)
 
-
-
-visreg2d(m, "ba", "dem", scale = "response", plot.type = "persp", theta = -65, phi = -30)
-
-library(ggiraphExtra)
+visreg2d(m,   "sh_c2", "ba", scale = "response", plot.type = "persp", theta = -39, phi= 30, 
+         xlab = "\n\nShannon \nstructural index ", ylab = batitle_pers, zlab = wt_title, 
+         cex.lab = 1, cex.axis = 0.7, color = "green", shade =.4)
+dev.off()
 
 ```
 
 
-
-
-
-
-
-
-
-
-   
-
-
-
+```{r, eval=FALSE}
+#Old codes 
 
 
 
@@ -195,177 +201,137 @@ library(ggiraphExtra)
 # 
 
 
-# BA 
-mydata <- data.frame(ba = seq(0, 95, by = 1), dem = 1750, density = 500)
-p0 <- predict(m0best, newdata=mydata, type = "response", se = TRUE)
 
-plot(x = Xy$ba, y = Xy$wt_lid, type = "n", xlab = "Basal Area", ylab = "Wtotal")
-points(x = Xy$ba, y = Xy$wt_lid, pch = 19, cex=0.5)
-lines(x=mydata$ba, y = p0$fit) 
-lines(x =mydata$ba, y = p0$fit  + 2*p0$se.fit, lty=2)
-lines(x =mydata$ba, y = p0$fit  - 2*p0$se.fit, lty=2)
+############### Surface responses Manual
+# 
+# # BA 
+# mydata <- data.frame(ba = seq(0, 95, by = 1), dem = 1750, density = 500)
+# p0 <- predict(m0best, newdata=mydata, type = "response", se = TRUE)
+# 
+# plot(x = Xy$ba, y = Xy$wt_lid, type = "n", xlab = "Basal Area", ylab = "Wtotal")
+# points(x = Xy$ba, y = Xy$wt_lid, pch = 19, cex=0.5)
+# lines(x=mydata$ba, y = p0$fit) 
+# lines(x =mydata$ba, y = p0$fit  + 2*p0$se.fit, lty=2)
+# lines(x =mydata$ba, y = p0$fit  - 2*p0$se.fit, lty=2)
+# 
+# # DEM 
+# mydata <- data.frame(dem = seq(1300, 2000, by = 10), ba = 25, density = 500)
+# p0 <- predict(m0best, newdata=mydata, type = "response", se = TRUE)
+# 
+# plot(x = Xy$dem, y = Xy$wt_lid, type = "n", xlab = "Elevation", ylab = "Wtotal")
+# points(x = Xy$dem, y = Xy$wt_lid, pch = 19, cex=0.5)
+# lines(x=mydata$dem, y = p0$fit) 
+# lines(x =mydata$dem, y = p0$fit  + 2*p0$se.fit, lty=2)
+# lines(x =mydata$dem, y = p0$fit  - 2*p0$se.fit, lty=2)
+# 
+# 
+# # density 
+# mydata <- data.frame(dem = 1750, ba = 25, density = seq(0, 3000, by = 25))
+# p0 <- predict(m0best, newdata=mydata, type = "response", se = TRUE)
+# 
+# plot(x = Xy$density, y = Xy$wt_lid, type = "n", xlab = "Density", ylab = "Wtotal")
+# points(x = Xy$density, y = Xy$wt_lid, pch = 19, cex=0.5)
+# lines(x=mydata$density, y = p0$fit) 
+# lines(x =mydata$density, y = p0$fit  + 2*p0$se.fit, lty=2)
+# lines(x =mydata$density, y = p0$fit  - 2*p0$se.fit, lty=2)
 
-# DEM 
-mydata <- data.frame(dem = seq(1300, 2000, by = 10), ba = 25, density = 500)
-p0 <- predict(m0best, newdata=mydata, type = "response", se = TRUE)
-
-plot(x = Xy$dem, y = Xy$wt_lid, type = "n", xlab = "Elevation", ylab = "Wtotal")
-points(x = Xy$dem, y = Xy$wt_lid, pch = 19, cex=0.5)
-lines(x=mydata$dem, y = p0$fit) 
-lines(x =mydata$dem, y = p0$fit  + 2*p0$se.fit, lty=2)
-lines(x =mydata$dem, y = p0$fit  - 2*p0$se.fit, lty=2)
-
-
-# density 
-mydata <- data.frame(dem = 1750, ba = 25, density = seq(0, 3000, by = 25))
-p0 <- predict(m0best, newdata=mydata, type = "response", se = TRUE)
-
-plot(x = Xy$density, y = Xy$wt_lid, type = "n", xlab = "Density", ylab = "Wtotal")
-points(x = Xy$density, y = Xy$wt_lid, pch = 19, cex=0.5)
-lines(x=mydata$density, y = p0$fit) 
-lines(x =mydata$density, y = p0$fit  + 2*p0$se.fit, lty=2)
-lines(x =mydata$density, y = p0$fit  - 2*p0$se.fit, lty=2)
-
-
-# Obtener que color de sombra se utiliza 
-sombra.col <- trellis.par.get("shade.colors")
-## Cambiar la transparencia del grafico 
-sombra.col$alpha <-.3
-## Cambiar la paleta del sombreado
-sombra.col$palette <- function(irr, ref,
-height, w = 0.5) {grey(w * irr + (1 - w) * (1 - (1 - ref)^0.4))}
-## Set los nuevos valores de shade
-trellis.par.set("shade.colors",sombra.col)
-
-
-# 3d plot BA elev 
-
-# Creamos un conjunto de datos para los predichos
-nuevos.datos <- expand.grid(dem = seq(from=1300, to=2000, by=10),
-                            ba = seq(0, 95, by = 1), density = 500)
-# Calculamos los predichos 
-nuevos.datos$predichos <- predict(m0best, newdata=nuevos.datos, type="response")
-
-
-plot_elev_ba <- wireframe(predichos ~ dem * ba,
-		data=nuevos.datos, screen= list(z=-35, x= -60), shade=T, 
-		scales = list(arrows = TRUE),
-		zlab = list(label = "Wt"),
-		ylab = list(label = "BA"),
-		xlab = list(label = "Elevation"),
-		strip = strip.custom(bg=gray.colors(1,0.95)))
-
-
-# 3d plot BA density 
-
-# Creamos un conjunto de datos para los predichos
-nuevos.datos <- expand.grid(dem = 1750,
-                            ba = seq(0, 95, by = 20), 
-                            density = seq(0, 3000, by = 100))
-# Calculamos los predichos 
-nuevos.datos$predichos <- predict(m0best, newdata=nuevos.datos, type="response")
-
-plot_den_ba <- wireframe(predichos ~ density * ba,
-		data=nuevos.datos, screen= list(z=-35, x= -60), shade=T, 
-		scales = list(arrows = TRUE),
-		zlab = list(label = "Wt"),
-		ylab = list(label = "BA"),
-		xlab = list(label = "Tree density"),
-		strip = strip.custom(bg=gray.colors(1,0.95)),
-				panel.3d.wireframe =
-            function(x, y, z,
-                     xlim, ylim, zlim,
-                     xlim.scaled, ylim.scaled, zlim.scaled,
-                     ...) {
-              panel.3dwire(x = x, y = y, z = z,
-                           xlim = xlim,
-                           ylim = ylim,
-                           zlim = zlim,
-                           xlim.scaled = xlim.scaled,
-                           ylim.scaled = ylim.scaled,
-                           zlim.scaled = zlim.scaled,
-                           col = "gray",
-                           ...)
-            })
-
-
-
-# 3d plot elev density 
-
-# Creamos un conjunto de datos para los predichos
-nuevos.datos <- expand.grid(dem = seq(1300, 2000, by = 50), 
-                            ba = 25,
-                            density = seq(0, 3000, by = 50))
-# Calculamos los predichos 
-nuevos.datos$predichos <- predict(m0best, newdata=nuevos.datos, type="response")
-
-plot_dem_den <-
-wireframe(predichos ~ dem * density ,
-		data=nuevos.datos, screen= list(z=-35, x= -50), shade=T, 
-		scales = list(arrows = TRUE),
-		zlab = list(label = "Wt"),
-		#ylab = list(label = "BA"),
-		#xlab = list(label = "Tree density"),
-		strip = strip.custom(bg=gray.colors(1,0.95)),
-		panel.3d.wireframe =
-            function(x, y, z,
-                     xlim, ylim, zlim,
-                     xlim.scaled, ylim.scaled, zlim.scaled,
-                     ...) {
-              panel.3dwire(x = x, y = y, z = z,
-                           xlim = xlim,
-                           ylim = ylim,
-                           zlim = zlim,
-                           xlim.scaled = xlim.scaled,
-                           ylim.scaled = ylim.scaled,
-                           zlim.scaled = zlim.scaled,
-                           col = "gray",
-                           ...)
-            })
-
-
-
-
-summary(m1)
-vif(m1)
-# elimino n_strata --> muy correlacionado con sh_c2
-
-m2 <- glm(wt_lid ~ ba + density + dem + slope + aspect + twi + sh_c2,
-          family = "poisson", data = df_scaled)
-summary(m2)
-
-devtools::install_github("cardiomoon/ggiraphExtra")
-
-
-
-```
-
-# overdispersion
-```{r}
-e2 <- resid(m2, type = "pearson")
-N <- nrow(dfs) 
-p <- length(coef(m2))
-sum(e2^2) / (N - p) 
-# muy overdispersion 
-
-# negative Binomial ? 
-library(MASS)
-
-m3 <- glm.nb(wt_lid ~ ba + density + dem + slope + aspect + twi + sh_c2,
-          data = df)
-summary(m3)
-e3 <- resid(m3, type = "pearson")
-N <- nrow(dfs) 
-p <- length(coef(m2)) + 1
-sum(e3^2) / (N - p) 
-
-
-```
-
-```{r}
-library(effects)
-allEffects(m3)
-
+# 
+# # Obtener que color de sombra se utiliza 
+# sombra.col <- trellis.par.get("shade.colors")
+# ## Cambiar la transparencia del grafico 
+# sombra.col$alpha <-.3
+# ## Cambiar la paleta del sombreado
+# sombra.col$palette <- function(irr, ref,
+# height, w = 0.5) {grey(w * irr + (1 - w) * (1 - (1 - ref)^0.4))}
+# ## Set los nuevos valores de shade
+# trellis.par.set("shade.colors",sombra.col)
+# 
+# 
+# # 3d plot BA elev 
+# 
+# # Creamos un conjunto de datos para los predichos
+# nuevos.datos <- expand.grid(dem = seq(from=1300, to=2000, by=10),
+#                             ba = seq(0, 95, by = 1), density = 500)
+# # Calculamos los predichos 
+# nuevos.datos$predichos <- predict(m0best, newdata=nuevos.datos, type="response")
+# 
+# 
+# plot_elev_ba <- wireframe(predichos ~ dem * ba,
+# 		data=nuevos.datos, screen= list(z=-35, x= -60), shade=T, 
+# 		scales = list(arrows = TRUE),
+# 		zlab = list(label = "Wt"),
+# 		ylab = list(label = "BA"),
+# 		xlab = list(label = "Elevation"),
+# 		strip = strip.custom(bg=gray.colors(1,0.95)))
+# 
+# 
+# # 3d plot BA density 
+# 
+# # Creamos un conjunto de datos para los predichos
+# nuevos.datos <- expand.grid(dem = 1750,
+#                             ba = seq(0, 95, by = 20), 
+#                             density = seq(0, 3000, by = 100))
+# # Calculamos los predichos 
+# nuevos.datos$predichos <- predict(m0best, newdata=nuevos.datos, type="response")
+# 
+# plot_den_ba <- wireframe(predichos ~ density * ba,
+# 		data=nuevos.datos, screen= list(z=-35, x= -60), shade=T, 
+# 		scales = list(arrows = TRUE),
+# 		zlab = list(label = "Wt"),
+# 		ylab = list(label = "BA"),
+# 		xlab = list(label = "Tree density"),
+# 		strip = strip.custom(bg=gray.colors(1,0.95)),
+# 				panel.3d.wireframe =
+#             function(x, y, z,
+#                      xlim, ylim, zlim,
+#                      xlim.scaled, ylim.scaled, zlim.scaled,
+#                      ...) {
+#               panel.3dwire(x = x, y = y, z = z,
+#                            xlim = xlim,
+#                            ylim = ylim,
+#                            zlim = zlim,
+#                            xlim.scaled = xlim.scaled,
+#                            ylim.scaled = ylim.scaled,
+#                            zlim.scaled = zlim.scaled,
+#                            col = "gray",
+#                            ...)
+#             })
+# 
+# 
+# 
+# # 3d plot elev density 
+# 
+# # Creamos un conjunto de datos para los predichos
+# nuevos.datos <- expand.grid(dem = seq(1300, 2000, by = 50), 
+#                             ba = 25,
+#                             density = seq(0, 3000, by = 50))
+# # Calculamos los predichos 
+# nuevos.datos$predichos <- predict(m0best, newdata=nuevos.datos, type="response")
+# 
+# plot_dem_den <-
+# wireframe(predichos ~ dem * density ,
+# 		data=nuevos.datos, screen= list(z=-35, x= -50), shade=T, 
+# 		scales = list(arrows = TRUE),
+# 		zlab = list(label = "Wt"),
+# 		#ylab = list(label = "BA"),
+# 		#xlab = list(label = "Tree density"),
+# 		strip = strip.custom(bg=gray.colors(1,0.95)),
+# 		panel.3d.wireframe =
+#             function(x, y, z,
+#                      xlim, ylim, zlim,
+#                      xlim.scaled, ylim.scaled, zlim.scaled,
+#                      ...) {
+#               panel.3dwire(x = x, y = y, z = z,
+#                            xlim = xlim,
+#                            ylim = ylim,
+#                            zlim = zlim,
+#                            xlim.scaled = xlim.scaled,
+#                            ylim.scaled = ylim.scaled,
+#                            zlim.scaled = zlim.scaled,
+#                            col = "gray",
+#                            ...)
+#             })
+# 
 ```
 
 
@@ -376,17 +342,15 @@ allEffects(m3)
 
 
 
-df %>% 
-  mutate(across(ba,density, dem, slope, aspect, twi, shc, n_strata), scale)
-
-  pivot_longer(cols = ba:n_strata, names_to = "variables") %>% 
-  ggplot(aes(x=wt_lid, y = value)) + 
-  geom_point() + 
-  facet_wrap(~variables)
 
 
 
-mall <- glm(wt_lid ~ ba * density * dem * slope * aspect * twi * shc * n_strata, family = "gaussian", data = df)
-summary(mall)
-```
+
+   
+
+
+
+
+
+
 
