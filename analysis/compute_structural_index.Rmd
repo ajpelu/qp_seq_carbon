@@ -84,6 +84,49 @@ write_csv(shanon_str, file=here::here("data/shannon_str.csv"))
 ```
 
 
+```{r}
+bp <- read_csv(here::here("data/biomass_plot.csv"), col_types = cols()) %>% select(code, loc)
+
+f <- cd_by_plot %>% inner_join(bp) %>% 
+    mutate(oakCluster = case_when(
+    loc == "CAM" ~ "N", 
+    loc %in% c("GEN", "MON", "DIL", "DUR") ~ "NW",
+    TRUE ~ "S")
+    ) 
+
+
+g <- f %>% group_by(cd, oakCluster) %>% 
+  summarise(mean = mean(n, na.rm=TRUE),
+            se = sd(n, na.rm=TRUE)/sqrt(length(n)))
+
+adddd <- data.frame(
+  cd = c("(0,2.5]", "(2.5,7.5]"), 
+  oakCluster = c("N", "N"), 
+  mean = c(NA, NA), 
+  se = c(NA, NA)
+)
+adddd$cd <- as.factor(adddd$cd)
+
+g <- g %>% bind_rows(adddd)
+
+p <- g %>% 
+  ggplot(aes(x=cd, y = mean, color = oakCluster, fill=oakCluster)) + 
+  geom_bar(stat="identity", position = position_dodge(0.9), width = .8) + 
+  geom_errorbar(aes(ymin = mean -se, ymax = mean + se), 
+                position = position_dodge(0.9), 
+                width = .4) + 
+  geom_line() + 
+  theme_bw() +
+  ylab("tree numbers") + xlab("Diametric classes") + 
+  theme(
+    axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)
+  )
+
+
+ggsave(filename=here::here("fig/diametric_classes.pdf"), 
+       plot=p, width=8, height = 5, dpi = 500) 
+
+```
 
 
 
