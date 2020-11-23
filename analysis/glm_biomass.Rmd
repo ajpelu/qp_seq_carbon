@@ -162,6 +162,50 @@ visreg(m, "sh_c2", by="ba")
 ```
 
 
+```{r}
+p_ba <- visreg(m, ylab = ytitle, "ba", xlab = batitle, gg = TRUE, fill.par=list(fill="#008DFF33"))+
+  theme_bw() + theme(panel.grid = element_blank())
+                      
+p_dem <- visreg(m, ylab = ytitle, "dem", xlab = demtitle, gg=TRUE,
+                fill.par=list(fill="#008DFF33")) +
+  theme_bw() + theme(panel.grid = element_blank()) 
+p_den <- visreg(m, ylab = ytitle, "density", xlab = densitytitle, gg=TRUE, 
+                fill.par=list(fill="#008DFF33")) +
+  theme_bw() + theme(panel.grid = element_blank()) 
+p_sh <- visreg(m, ylab = ytitle, "sh_c2", xlab = shtitle, gg=TRUE, fill.par=list(fill="#008DFF33")) +
+  theme_bw() + theme(panel.grid = element_blank()) 
+
+
+p_bash <- visreg(m, "sh_c2", by="ba", breaks=c(10, 25, 50), gg=TRUE,
+       fill.par=list(fill="#008DFF33")) + 
+  xlab(shtitle) + ylab(ytitle) + theme_bw() + 
+  theme(
+    panel.grid = element_blank(), 
+    strip.background = element_blank()
+  )
+
+p_upper <- p_ba + p_dem + p_den + p_sh + plot_layout(nrow=2)
+
+plotitos <- p_upper / p_bash+ plot_layout(ncol=1, heights = c(5,2.5)) + plot_annotation(tag_levels = "a") 
+
+
+ggsave(filename=here::here("fig/glm_effects.pdf"), 
+       plot=plotitos, width=5, height = 6, dpi = 500) 
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
 # Surface responses 
 
 ```{r}
