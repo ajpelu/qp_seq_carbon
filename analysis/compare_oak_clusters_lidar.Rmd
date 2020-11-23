@@ -217,8 +217,8 @@ total_cluster <- total_cluster %>%
          NW_t = as.numeric(NW_t),
          S_t = as.numeric(S_t),
          N_tTg = N_t/1000000, 
-         NW_tTg = NW_t/100000, 
-         S_tTg = S_t/100000) 
+         NW_tTg = NW_t/1000000, 
+         S_tTg = S_t/1000000) 
          
 total <- dfraw %>% 
   dplyr::select(ws, w27, w2, wr, wt, cr, cs, c2, c27, ct) %>% 
