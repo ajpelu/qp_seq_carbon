@@ -93,9 +93,24 @@ select_m0 <- glmulti(wt_lid ~ ba*density*dem*twi*sh_c2, data = df,
 summary(select_m0@objects[[1]]) 
 
 # Best Model 
-m <- glm(wt_lid ~ ba + density + dem + sh_c2 + ba:sh_c2, 
+m <- glm(wt_lid ~ ba + density + dem + sh_c2 + ba:sh_c2 , 
           family = "gaussian", data = df)
-tabglm(m)
+
+
+tm <- tabglm(m, columns = c("beta.se",  "test", "p")) 
+names(tm) <- c("Variable", "Estimate", "Zvalue", "pvalue") 
+
+
+tablita_auxiliar <- data.frame(
+  Variable = c("DegreeFreedom", "AIC", "BIC", "DevianceExplained"), 
+  Estimate = as.character(c(df.residual(m), round(AIC(m),0), round(BIC(m), 0), 
+round( ((m$null.deviance - m$deviance) / m$null.deviance),3))),
+  Zvalue = "", pvalue = ""
+)
+
+tm <- bind_rows(tm, tablita_auxiliar)
+
+write.csv(tm, here::here("data/best_glm_parameters.csv"))
 ```
 
 ```{r, results='asis'}
