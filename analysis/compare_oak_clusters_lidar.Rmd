@@ -15,7 +15,6 @@ source(here::here("load_pkgs.R"))
 ```
 
 
-
 ```{r, message=FALSE}
 dfraw <- read_csv(here::here("data/biomass_lidar_maps_df.csv"), col_types = cols())
 ```
@@ -28,8 +27,6 @@ dfraw %>%
   replace(is.na(.), 0) %>% 
   summarise_all(sum) 
 ```
-
-
 
 
 # Compute differences between locs 
@@ -104,12 +101,6 @@ m <- s %>%
 
 write_csv(m, file = here::here("data/kw_lidar_locs.csv"))
 ```
-
-
-```{r}
-
-```
-
 
 
 
@@ -225,7 +216,7 @@ total_cluster <- total_cluster %>%
   mutate(N_t = as.numeric(N_t), 
          NW_t = as.numeric(NW_t),
          S_t = as.numeric(S_t),
-         N_tTg = N_t/100000, 
+         N_tTg = N_t/1000000, 
          NW_tTg = NW_t/100000, 
          S_tTg = S_t/100000) 
          
@@ -246,7 +237,7 @@ total <- total %>% mutate(totalTg = total/1000000)
 
 
 
-totales <- total %>% inner_join(total_cluster)
+totales <- total %>% inner_join(total_cluster) 
 write_csv(totales, file = here::here("data/totales_biomass_lidar.csv"))
 
 ```
@@ -270,7 +261,6 @@ df %>%
     )
 
 ```
-
 
 
 
