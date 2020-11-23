@@ -187,6 +187,95 @@ dev.off()
 ```
 
 
+
+# Otras variables 
+
+## Wr 
+```{r}
+set.seed(1234)
+select_wr <- glmulti(wr_lid ~ ba*density*dem*twi*sh_c2, data = df,
+             level= 2,
+        chunk = 1, chunks = 4,
+        method = "ga",
+        crit = "bic", 
+        family = "gaussian", 
+        marginality = TRUE,
+        confsetsize = 5, 
+        plotty = FALSE, report = FALSE)
+
+summary(select_wr@objects[[1]]) 
+
+
+# Best Model 
+mwr <- glm(wr_lid ~ ba + density + dem + sh_c2 + ba:sh_c2 , 
+          family = "gaussian", data = df)
+
+
+tmwr <- tabglm(mwr, columns = c("beta.se",  "test", "p")) 
+names(tmwr) <- c("Variable", "Estimate", "Zvalue", "pvalue") 
+
+
+tablita_auxiliar_wr <- data.frame(
+  Variable = c("DegreeFreedom", "AIC", "BIC", "DevianceExplained"), 
+  Estimate = as.character(c(df.residual(mwr), round(AIC(mwr),0), round(BIC(mwr), 0), 
+round( ((mwr$null.deviance - mwr$deviance) / mwr$null.deviance),3))),
+  Zvalue = "", pvalue = ""
+)
+
+tmwr <- bind_rows(tmwr, tablita_auxiliar_wr)
+
+write.csv(tmwr, here::here("data/best_glm_parameters_wr.csv"))
+```
+
+
+
+## Wr 
+```{r}
+set.seed(1234)
+select_ws <- glmulti(ws_lid ~ ba*density*dem*twi*sh_c2, data = df,
+             level= 2,
+        chunk = 1, chunks = 4,
+        method = "ga",
+        crit = "bic", 
+        family = "gaussian", 
+        marginality = TRUE,
+        confsetsize = 5, 
+        plotty = FALSE, report = FALSE)
+
+summary(select_ws@objects[[1]]) 
+
+
+# Best Model 
+mws <- glm(ws_lid ~ ba + density + dem + sh_c2 + ba:sh_c2 , 
+          family = "gaussian", data = df)
+
+
+tmws <- tabglm(mws, columns = c("beta.se",  "test", "p")) 
+names(tmws) <- c("Variable", "Estimate", "Zvalue", "pvalue") 
+
+
+tablita_auxiliar_ws <- data.frame(
+  Variable = c("DegreeFreedom", "AIC", "BIC", "DevianceExplained"), 
+  Estimate = as.character(c(df.residual(mws), round(AIC(mws),0), round(BIC(mws), 0), 
+round( ((mws$null.deviance - mws$deviance) / mws$null.deviance),3))),
+  Zvalue = "", pvalue = ""
+)
+
+tmws <- bind_rows(tmws, tablita_auxiliar_ws)
+
+write.csv(tmws, here::here("data/best_glm_parameters_ws.csv"))
+```
+
+
+
+
+
+
+
+
+
+
+
 ```{r, eval=FALSE}
 #Old codes 
 
