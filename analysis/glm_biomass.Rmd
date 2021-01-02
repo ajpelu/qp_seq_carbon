@@ -26,7 +26,8 @@ df <- biomass_field %>%
   inner_join(shanon, by = "code") %>% 
   inner_join(biomass, by = "code") %>%
   filter(!is.na(wt_lid)) %>% 
-  filter(code != "DIL2") # Ojo tras analizar todo el modelado he visto que hay un error en DIL2, así que lo eliminamos (era un outlier detectado con DHARMa)
+  mutate(Ldensity = log(density)) %>% 
+  filter(code != "DIL2") # Ojo tras analizar todo el modelado he visto que hay un error en DIL2, así que lo eliminamos (era un outlier detectado con DHARMa)  
 
 
 ```
@@ -36,19 +37,22 @@ df <- biomass_field %>%
 
 ## Explore relationships 
 ```{r, eval=FALSE}
-df %>% dplyr::select(df, wt_lid, ba, density, dem, slope, aspect, twi, sh_c2, n_strata) %>% 
+df %>% dplyr::select(wt_lid, ba, Ldensity, dem, slope, aspect, twi, sh_c2, n_strata) %>% 
   pivot_longer(cols = ba:n_strata, names_to = "variables") %>% 
-  ggplot(rela, aes(y=wt_lid, x = value)) + 
+  ggplot(aes(y=wt_lid, x = value)) + 
   geom_point() + geom_smooth() + 
   facet_wrap(~variables, scales = "free_x")
 ```
 
 ## Colinealidad 
 ```{r}
+# quita la ba 
 dfs <- df %>% 
-  dplyr::select(code, wt_lid, ba,density, dem, slope, aspect, twi, sh, sh_c2, n_strata) 
+  dplyr::select(code, wt_lid, Ldensity, dem, slope, aspect, twi, sh, sh_c2, n_strata) 
+  
 
-ggpairs(dfs, columns = 3:11) 
+ggpairs(dfs, columns = 3:10) 
+
 ```
 
 
@@ -58,7 +62,7 @@ ggpairs(dfs, columns = 3:11)
 # Scalamos los datos
 scale2 <- function(x, na.rm = FALSE) (x - mean(x, na.rm = na.rm)) / sd(x, na.rm)
 df_scaled <- dfs %>% 
-  mutate_at(c("ba", "density", "dem", "slope", "aspect", "twi", "sh", "sh_c2", "n_strata"), ~scale2(.x, na.rm = TRUE)) %>% 
+  mutate_at(c("Ldensity", "dem", "slope", "aspect", "twi", "sh", "sh_c2", "n_strata"), ~scale2(.x, na.rm = TRUE)) %>% 
   filter(!is.na(wt_lid))
 ```
 
@@ -69,7 +73,7 @@ df_scaled <- dfs %>%
 
 ```{r}
 # Datos no scalados 
-m0 <- glm(wt_lid ~ ba + density + dem + slope + aspect + twi + sh_c2 + n_strata, 
+m0 <- glm(wt_lid ~ Ldensity + dem + slope + aspect + twi + sh_c2 + n_strata, 
           family = "gaussian", data = df)
 
 
@@ -79,7 +83,7 @@ m0 <- glm(wt_lid ~ ba + density + dem + slope + aspect + twi + sh_c2 + n_strata,
 
 
 set.seed(1234)
-select_m0 <- glmulti(wt_lid ~ ba*density*dem*twi*sh_c2, data = df,
+select_m0 <- glmulti(wt_lid ~ Ldensity*dem*twi*sh_c2, data = df,
              level= 2,
         chunk = 1, chunks = 4,
         method = "ga",
@@ -93,7 +97,7 @@ select_m0 <- glmulti(wt_lid ~ ba*density*dem*twi*sh_c2, data = df,
 summary(select_m0@objects[[1]]) 
 
 # Best Model 
-m <- glm(wt_lid ~ ba + density + dem + sh_c2 + ba:sh_c2 , 
+m <- glm(wt_lid ~ Ldensity + dem + sh_c2 + Ldensity:sh_c2 , 
           family = "gaussian", data = df)
 
 
@@ -137,60 +141,101 @@ testDispersion(diagnosis_m)
 plot_model(m, sort.est = TRUE, type="std2")
 
 ytitle <- expression(paste(W[total], " (Mg ", ha^-1,")"))
-batitle <- expression(paste("Basal Area (",m^2, " ", ha^-1,")"))
+# batitle <- expression(paste("Basal Area (",m^2, " ", ha^-1,")"))
 demtitle <- "Elevation (m)"
-densitytitle <- expression(paste("Tree density (trees ", ha^-1, ")"))
-shtitle <- "Shannon structural diversity index"
+densitytitle <- expression(paste("Log (Tree density (trees ", ha^-1, ")"))
+
+densitytitle <- "Log (Tree density\n (trees/ha))"
+
+shtitle <- "Shannon structural \n diversity index"
 
 # pdf(here::here("/fig/glm_wtotal.pdf"), width=7, height = 7)
 png(here::here("/fig/glm_wtotal.png"), width=3000, height=3000, res=500, pointsize = 12)
-par(mfrow=c(2,2),
+par(mfrow=c(1,3),
     mar = c(4,4.5,2,2))
-visreg(m, ylab = ytitle, "ba", xlab = batitle)
+# visreg(m, ylab = ytitle, "ba", xlab = batitle)
 visreg(m, ylab = ytitle, "dem", xlab = demtitle)
-visreg(m, ylab = ytitle, "density", xlab = densitytitle)
+visreg(m, ylab = ytitle, "Ldensity", xlab = densitytitle)
 visreg(m, ylab = ytitle, "sh_c2", xlab = shtitle)
 dev.off()
 ```
 
 ```{r}
 # Plots interactions
-visreg(m, "density", by="sh_c2")
+visreg(m, "Ldensity", by="sh_c2")
 visreg(m, "dem", by="sh_c2")
-visreg(m, "ba", by="sh_c2")
-visreg(m, "sh_c2", by="ba")
+#visreg(m, "ba", by="sh_c2")
+visreg(m, "sh_c2", by="Ldensity")
 ```
 
 
 ```{r}
-p_ba <- visreg(m, ylab = ytitle, "ba", xlab = batitle, gg = TRUE, fill.par=list(fill="#008DFF33"))+
-  theme_bw() + theme(panel.grid = element_blank())
-                      
+# p_ba <- visreg(m, ylab = ytitle, "ba", xlab = batitle, gg = TRUE, fill.par=list(fill="#008DFF33"))+
+#   theme_bw() + theme(panel.grid = element_blank())
+
+ylimites <- scale_y_continuous(limits = c(NA, 450), 
+                     breaks = c(100,200,300,400))
+                   
 p_dem <- visreg(m, ylab = ytitle, "dem", xlab = demtitle, gg=TRUE,
                 fill.par=list(fill="#008DFF33")) +
-  theme_bw() + theme(panel.grid = element_blank()) 
-p_den <- visreg(m, ylab = ytitle, "density", xlab = densitytitle, gg=TRUE, 
-                fill.par=list(fill="#008DFF33")) +
-  theme_bw() + theme(panel.grid = element_blank()) 
+  theme_bw() + theme(panel.grid = element_blank()) + 
+  ylimites
+
+p_den <- visreg(m, ylab = ytitle, "Ldensity", xlab = densitytitle, gg=TRUE, 
+                fill.par=list(fill="#008DFF33"))+ 
+                # xtrans = exp) +
+  theme_bw() + theme(panel.grid = element_blank()) +
+  ylimites
+  
+  # scale_x_continuous(sec.axis = sec_axis(trans = "exp", 
+  #                                        breaks = c(100, 250, 500, 1000, 2000, 3000), 
+  #                                        name = expression(paste("Tree density (trees ", ha^-1, ")")))) +
+  # ylimites
+
 p_sh <- visreg(m, ylab = ytitle, "sh_c2", xlab = shtitle, gg=TRUE, fill.par=list(fill="#008DFF33")) +
-  theme_bw() + theme(panel.grid = element_blank()) 
+  theme_bw() + theme(panel.grid = element_blank()) + ylimites 
 
 
-p_bash <- visreg(m, "sh_c2", by="ba", breaks=c(10, 25, 50), gg=TRUE,
+# Lables density 
+ldensitybreaks <- c(log(250), log(750), log(2250))
+density_labels <-c("250 tree/ha", "750 tree/ha", "2250 tree/ha")
+
+
+names(density_labels) <- ldensitybreaks
+
+
+p_densh <- visreg(m, "sh_c2", by="Ldensity", breaks=ldensitybreaks, gg=TRUE,
        fill.par=list(fill="#008DFF33")) + 
   xlab(shtitle) + ylab(ytitle) + theme_bw() + 
   theme(
     panel.grid = element_blank(), 
     strip.background = element_blank()
-  )
+  ) +
+  facet_wrap(~Ldensity, labeller = as_labeller(density_labels))
 
-p_upper <- p_ba + p_dem + p_den + p_sh + plot_layout(nrow=2)
+ 
+p_upper <- p_dem + p_den + p_sh + plot_layout(nrow=1)
 
-plotitos <- p_upper / p_bash+ plot_layout(ncol=1, heights = c(5,2.5)) + plot_annotation(tag_levels = "a") 
+# para eliminat los ejes y 
+p_upper[[2]] = p_upper[[2]] + theme(axis.text.y = element_blank(),
+                                        axis.ticks.y = element_blank(),
+                                        axis.title.y = element_blank())
+
+p_upper[[3]] = p_upper[[3]] + theme(axis.text.y = element_blank(),
+                                        axis.ticks.y = element_blank(),
+                                        axis.title.y = element_blank())
+
+
+
+
+
+plotitos <- p_upper / p_densh + plot_layout(ncol=1) + plot_annotation(tag_levels = "a") 
 
 
 ggsave(filename=here::here("fig/glm_effects.pdf"), 
-       plot=plotitos, width=5, height = 6, dpi = 500) 
+       plot=plotitos, width=8, height = 8, dpi = 500) 
+
+
 
 
 ```

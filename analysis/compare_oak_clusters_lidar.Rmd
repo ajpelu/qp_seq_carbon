@@ -9,17 +9,16 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 ```{r, message=FALSE, warning=FALSE}
 source(here::here("load_pkgs.R"))
 ```
-
 
 ```{r, message=FALSE}
 dfraw <- read_csv(here::here("data/biomass_lidar_maps_df.csv"), col_types = cols())
 ```
 
-# Global summary 
+# Global summary
+
 ```{r}
 dfraw %>% 
   dplyr::select(wt, ct) %>% 
@@ -28,8 +27,7 @@ dfraw %>%
   summarise_all(sum) 
 ```
 
-
-# Compute differences between locs 
+# Compute differences between locs
 
 ```{r}
 df_loc <- dfraw %>% 
@@ -42,8 +40,6 @@ kw_loc <- df_loc %>%
     ~broom::tidy(kruskal.test(values ~ loc, data=.x))) %>% 
   mutate(parameter = as.character(parameter))
 ```
-
-
 
 ```{r}
 se <- function(x) sd(x, na.rm=TRUE)/sqrt(length(x))
@@ -102,9 +98,7 @@ m <- s %>%
 write_csv(m, file = here::here("data/kw_lidar_locs.csv"))
 ```
 
-
-
-# Graficos?? 
+# Graficos??
 
 ```{r}
 compara <- list(
@@ -130,8 +124,6 @@ df %>%
 
 ```
 
-
-
 # Compute differences between oakClusters
 
 ```{r}
@@ -145,8 +137,6 @@ kw_clus <- df_clus %>%
     ~broom::tidy(kruskal.test(values ~ oakCluster, data=.x))) %>% 
   mutate(parameter = as.character(parameter))
 ```
-
-
 
 ```{r}
 se <- function(x) sd(x, na.rm=TRUE)/sqrt(length(x))
@@ -242,8 +232,7 @@ write_csv(totales, file = here::here("data/totales_biomass_lidar.csv"))
 
 ```
 
-
-# Graficos?? 
+# Graficos??
 
 ```{r}
 compara <- list(c("N", "NW"), c("N", "S"), c("NW", "S"))
@@ -261,7 +250,3 @@ df %>%
     )
 
 ```
-
-
-
-
